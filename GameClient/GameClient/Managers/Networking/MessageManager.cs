@@ -76,6 +76,7 @@ namespace GameClient.Managers
         {
             string s = message.ReadString();
             var template = Newtonsoft.Json.JsonConvert.DeserializeObject<MessageTemplate>(s);
+
             switch (template.MessageType)
             {
                 case MessageType.LoginSuccess:
@@ -86,11 +87,12 @@ namespace GameClient.Managers
                     break;
 
                 case MessageType.LoginFailure:
-
+                    
                     break;
+
                 case MessageType.Movement:
                     Vector2 vector2 = Newtonsoft.Json.JsonConvert.DeserializeObject<Vector2>(template.JsonMessage);
-                    login.GetCharacter().MoveToPos(vector2);
+                    LoginManagerClient.GetCharacter().MoveToPos(vector2);
                     break;
             }
         }

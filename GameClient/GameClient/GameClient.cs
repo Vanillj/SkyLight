@@ -24,10 +24,11 @@ namespace GameClient
             base.Initialize();
 
             ClientNetworkManager.SetupClient();
+            Core.PauseOnFocusLost = false;
 
             BaseScene.messageManager = new MessageManager();
             MessageManager.inputManager = new InputManager();
-
+            
             LoginScene mainScene = new LoginScene() {  };
             SceneManager.CurrentScene = mainScene;
             Scene = mainScene;

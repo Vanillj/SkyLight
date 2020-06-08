@@ -27,18 +27,25 @@ namespace Server.Scenes
             var UICanvas = CreateEntity("ui-canvas").AddComponent(new UICanvas());
             Table = UICanvas.Stage.AddElement(new Table());
             Table.SetFillParent(true).Top().PadLeft(10).PadTop(50);
-            //Table.AddElement(new TextField("", TextFieldStyle.Create(Color.White, Color.Red, Color.Black, Color.Green)));
 
         }
-
+        int i = 0;
         public override void Update()
         {
-            base.Update(); 
             if(messageManager != null)
             {
+                //delay
+                i++;
+                if ( i > 3)
+                {
+                    MessageManager.SendQueue();
+                    i = 0;
+                }
+                
                 MessageManager.CheckForMessage();
-                MessageManager.SendQueue();
             }
+            base.Update(); 
+            
         }
 
     }

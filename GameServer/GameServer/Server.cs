@@ -18,7 +18,7 @@ namespace GameServer
         {
 
             base.Initialize();
-
+            Core.PauseOnFocusLost = false;
             networkManager = new ServerNetworkManager();
             MessageManager = new MessageManager();
             Scene mainScene = new MainScene() { MessageManager = MessageManager };

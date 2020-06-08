@@ -1,16 +1,11 @@
 ﻿using Client.Types;
 using Server.Managers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Client.Managers
 {
     class LoginManagerClient : LoginManagerHead
     {
-        private Character AccountCharacter;
+        private static Character AccountCharacter;
         public LoginManagerClient(string username, string password) : base(username, password)
         { }
 
@@ -19,7 +14,7 @@ namespace Client.Managers
             AccountCharacter = character;
         }
 
-        public Character GetCharacter()
+        public static Character GetCharacter()
         {
             return AccountCharacter;
         }

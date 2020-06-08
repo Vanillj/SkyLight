@@ -18,7 +18,16 @@ namespace Server.Managers
                 switch (key)
                 {
                     case Keys.W:
-                        character._pos.X += 5;
+                        character._pos.Y -= 1f;
+                        break;
+                    case Keys.A:
+                        character._pos.X -= 1f;
+                        break;
+                    case Keys.S:
+                        character._pos.Y += 1f;
+                        break;
+                    case Keys.D:
+                        character._pos.X += 1f;
                         break;
 
                     default:

@@ -17,7 +17,6 @@ namespace Client.Managers
 {
     class InputManager
     {
-        static Vector2 changeInPosition = new Vector2();
         KeyboardState oldState;
 
         public InputManager()
@@ -29,12 +28,16 @@ namespace Client.Managers
         {
             if (ClientNetworkManager.client.ConnectionStatus != NetConnectionStatus.Connected || Core.Scene is LoginScene)
                 return;
+
             var newState = Keyboard.GetState();
 
+            if (newState.GetPressedKeys().Length > 0)
+                SendMovementRequest(newState);
+
+
+            //might be usable later for abilities and more.
             if (newState.IsKeyDown(Keys.S) && !oldState.IsKeyDown(Keys.S))
             {
-                changeInPosition.Y -= 5;
-                SendMovementRequest(newState);
             }
             else if (newState.IsKeyDown(Keys.S) && oldState.IsKeyDown(Keys.S))
             {
@@ -49,13 +52,10 @@ namespace Client.Managers
 
             if (newState.IsKeyDown(Keys.W) && !oldState.IsKeyDown(Keys.W))
             {
-                changeInPosition.Y += 5;
-                SendMovementRequest(newState);
             }
             else if (newState.IsKeyDown(Keys.W) && oldState.IsKeyDown(Keys.W))
             {
                 // the player is holding the key down
-                SendMovementRequest(newState);
             }
             else if (!newState.IsKeyDown(Keys.W) && oldState.IsKeyDown(Keys.W))
             {
@@ -65,7 +65,6 @@ namespace Client.Managers
 
             if (newState.IsKeyDown(Keys.A) && !oldState.IsKeyDown(Keys.A))
             {
-                changeInPosition.X -= 5;
 
             }
             else if (newState.IsKeyDown(Keys.A) && oldState.IsKeyDown(Keys.A))
@@ -81,7 +80,6 @@ namespace Client.Managers
 
             if (newState.IsKeyDown(Keys.D) && !oldState.IsKeyDown(Keys.D))
             {
-                changeInPosition.X += 5;
 
             }
             else if (newState.IsKeyDown(Keys.D) && oldState.IsKeyDown(Keys.D))

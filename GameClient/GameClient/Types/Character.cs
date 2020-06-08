@@ -18,7 +18,7 @@ namespace Client.Types
         public void MoveToPos(Vector2 vector)
         {
             //Change later with animations etc.
-            _pos += vector;
+            _pos = vector;
         }
 
         public string CreateJsonFromCharacter()

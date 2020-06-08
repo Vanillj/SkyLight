@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Remoting.Services;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
+﻿using Client.Managers;
 using Nez;
 using Nez.UI;
 using Server.Managers;
@@ -38,6 +32,7 @@ namespace Server.Scenes
 
         public override void Update()
         {
+            
             MessageManager.CheckForMessageAvailable();
             base.Update();
         }

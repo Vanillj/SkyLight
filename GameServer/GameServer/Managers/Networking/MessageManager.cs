@@ -1,7 +1,6 @@
 ﻿using Client.Managers;
 using GameServer.Scenes;
 using Lidgren.Network;
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Server.Types;
 using System;
@@ -55,28 +54,19 @@ namespace Server.Managers
         {
             string s = message.ReadString();
             List<MessageTemplate> QueueList = Newtonsoft.Json.JsonConvert.DeserializeObject<List<MessageTemplate>>(s);
+            Character c = CharacterManager.GetCharacterFromUniqueID(message.SenderConnection.RemoteUniqueIdentifier);
 
             QueueList.ForEach((template) =>
             {
                 switch (template.MessageType)
                 {
-                    case MessageType.Login:
-                        LoginAttempt(message, template);
-                        break;
-
                     case MessageType.Movement:
-                        Character c = CharacterManager.GetCharacterFromUniqueID(message.SenderConnection.RemoteUniqueIdentifier);
                         Keys[] state = Newtonsoft.Json.JsonConvert.DeserializeObject<Keys[]>(template.JsonMessage);
                         InputManager.CalculateMovement(c, state);
+                        break;
 
-                        //Gets the the position and returns it
-                        string posString = Newtonsoft.Json.JsonConvert.SerializeObject(c._pos);
-                        MessageTemplate temp = new MessageTemplate(posString, MessageType.Movement);
-                        NetOutgoingMessage mvmntMessage = ServerNetworkManager.server.CreateMessage(Newtonsoft.Json.JsonConvert.SerializeObject(temp));
-
-                        NetConnection sender = message.SenderConnection;
-                        sender.SendMessage(mvmntMessage, NetDeliveryMethod.ReliableOrdered, 0);
-                        Console.WriteLine("Reply successful.");
+                    case MessageType.Login:
+                        LoginAttempt(message, template);
                         break;
 
                     case MessageType.Register:
@@ -86,6 +76,16 @@ namespace Server.Managers
                 }
             });
 
+            //Gets the the position and returns it
+            if (c != null)
+            {
+                string posString = Newtonsoft.Json.JsonConvert.SerializeObject(c._pos);
+                MessageTemplate temp = new MessageTemplate(posString, MessageType.Movement);
+                NetOutgoingMessage mvmntMessage = ServerNetworkManager.server.CreateMessage(Newtonsoft.Json.JsonConvert.SerializeObject(temp));
+                NetConnection sender = message.SenderConnection;
+                sender.SendMessage(mvmntMessage, NetDeliveryMethod.ReliableOrdered, 0);
+                Console.WriteLine("Reply successful.");
+            }
             var data = message.ReadString();
             Debug.WriteLine(data);
         }
@@ -105,7 +105,8 @@ namespace Server.Managers
                 if (success)
                 {
                     Console.WriteLine("Logged in with \"" + temsp.username + "\" to Database");
-                    string characterString = Newtonsoft.Json.JsonConvert.SerializeObject(temsp.AccountCharacter);
+                    Character temps = new Character(0,0);
+                    string characterString = Newtonsoft.Json.JsonConvert.SerializeObject(temps);
                     MessageTemplate temp = new MessageTemplate(characterString, MessageType.LoginSuccess);
                     NetOutgoingMessage mvmntMessage = ServerNetworkManager.server.CreateMessage(Newtonsoft.Json.JsonConvert.SerializeObject(temp));
                     sender.SendMessage(mvmntMessage, NetDeliveryMethod.ReliableOrdered, 0);

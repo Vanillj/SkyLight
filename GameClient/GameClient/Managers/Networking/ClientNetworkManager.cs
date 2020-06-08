@@ -1,12 +1,4 @@
 ﻿using Lidgren.Network;
-using Server.Managers;
-using Server.Types;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Client.Managers
 {
