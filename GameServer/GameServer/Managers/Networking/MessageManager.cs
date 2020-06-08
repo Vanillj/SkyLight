@@ -2,6 +2,7 @@
 using GameServer.Scenes;
 using Lidgren.Network;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using Server.Types;
 using System;
 using System.Collections.Generic;
@@ -64,16 +65,15 @@ namespace Server.Managers
                         break;
 
                     case MessageType.Movement:
-                        //update data
-                        Vector2 v = Newtonsoft.Json.JsonConvert.DeserializeObject<Vector2>(template.JsonMessage);
-                        CharacterManager.ChangeCharacterPosition(v, message.SenderConnection.RemoteUniqueIdentifier);
-
-                        //return
                         Character c = CharacterManager.GetCharacterFromUniqueID(message.SenderConnection.RemoteUniqueIdentifier);
-                        string posString = Newtonsoft.Json.JsonConvert.SerializeObject(c._pos);
+                        Keys[] state = Newtonsoft.Json.JsonConvert.DeserializeObject<Keys[]>(template.JsonMessage);
+                        InputManager.CalculateMovement(c, state);
 
+                        //Gets the the position and returns it
+                        string posString = Newtonsoft.Json.JsonConvert.SerializeObject(c._pos);
                         MessageTemplate temp = new MessageTemplate(posString, MessageType.Movement);
                         NetOutgoingMessage mvmntMessage = ServerNetworkManager.server.CreateMessage(Newtonsoft.Json.JsonConvert.SerializeObject(temp));
+
                         NetConnection sender = message.SenderConnection;
                         sender.SendMessage(mvmntMessage, NetDeliveryMethod.ReliableOrdered, 0);
                         Console.WriteLine("Reply successful.");

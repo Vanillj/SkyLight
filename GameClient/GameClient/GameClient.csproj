@@ -46,19 +46,17 @@
     <Compile Include="..\..\GameServer\GameServer\Managers\CryptoManager.cs">
       <Link>Managers\CryptoManager.cs</Link>
     </Compile>
-    <Compile Include="..\..\Server\Server\Managers\LoginManagerHead.cs">
-      <Link>Managers\Networking\LoginManagerHead.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Server\Server\Types\MessageTemplate.cs">
+    <Compile Include="..\..\GameServer\GameServer\Types\MessageTemplate.cs">
       <Link>Types\MessageTemplate.cs</Link>
     </Compile>
-    <Compile Include="..\..\Server\Server\Types\MessageType.cs">
+    <Compile Include="..\..\GameServer\GameServer\Types\MessageType.cs">
       <Link>Types\MessageType.cs</Link>
     </Compile>
     <Compile Include="GameClient.cs" />
     <Compile Include="Managers\Networking\ClientNetworkManager.cs" />
     <Compile Include="Managers\Input\InputManager.cs" />
     <Compile Include="Managers\Networking\LoginManagerClient.cs" />
+    <Compile Include="Managers\Networking\LoginManagerHead.cs" />
     <Compile Include="Managers\Networking\MessageManager.cs" />
     <Compile Include="Managers\UI\SceneManager.cs" />
     <Compile Include="Program.cs" />
@@ -139,12 +137,11 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\OneDrive\Documents\Development\Nez\Nez.Portable\Nez.csproj">
-      <Project>{d66c8e71-83de-4fe4-8673-574c5c0b0adb}</Project>
+    <ProjectReference Include="..\..\..\..\..\OneDrive\Documents\Development\Nez\Nez.Portable\Nez.csproj">
+      <Project>{db022000-6bdb-4837-a4d0-5e48c2d0c4fe}</Project>
       <Name>Nez</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

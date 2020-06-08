@@ -15,6 +15,12 @@ namespace Client.Types
             _name = "admin";
         }
 
+        public void MoveToPos(Vector2 vector)
+        {
+            //Change later with animations etc.
+            _pos += vector;
+        }
+
         public string CreateJsonFromCharacter()
         {
             return Newtonsoft.Json.JsonConvert.SerializeObject(this);

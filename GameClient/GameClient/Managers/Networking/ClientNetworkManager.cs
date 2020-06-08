@@ -28,7 +28,7 @@ namespace Client.Managers
                 return true;
 
             connection = client.Connect(host: "127.0.0.1", port: 100);
-            if (connection.Status == NetConnectionStatus.Connected)
+            if (connection != null && connection.Status == NetConnectionStatus.Connected)
             {
                 return true;
             }

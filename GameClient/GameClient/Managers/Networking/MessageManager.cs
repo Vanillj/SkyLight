@@ -2,6 +2,7 @@
 using Client.Types;
 using GameClient.Scenes;
 using Lidgren.Network;
+using Microsoft.Xna.Framework;
 using Nez;
 using Server.Managers;
 using Server.Types;
@@ -47,9 +48,8 @@ namespace GameClient.Managers
                         Debug.WriteLine(message.ReadString());
                         break;
 
-                    /* .. */
                     default:
-                        Debug.WriteLine("unhandled message with type: " + message.MessageType);
+                        Debug.WriteLine("unhandled message with type: " + message.MessageType + ": " + message.ReadString());
                         break;
                 }
             }
@@ -59,7 +59,7 @@ namespace GameClient.Managers
         {
             if (!QueueList.Any())
                 return;
-            NetOutgoingMessage message1 = ClientNetworkManager.client.CreateMessage(MessageTemplate.ObjectToJson(QueueList));
+            NetOutgoingMessage message1 = ClientNetworkManager.client.CreateMessage(MessageTemplate.TemplateToJson(QueueList));
             ClientNetworkManager.client.SendMessage(message1, NetDeliveryMethod.ReliableOrdered);
 
             //Always end with empty list
@@ -80,14 +80,17 @@ namespace GameClient.Managers
             {
                 case MessageType.LoginSuccess:
                     Console.WriteLine("Login and recieved sucessfully!");
-                    //MessageManager = ((BaseScene)Core.Scene).MessageManager
                     Core.StartSceneTransition(new FadeTransition(() => new MainScene() { InputManager = inputManager }));
                     Character c = Newtonsoft.Json.JsonConvert.DeserializeObject<Character>(template.JsonMessage);
                     login.SetCharacter(c);
                     break;
 
-                case MessageType.Movement:
+                case MessageType.LoginFailure:
 
+                    break;
+                case MessageType.Movement:
+                    Vector2 vector2 = Newtonsoft.Json.JsonConvert.DeserializeObject<Vector2>(template.JsonMessage);
+                    login.GetCharacter().MoveToPos(vector2);
                     break;
             }
         }
@@ -125,8 +128,11 @@ namespace GameClient.Managers
 
         public static void SendLoginRequest()
         {
-            List<MessageTemplate> tempQueue = new List<MessageTemplate>();
-            tempQueue.Add(new MessageTemplate(Newtonsoft.Json.JsonConvert.SerializeObject(login), MessageType.Login));
+            List<MessageTemplate> tempQueue = new List<MessageTemplate>
+            {
+                new MessageTemplate(Newtonsoft.Json.JsonConvert.SerializeObject(login), MessageType.Login)
+            };
+
             string send = Newtonsoft.Json.JsonConvert.SerializeObject(tempQueue);
 
             var messageToSend = ClientNetworkManager.client.CreateMessage(send);

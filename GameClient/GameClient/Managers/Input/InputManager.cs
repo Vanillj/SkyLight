@@ -27,12 +27,14 @@ namespace Client.Managers
 
         public void CheckForInput()
         {
+            if (ClientNetworkManager.client.ConnectionStatus != NetConnectionStatus.Connected || Core.Scene is LoginScene)
+                return;
             var newState = Keyboard.GetState();
 
             if (newState.IsKeyDown(Keys.S) && !oldState.IsKeyDown(Keys.S))
             {
                 changeInPosition.Y -= 5;
-                
+                SendMovementRequest(newState);
             }
             else if (newState.IsKeyDown(Keys.S) && oldState.IsKeyDown(Keys.S))
             {
@@ -48,12 +50,12 @@ namespace Client.Managers
             if (newState.IsKeyDown(Keys.W) && !oldState.IsKeyDown(Keys.W))
             {
                 changeInPosition.Y += 5;
-                
+                SendMovementRequest(newState);
             }
             else if (newState.IsKeyDown(Keys.W) && oldState.IsKeyDown(Keys.W))
             {
                 // the player is holding the key down
-
+                SendMovementRequest(newState);
             }
             else if (!newState.IsKeyDown(Keys.W) && oldState.IsKeyDown(Keys.W))
             {
@@ -93,12 +95,19 @@ namespace Client.Managers
 
             }
 
-            if (changeInPosition != Vector2.Zero && ClientNetworkManager.client.ConnectionStatus == NetConnectionStatus.Connected && !(Core.Scene is LoginScene))
+            /*if (changeInPosition != Vector2.Zero && ClientNetworkManager.client.ConnectionStatus == NetConnectionStatus.Connected && !(Core.Scene is LoginScene))
             {
-                MessageManager.AddToQueue(new MessageTemplate(MessageTemplate.ObjectToJson(changeInPosition), MessageType.Movement));
+                string changeS = Newtonsoft.Json.JsonConvert.SerializeObject(changeInPosition);
+                MessageManager.AddToQueue(new MessageTemplate(changeS, MessageType.Movement));
                 changeInPosition = Vector2.Zero;
-            }
+            }*/
             oldState = newState;
+        }
+
+        private void SendMovementRequest(KeyboardState keyboardState)
+        {
+            string messageS = Newtonsoft.Json.JsonConvert.SerializeObject(keyboardState.GetPressedKeys());
+            MessageManager.AddToQueue(new MessageTemplate(messageS, MessageType.Movement));
         }
     }
 }

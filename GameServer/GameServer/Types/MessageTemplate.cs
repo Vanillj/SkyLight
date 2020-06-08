@@ -18,7 +18,7 @@ namespace Server.Managers
             this.MessageType = MessageType;
         }
 
-        public static string TemplateToJson(MessageTemplate obj)
+        public static string TemplateToJson(List<MessageTemplate> obj)
         {
             return Newtonsoft.Json.JsonConvert.SerializeObject(obj);
         }

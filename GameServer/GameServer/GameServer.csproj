@@ -47,14 +47,12 @@
     <Compile Include="Server.cs" />
     <Compile Include="Managers\CharacterManager.cs" />
     <Compile Include="Managers\CryptoManager.cs" />
-    <Compile Include="Managers\FunctionManager.cs" />
-    <Compile Include="Managers\InputManager.cs" />
-    <Compile Include="Managers\LoginManagerHead.cs" />
-    <Compile Include="Managers\LoginManagerServer.cs" />
-    <Compile Include="Managers\MessageManager.cs" />
-    <Compile Include="Managers\NetworkManager.cs" />
-    <Compile Include="Managers\ServerNetworkManager.cs" />
-    <Compile Include="Managers\SQLManager.cs" />
+    <Compile Include="Managers\Input\InputManager.cs" />
+    <Compile Include="Managers\Networking\LoginManagerHead.cs" />
+    <Compile Include="Managers\Networking\LoginManagerServer.cs" />
+    <Compile Include="Managers\Networking\MessageManager.cs" />
+    <Compile Include="Managers\Networking\ServerNetworkManager.cs" />
+    <Compile Include="Managers\Networking\SQLManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scenes\BaseScene.cs" />
@@ -185,8 +183,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\OneDrive\Documents\Development\Nez\Nez.Portable\Nez.csproj">
-      <Project>{b2e83aa6-74e2-4e31-8a20-83999824d8c2}</Project>
+    <ProjectReference Include="..\..\..\..\..\OneDrive\Documents\Development\Nez\Nez.Portable\Nez.csproj">
+      <Project>{74d63cad-fabe-4724-9cff-c56467b759c2}</Project>
       <Name>Nez</Name>
     </ProjectReference>
   </ItemGroup>
