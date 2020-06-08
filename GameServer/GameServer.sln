@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30002.166
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameServer", "GameServer\GameServer.csproj", "{FBB6BD3D-4988-4B91-8265-58EDAA11BA4D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nez", "..\..\..\OneDrive\Documents\Development\Nez\Nez.Portable\Nez.csproj", "{B2E83AA6-74E2-4E31-8A20-83999824D8C2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FBB6BD3D-4988-4B91-8265-58EDAA11BA4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FBB6BD3D-4988-4B91-8265-58EDAA11BA4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FBB6BD3D-4988-4B91-8265-58EDAA11BA4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FBB6BD3D-4988-4B91-8265-58EDAA11BA4D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B2E83AA6-74E2-4E31-8A20-83999824D8C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2E83AA6-74E2-4E31-8A20-83999824D8C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2E83AA6-74E2-4E31-8A20-83999824D8C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2E83AA6-74E2-4E31-8A20-83999824D8C2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C03B9BAB-3DD1-46A2-AB5C-2CF69B8B639F}
+	EndGlobalSection
+EndGlobal

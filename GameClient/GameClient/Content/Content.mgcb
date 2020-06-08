@@ -1,0 +1,63 @@
+
+#----------------------------- Global Properties ----------------------------#
+
+/outputDir:bin/$(Platform)
+/intermediateDir:obj/$(Platform)
+/platform:DesktopGL
+/config:
+/profile:Reach
+/compress:False
+
+#-------------------------------- References --------------------------------#
+
+/reference:..\..\packages\Nez.PipelineImporter.0.9.5\tools\Ionic.ZLib.dll
+/reference:..\..\packages\Nez.PipelineImporter.0.9.5\tools\Nez.dll
+/reference:..\..\packages\Nez.PipelineImporter.0.9.5\tools\Nez.PipelineImporter.dll
+
+#---------------------------------- Content ---------------------------------#
+
+#begin nez/textures/textureWipeTransition/angular.xnb
+/importer:WmvImporter
+/processor:PassThroughProcessor
+/build:nez/textures/textureWipeTransition/angular.xnb
+
+#begin nez/textures/textureWipeTransition/crissCross.xnb
+/importer:WmvImporter
+/processor:PassThroughProcessor
+/build:nez/textures/textureWipeTransition/crissCross.xnb
+
+#begin nez/textures/textureWipeTransition/diagonalDistort.xnb
+/importer:WmvImporter
+/processor:PassThroughProcessor
+/build:nez/textures/textureWipeTransition/diagonalDistort.xnb
+
+#begin nez/textures/textureWipeTransition/horizontal.xnb
+/importer:WmvImporter
+/processor:PassThroughProcessor
+/build:nez/textures/textureWipeTransition/horizontal.xnb
+
+#begin nez/textures/textureWipeTransition/noise.xnb
+/importer:WmvImporter
+/processor:PassThroughProcessor
+/build:nez/textures/textureWipeTransition/noise.xnb
+
+#begin nez/textures/textureWipeTransition/pokemon.xnb
+/importer:WmvImporter
+/processor:PassThroughProcessor
+/build:nez/textures/textureWipeTransition/pokemon.xnb
+
+#begin nez/textures/textureWipeTransition/sawTooth.xnb
+/importer:WmvImporter
+/processor:PassThroughProcessor
+/build:nez/textures/textureWipeTransition/sawTooth.xnb
+
+#begin nez/textures/textureWipeTransition/spiral.xnb
+/importer:WmvImporter
+/processor:PassThroughProcessor
+/build:nez/textures/textureWipeTransition/spiral.xnb
+
+#begin nez/textures/textureWipeTransition/wink.xnb
+/importer:WmvImporter
+/processor:PassThroughProcessor
+/build:nez/textures/textureWipeTransition/wink.xnb
+
