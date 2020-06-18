@@ -15,6 +15,7 @@ namespace Server.Types
         InventoryInteraction,
         LoginSuccess,
         LoginFailure,
-        Register
+        Register,
+        GameUpdate
     };
 }

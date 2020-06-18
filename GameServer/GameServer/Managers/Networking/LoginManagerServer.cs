@@ -10,7 +10,7 @@ namespace Client.Managers
     class LoginManagerServer : LoginManagerHead
     {
 
-        public Character AccountCharacter;
+        public CharacterPlayer AccountCharacter;
 
         public LoginManagerServer(string username, string password) : base(username, password)
         {}
@@ -22,17 +22,17 @@ namespace Client.Managers
             bool testP = CryptoManager.CheckHash(password, hashed);
             if (testP)
             {
-                AccountCharacter = Newtonsoft.Json.JsonConvert.DeserializeObject<Character>(st[0]);
+                AccountCharacter = Newtonsoft.Json.JsonConvert.DeserializeObject<CharacterPlayer>(st[0]);
             }
             return true;
         }
 
-        public void SetCharacter(Character character)
+        public void SetCharacter(CharacterPlayer character)
         {
             AccountCharacter = character;
         }
 
-        public Character GetCharacter()
+        public CharacterPlayer GetCharacter()
         {
             return AccountCharacter;
         }

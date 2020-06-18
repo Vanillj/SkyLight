@@ -1,17 +1,16 @@
 ﻿using Client.Managers;
+using FarseerPhysics.Dynamics;
 using GameClient.Managers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Nez;
+using Nez.Farseer;
 using Nez.Sprites;
-using Nez.Textures;
+using Nez.Tweens;
 using Nez.UI;
 using Server.Scenes;
+using Server.Types;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GameClient.Scenes
 {
@@ -23,29 +22,77 @@ namespace GameClient.Scenes
 
         private Label label;
         private Entity player;
+        Texture2D playerTexture;
         public override void Initialize()
         {
             base.Initialize();
-            Texture2D playerTexture = Content.Load<Texture2D>("images/playerTexture");
+            playerTexture = Content.Load<Texture2D>("images/playerTexture");
             player = CreateEntity("Player");
-            player.AddComponent(new SpriteRenderer(playerTexture));
-            player.Position = new Vector2(0, 0);
+            player.SetPosition(new Vector2(0, 0))
+                .AddComponent<FSRigidBody>()
+                .SetBodyType(BodyType.Dynamic)
+                .AddComponent<FSCollisionCircle>()
+                .SetRadius(playerTexture.Width /2)
+                .AddComponent(new SpriteRenderer(playerTexture));
+
+            var body = player.GetComponent<FSRigidBody>();
+            body.Body.FixedRotation = true;
+            body.SetGravityScale(0);
+
+            CreateEntity("Object").SetPosition(new Vector2(200, 200))
+                .AddComponent(new SpriteRenderer(playerTexture));
+
             Table.Row();
             label = new Label("Logged in!").SetFontScale(3);
             Table.Add(label);
-            
-
         }
         public override void Update()
         {
             if (InputManager != null)
                 MessageManager.inputManager.CheckForInput();
-            Vector2 vector2 = LoginManagerClient.GetCharacter()._pos;
-            if (vector2 != player.Position)
+            if(LoginManagerClient.Othercharacter != null)
             {
-                var newP = vector2 - player.Transform.Position;
-                player.Transform.Position += newP;
+                foreach (CharacterHead others in LoginManagerClient.Othercharacter)
+                {
+                    Entity e = Core.Scene.FindEntity(others._name);
+                    
+                    float delta = Time.DeltaTime;
+                    if (e != null)
+                    {
+                        Vector2 diff = e.Transform.LocalToWorldTransform.Translation - others._pos;
+                        e.Transform.Position += diff;
+                        //var tween = e.Transform.TweenPositionTo(others._pos, 0.01f);
+                        //tween.Start();
+                    }
+                    else
+                    {
+                        Entity temp = CreateEntity(others._name).SetPosition(others._pos);
+                            temp.AddComponent(new SpriteRenderer(playerTexture));
+
+                    }
+                }
             }
+
+            Vector2 ClientsidePos = LoginManagerClient.GetCharacter()._pos;
+
+            if (ClientsidePos != player.Position)
+            {
+                //If error is too big, 
+                Vector2 recieved = LoginManagerClient.GetCharacter().physicalPosition;
+
+                float diff = recieved.Length() - ClientsidePos.Length();
+                Console.WriteLine(diff);
+
+                if (Math.Abs(diff) > 25)
+                {
+                    LoginManagerClient.GetCharacter()._pos = recieved;
+                    ClientsidePos = recieved;
+                }
+
+                ITween<Vector2> tween = player.Transform.TweenPositionTo(ClientsidePos, 0.01f);
+                tween.Start();
+            }
+            
             base.Update();
             
         }

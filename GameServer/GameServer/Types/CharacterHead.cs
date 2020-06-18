@@ -1,9 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Server.Types
 {
@@ -11,14 +7,14 @@ namespace Server.Types
     {
         public Vector2 _pos;
         public string _name;
+        public Texture2D playerTexture { get; set; }
 
-        public CharacterHead(int x, int y)
+        public CharacterHead(float x, float y, string name)
         {
             _pos.X = x;
             _pos.Y = y;
-            _name = "admin";
+            _name = name;
         }
-
 
     }
 }

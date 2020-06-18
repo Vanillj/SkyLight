@@ -43,16 +43,38 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="..\..\GameServer\GameServer\General\StaticConstantValues.cs">
+      <Link>General\StaticConstantValues.cs</Link>
+    </Compile>
     <Compile Include="..\..\GameServer\GameServer\Managers\CryptoManager.cs">
       <Link>Managers\CryptoManager.cs</Link>
     </Compile>
-    <Compile Include="..\..\GameServer\GameServer\Types\MessageTemplate.cs">
-      <Link>Types\MessageTemplate.cs</Link>
+    <Compile Include="..\..\GameServer\GameServer\Types\CharacterHead.cs">
+      <Link>Types\CharacterHead.cs</Link>
     </Compile>
-    <Compile Include="..\..\GameServer\GameServer\Types\MessageType.cs">
-      <Link>Types\MessageType.cs</Link>
+    <Compile Include="..\..\GameServer\GameServer\Types\CharacterPlayer.cs">
+      <Link>Types\CharacterPlayer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\GameServer\GameServer\Types\Item\ItemBase.cs">
+      <Link>Types\Item\ItemBase.cs</Link>
+    </Compile>
+    <Compile Include="..\..\GameServer\GameServer\Types\Item\ItemType.cs">
+      <Link>Types\Item\ItemType.cs</Link>
+    </Compile>
+    <Compile Include="..\..\GameServer\GameServer\Types\Item\WeaponTypes.cs">
+      <Link>Types\Item\WeaponTypes.cs</Link>
+    </Compile>
+    <Compile Include="..\..\GameServer\GameServer\Types\Networking\DataTemplate.cs">
+      <Link>Types\Networking\DataTemplate.cs</Link>
+    </Compile>
+    <Compile Include="..\..\GameServer\GameServer\Types\Networking\MessageTemplate.cs">
+      <Link>Types\Networking\MessageTemplate.cs</Link>
+    </Compile>
+    <Compile Include="..\..\GameServer\GameServer\Types\Networking\MessageType.cs">
+      <Link>Types\Networking\MessageType.cs</Link>
     </Compile>
     <Compile Include="GameClient.cs" />
+    <Compile Include="Managers\LoadManager.cs" />
     <Compile Include="Managers\Networking\ClientNetworkManager.cs" />
     <Compile Include="Managers\Input\InputManager.cs" />
     <Compile Include="Managers\Networking\LoginManagerClient.cs" />
@@ -64,7 +86,6 @@
     <Compile Include="Scenes\BaseScene.cs" />
     <Compile Include="Scenes\LoginScene.cs" />
     <Compile Include="Scenes\MainScene.cs" />
-    <Compile Include="Types\Character.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="BCrypt.Net, Version=0.1.4141.31969, Culture=neutral, PublicKeyToken=f3bc8f8c31beeb49, processorArchitecture=MSIL">
@@ -137,10 +158,17 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\OneDrive\Documents\Development\Nez\Nez.FarseerPhysics\Nez.FarseerPhysics.csproj">
+      <Project>{db2d2aa2-5f6b-4acd-8792-70cc0d05baa5}</Project>
+      <Name>Nez.FarseerPhysics</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\OneDrive\Documents\Development\Nez\Nez.Portable\Nez.csproj">
       <Project>{db022000-6bdb-4837-a4d0-5e48c2d0c4fe}</Project>
       <Name>Nez</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Assets\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />

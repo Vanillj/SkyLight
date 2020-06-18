@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameClient", "GameClient\Ga
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nez", "..\..\..\..\OneDrive\Documents\Development\Nez\Nez.Portable\Nez.csproj", "{DB022000-6BDB-4837-A4D0-5E48C2D0C4FE}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nez.FarseerPhysics", "..\..\..\..\OneDrive\Documents\Development\Nez\Nez.FarseerPhysics\Nez.FarseerPhysics.csproj", "{DB2D2AA2-5F6B-4ACD-8792-70CC0D05BAA5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{DB022000-6BDB-4837-A4D0-5E48C2D0C4FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DB022000-6BDB-4837-A4D0-5E48C2D0C4FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DB022000-6BDB-4837-A4D0-5E48C2D0C4FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB2D2AA2-5F6B-4ACD-8792-70CC0D05BAA5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB2D2AA2-5F6B-4ACD-8792-70CC0D05BAA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB2D2AA2-5F6B-4ACD-8792-70CC0D05BAA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB2D2AA2-5F6B-4ACD-8792-70CC0D05BAA5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

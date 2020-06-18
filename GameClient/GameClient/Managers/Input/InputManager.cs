@@ -1,5 +1,4 @@
-﻿using Client.Types;
-using GameClient.Managers;
+﻿using GameClient.Managers;
 using GameClient.Scenes;
 using Lidgren.Network;
 using Microsoft.Xna.Framework;
@@ -42,7 +41,8 @@ namespace Client.Managers
             else if (newState.IsKeyDown(Keys.S) && oldState.IsKeyDown(Keys.S))
             {
                 // the player is holding the key down
-
+                //LoginManagerClient.GetCharacter()._pos.Y += 3*60f * Time.DeltaTime;
+                LoginManagerClient.GetCharacter()._pos.Y += 3;
             }
             else if (!newState.IsKeyDown(Keys.S) && oldState.IsKeyDown(Keys.S))
             {
@@ -56,6 +56,8 @@ namespace Client.Managers
             else if (newState.IsKeyDown(Keys.W) && oldState.IsKeyDown(Keys.W))
             {
                 // the player is holding the key down
+                //LoginManagerClient.GetCharacter()._pos.Y -= 3*60f * Time.DeltaTime;
+                LoginManagerClient.GetCharacter()._pos.Y -= 3;
             }
             else if (!newState.IsKeyDown(Keys.W) && oldState.IsKeyDown(Keys.W))
             {
@@ -70,7 +72,8 @@ namespace Client.Managers
             else if (newState.IsKeyDown(Keys.A) && oldState.IsKeyDown(Keys.A))
             {
                 // the player is holding the key down
-
+                //LoginManagerClient.GetCharacter()._pos.X -= 3*60f * Time.DeltaTime;
+                LoginManagerClient.GetCharacter()._pos.X -= 3;
             }
             else if (!newState.IsKeyDown(Keys.A) && oldState.IsKeyDown(Keys.A))
             {
@@ -85,7 +88,8 @@ namespace Client.Managers
             else if (newState.IsKeyDown(Keys.D) && oldState.IsKeyDown(Keys.D))
             {
                 // the player is holding the key down
-
+                //LoginManagerClient.GetCharacter()._pos.X += 3*60f * Time.DeltaTime;
+                LoginManagerClient.GetCharacter()._pos.X += 3;
             }
             else if (!newState.IsKeyDown(Keys.D) && oldState.IsKeyDown(Keys.D))
             {
@@ -93,12 +97,6 @@ namespace Client.Managers
 
             }
 
-            /*if (changeInPosition != Vector2.Zero && ClientNetworkManager.client.ConnectionStatus == NetConnectionStatus.Connected && !(Core.Scene is LoginScene))
-            {
-                string changeS = Newtonsoft.Json.JsonConvert.SerializeObject(changeInPosition);
-                MessageManager.AddToQueue(new MessageTemplate(changeS, MessageType.Movement));
-                changeInPosition = Vector2.Zero;
-            }*/
             oldState = newState;
         }
 

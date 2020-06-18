@@ -1,6 +1,8 @@
 ﻿using GameServer.Scenes;
+using Microsoft.Xna.Framework;
 using Nez;
 using Server.Managers;
+using System;
 
 namespace GameServer
 {
@@ -9,9 +11,9 @@ namespace GameServer
 
         ServerNetworkManager networkManager;
         MessageManager MessageManager;
-        public Server()
+        public Server() : base()
         {
-
+            Window.AllowUserResizing = true;
         }
 
         protected override void Initialize()

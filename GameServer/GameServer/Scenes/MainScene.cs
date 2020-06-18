@@ -1,7 +1,17 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Client.Managers;
+using GameServer.Types;
+using Lidgren.Network;
+using Microsoft.Xna.Framework;
+using Nez;
+using Nez.BitmapFonts;
 using Nez.UI;
 using Server.Managers;
 using Server.Scenes;
+using Server.Types;
+using System;
+using System.Collections.Generic;
+using CharacterPlayer = Server.Types.CharacterPlayer;
+
 
 namespace GameServer.Scenes
 {
@@ -15,12 +25,19 @@ namespace GameServer.Scenes
         {
             base.Initialize();
             ConnectedCount = new Label("Current connections: 0").SetFontScale(5).SetFontColor(Color.Red);
-            
             Table.Add(ConnectedCount);
+            AddSceneComponent<GameSceneComponent>();
         }
 
+        float timeSpan = 0;
         public override void Update()
         {
+            timeSpan += Time.DeltaTime;
+            if (timeSpan > 0.05)
+            {
+                timeSpan = 0;
+            }
+            
             base.Update();
         }
     }

@@ -1,9 +1,10 @@
 ﻿using Client.Managers;
-using Client.Types;
 using GameClient.Scenes;
+using GameServer.Types;
 using Lidgren.Network;
 using Microsoft.Xna.Framework;
 using Nez;
+using Nez.Tweens;
 using Server.Managers;
 using Server.Types;
 using System;
@@ -74,25 +75,52 @@ namespace GameClient.Managers
 
         private static void CustomMessage(NetIncomingMessage message)
         {
-            string s = message.ReadString();
-            var template = Newtonsoft.Json.JsonConvert.DeserializeObject<MessageTemplate>(s);
+            var template = Newtonsoft.Json.JsonConvert.DeserializeObject<MessageTemplate>(message.ReadString());
 
             switch (template.MessageType)
             {
                 case MessageType.LoginSuccess:
                     Console.WriteLine("Login and recieved sucessfully!");
                     Core.StartSceneTransition(new FadeTransition(() => new MainScene() { InputManager = inputManager }));
-                    Character c = Newtonsoft.Json.JsonConvert.DeserializeObject<Character>(template.JsonMessage);
+                    CharacterPlayer c = Newtonsoft.Json.JsonConvert.DeserializeObject<CharacterPlayer>(template.JsonMessage);
                     login.SetCharacter(c);
                     break;
 
                 case MessageType.LoginFailure:
-                    
+                    Console.WriteLine("Failed to login! Try again");
                     break;
 
                 case MessageType.Movement:
                     Vector2 vector2 = Newtonsoft.Json.JsonConvert.DeserializeObject<Vector2>(template.JsonMessage);
                     LoginManagerClient.GetCharacter().MoveToPos(vector2);
+                    break;
+                case MessageType.GameUpdate:
+                    DataTemplate dataTemplate = Newtonsoft.Json.JsonConvert.DeserializeObject<DataTemplate>(template.JsonMessage);
+
+                    //the recieved position
+                    LoginManagerClient.SetRecievedPosition(dataTemplate.RecieverCharacter._pos);
+                    LoginManagerClient.GetCharacter().physicalPosition = ((CharacterPlayer)dataTemplate.RecieverCharacter).physicalPosition;
+                    //TODO: Remove element that are not recieved from list
+
+                    //add other character in area to a list
+                    if (dataTemplate.OthersCharacters != null && dataTemplate.OthersCharacters.Count > 0)
+                    {
+                        foreach (CharacterHead charac in dataTemplate.OthersCharacters)
+                        {
+                            int i = LoginManagerClient.Othercharacter.FindIndex(tempc => tempc._name.Equals(charac._name));
+
+
+                            if (i == -1)
+                            {
+                                LoginManagerClient.Othercharacter.Add(charac);
+                            }
+                            else
+                            {
+                                LoginManagerClient.Othercharacter[i] = charac;
+                            }
+                        }
+                    }
+                    
                     break;
             }
         }
@@ -111,6 +139,8 @@ namespace GameClient.Managers
                     Debug.WriteLine("Attemps: " + attempts);
                 else
                     attempts = 0;
+                if (login != null || LoginManagerClient.GetCharacter() == null)
+                    SendLoginRequest();
             }
         }
 

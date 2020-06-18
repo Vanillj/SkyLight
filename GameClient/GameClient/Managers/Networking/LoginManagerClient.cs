@@ -1,22 +1,36 @@
-﻿using Client.Types;
+﻿using Microsoft.Xna.Framework;
 using Server.Managers;
+using Server.Types;
+using System.Collections.Generic;
 
 namespace Client.Managers
 {
     class LoginManagerClient : LoginManagerHead
     {
-        private static Character AccountCharacter;
+        private static CharacterPlayer AccountCharacter;
+        public static List<CharacterHead> Othercharacter = new List<CharacterHead>();
+        private static Vector2 RecievedPosition;
         public LoginManagerClient(string username, string password) : base(username, password)
-        { }
+        {}
 
-        public void SetCharacter(Character character)
+        public void SetCharacter(CharacterPlayer character)
         {
             AccountCharacter = character;
         }
 
-        public static Character GetCharacter()
+        public static CharacterPlayer GetCharacter()
         {
             return AccountCharacter;
+        }
+
+        public static Vector2 GetRecievedPosition()
+        {
+            return RecievedPosition;
+        }
+
+        internal static void SetRecievedPosition(Vector2 pos)
+        {
+            RecievedPosition = pos;
         }
     }
 }

@@ -23,26 +23,27 @@ namespace Server.Scenes
 
         public void SetupScene()
         {
+            
             AddRenderer(new DefaultRenderer());
             var UICanvas = CreateEntity("ui-canvas").AddComponent(new UICanvas());
             Table = UICanvas.Stage.AddElement(new Table());
             Table.SetFillParent(true).Top().PadLeft(10).PadTop(50);
 
         }
-        int i = 0;
+
+        float timeSpan = 0;
         public override void Update()
         {
-            if(messageManager != null)
+            timeSpan += Time.DeltaTime;
+            if (messageManager != null)
             {
+                MessageManager.CheckForMessage();
                 //delay
-                i++;
-                if ( i > 3)
+                if (timeSpan > 0.033)
                 {
                     MessageManager.SendQueue();
-                    i = 0;
+                    timeSpan = 0;
                 }
-                
-                MessageManager.CheckForMessage();
             }
             base.Update(); 
             

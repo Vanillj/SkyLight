@@ -22,7 +22,7 @@ namespace Server.Managers
         }
         public static void ChangeCharacterPosition(Vector2 vector, float uniqueID)
         {
-            Character c = GetCharacterFromUniqueID(uniqueID);
+            CharacterPlayer c = GetCharacterFromUniqueID(uniqueID);
             if(c != null)
             {
                 c._pos.X += vector.X;
@@ -31,7 +31,7 @@ namespace Server.Managers
 
         }
 
-        public static Character GetCharacterFromUniqueID(float uniqueID)
+        public static CharacterPlayer GetCharacterFromUniqueID(float uniqueID)
         {
             foreach (LoginManagerServer l in LoginManagerServerList)
             {

@@ -1,41 +1,54 @@
 ﻿using Microsoft.Xna.Framework.Input;
 using Server.Types;
+using System;
+using System.Diagnostics;
 
 namespace Server.Managers
 {
     class InputManager
     {
-        ServerNetworkManager networkManager;
-        public InputManager(ServerNetworkManager _networkManager)
+        public InputManager()
         {
-            networkManager = _networkManager;
         }
 
-        public static void CalculateMovement(Character character, Keys[] keys)
+        public static void CalculateMovement(CharacterPlayer character, Keys[] keys)
         {
-            foreach (var key in keys)
-            {
-                switch (key)
-                {
-                    case Keys.W:
-                        character._pos.Y -= 1f;
-                        break;
-                    case Keys.A:
-                        character._pos.X -= 1f;
-                        break;
-                    case Keys.S:
-                        character._pos.Y += 1f;
-                        break;
-                    case Keys.D:
-                        character._pos.X += 1f;
-                        break;
+            if (character == null)
+                return;
 
-                    default:
-                        break;
+            try
+            {
+                foreach (var key in keys)
+                {
+                    //add proper movement with deltaTime later
+                    switch (key)
+                    {
+                        case Keys.W:
+                            character._pos.Y -= 3f;
+                            break;
+                        case Keys.A:
+                            character._pos.X -= 3f;
+                            break;
+                        case Keys.S:
+                            character._pos.Y += 3f;
+                            break;
+                        case Keys.D:
+                            character._pos.X += 3f;
+                            break;
+
+                        default:
+                            break;
+                    }
                 }
             }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+            }
+            
             
         }
 
     }
+
 }

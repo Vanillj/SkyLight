@@ -1,0 +1,39 @@
+﻿<Window x:Class="ItemGenerator.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ItemGenerator"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="353.295" Width="471.204">
+    <Grid Margin="0,0,2,0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="47*"/>
+            <ColumnDefinition Width="349*"/>
+        </Grid.ColumnDefinitions>
+        <Button Content="Generate" Grid.Column="1" HorizontalAlignment="Left" Margin="285,296,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
+        <TextBox x:Name="Name" HorizontalAlignment="Left" Height="23" Margin="10,35,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Grid.ColumnSpan="2"/>
+        <Label Content="Name" HorizontalAlignment="Left" Margin="10,4,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="ID" HorizontalAlignment="Left" Height="23" Margin="10,94,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Grid.ColumnSpan="2"/>
+        <Label Content="ID" HorizontalAlignment="Left" Margin="10,63,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="TextureName" HorizontalAlignment="Left" Height="23" Margin="10,153,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Grid.ColumnSpan="2"/>
+        <Label Content="Texture name" HorizontalAlignment="Left" Margin="10,122,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Width="97"/>
+        <ComboBox x:Name="TypeBox" Grid.Column="1" HorizontalAlignment="Left" Margin="239,33,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="ComboBox_SelectionChanged"/>
+        <CheckBox x:Name="IsWeapon" Content="Is Weapon?" Grid.Column="1" HorizontalAlignment="Left" Margin="239,92,0,0" VerticalAlignment="Top" Checked="CheckBox_Checked"/>
+        <Label Content="Type" HorizontalAlignment="Left" Margin="239,2,0,0" VerticalAlignment="Top" Grid.Column="1"/>
+        <ComboBox x:Name="WeaponType" Grid.Column="1" HorizontalAlignment="Left" Margin="239,151,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="ComboBox_SelectionChanged"/>
+        <Label Content="Type" HorizontalAlignment="Left" Margin="239,120,0,0" VerticalAlignment="Top" Grid.Column="1"/>
+        <TextBox x:Name="Lower" HorizontalAlignment="Left" Height="23" Margin="239,210,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="38" Grid.Column="1"/>
+        <Label x:Name="Range" Content="Weapon damage range" HorizontalAlignment="Left" Margin="229,179,0,0" VerticalAlignment="Top" Grid.Column="1"/>
+        <TextBox x:Name="Upper" HorizontalAlignment="Left" Height="23" Margin="305,210,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="38" Grid.Column="1"/>
+        <Label x:Name="Range_Copy" Content="-" HorizontalAlignment="Left" Margin="285,207,0,0" VerticalAlignment="Top" Grid.Column="1"/>
+        <TextBox x:Name="IntB" HorizontalAlignment="Left" Height="23" Margin="110,63,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="55" Grid.Column="1"/>
+        <Label x:Name="Int" Content="Intelligence" HorizontalAlignment="Left" Margin="110,32,0,0" VerticalAlignment="Top" Grid.Column="1"/>
+        <TextBox x:Name="StrB" HorizontalAlignment="Left" Height="23" Margin="110,122,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="55" Grid.Column="1"/>
+        <Label x:Name="Str" Content="Strength" HorizontalAlignment="Left" Margin="110,91,0,0" VerticalAlignment="Top" Grid.Column="1"/>
+        <Label Content="Attributes" HorizontalAlignment="Left" Margin="110,0,0,0" VerticalAlignment="Top" Grid.Column="1"/>
+        <TextBox x:Name="DexB" HorizontalAlignment="Left" Height="23" Margin="110,181,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="55" Grid.Column="1"/>
+        <Label x:Name="Dex" Content="Dexterity" HorizontalAlignment="Left" Margin="110,150,0,0" VerticalAlignment="Top" Grid.Column="1"/>
+
+    </Grid>
+</Window>

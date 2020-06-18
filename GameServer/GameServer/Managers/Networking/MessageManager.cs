@@ -54,7 +54,7 @@ namespace Server.Managers
         {
             string s = message.ReadString();
             List<MessageTemplate> QueueList = Newtonsoft.Json.JsonConvert.DeserializeObject<List<MessageTemplate>>(s);
-            Character c = CharacterManager.GetCharacterFromUniqueID(message.SenderConnection.RemoteUniqueIdentifier);
+            CharacterPlayer c = CharacterManager.GetCharacterFromUniqueID(message.SenderConnection.RemoteUniqueIdentifier);
 
             QueueList.ForEach((template) =>
             {
@@ -76,24 +76,12 @@ namespace Server.Managers
                 }
             });
 
-            //Gets the the position and returns it
-            if (c != null)
-            {
-                string posString = Newtonsoft.Json.JsonConvert.SerializeObject(c._pos);
-                MessageTemplate temp = new MessageTemplate(posString, MessageType.Movement);
-                NetOutgoingMessage mvmntMessage = ServerNetworkManager.server.CreateMessage(Newtonsoft.Json.JsonConvert.SerializeObject(temp));
-                NetConnection sender = message.SenderConnection;
-                sender.SendMessage(mvmntMessage, NetDeliveryMethod.ReliableOrdered, 0);
-                Console.WriteLine("Reply successful.");
-            }
-            var data = message.ReadString();
-            Debug.WriteLine(data);
         }
 
         private static void LoginAttempt(NetIncomingMessage message, MessageTemplate template)
         {
             var temsp = Newtonsoft.Json.JsonConvert.DeserializeObject<LoginManagerServer>(template.JsonMessage);
-            
+
             temsp.SetUniqueID(message.SenderConnection.RemoteUniqueIdentifier);
             Console.WriteLine("Login attempt by: " + temsp.username);
             NetConnection sender = message.SenderConnection;
@@ -105,9 +93,13 @@ namespace Server.Managers
                 if (success)
                 {
                     Console.WriteLine("Logged in with \"" + temsp.username + "\" to Database");
-                    Character temps = new Character(0,0);
+
+                    //remove later
+                    CharacterPlayer temps = new CharacterPlayer(temsp.AccountCharacter._pos.X, temsp.AccountCharacter._pos.Y, temsp.username);
+
                     string characterString = Newtonsoft.Json.JsonConvert.SerializeObject(temps);
                     MessageTemplate temp = new MessageTemplate(characterString, MessageType.LoginSuccess);
+
                     NetOutgoingMessage mvmntMessage = ServerNetworkManager.server.CreateMessage(Newtonsoft.Json.JsonConvert.SerializeObject(temp));
                     sender.SendMessage(mvmntMessage, NetDeliveryMethod.ReliableOrdered, 0);
                 }
@@ -117,7 +109,7 @@ namespace Server.Managers
                     NetOutgoingMessage mvmntMessage = ServerNetworkManager.server.CreateMessage(Newtonsoft.Json.JsonConvert.SerializeObject(temp));
                     sender.SendMessage(mvmntMessage, NetDeliveryMethod.ReliableOrdered, 0);
                 }
-                
+
             }
             else
             {
@@ -127,14 +119,15 @@ namespace Server.Managers
             }
 
             CharacterManager.AddLoginManagerServerToList(temsp);
-            
+
         }
 
         private static void RegisterUser(LoginManagerServer login)
         {
             //TODO: Move register to its own function
             //TODO: add better character creation later
-            login.SetCharacter(new Character(0, 0));
+            //TODO: Change login.username to requrested character name
+            login.SetCharacter(new CharacterPlayer(0, 0, login.username));
             string tempC = Newtonsoft.Json.JsonConvert.SerializeObject(login.GetCharacter());
             SQLManager.AddToSQL(login.username, login.password, tempC);
         }
@@ -147,11 +140,27 @@ namespace Server.Managers
             }
             if (message.SenderConnection.Status == NetConnectionStatus.Disconnected)
             {
+                CharacterManager.LoginManagerServerList.RemoveWhere(l => l.GetUniqueID().Equals(message.SenderConnection.RemoteUniqueIdentifier));
                 Debug.WriteLine("Disconnected! Connected: " + ServerNetworkManager.server.ConnectionsCount);
 
             }
             MainScene.ConnectedCount.SetText("Current connections: " + ServerNetworkManager.server.ConnectionsCount);
         }
 
+        public static void SendStringToUniqueID(string message, long UniqueID, MessageType type)
+        {
+            MessageTemplate temp = new MessageTemplate(message, type);
+
+            NetOutgoingMessage mvmntMessage = ServerNetworkManager.server.CreateMessage(Newtonsoft.Json.JsonConvert.SerializeObject(temp));
+            var connections = ServerNetworkManager.server.Connections;
+
+            NetConnection reciever = connections.Find(c => c.RemoteUniqueIdentifier.Equals(UniqueID));
+            if (reciever != null)
+            {
+                reciever.SendMessage(mvmntMessage, NetDeliveryMethod.UnreliableSequenced, 0);
+
+            }
+
+        }
     }
 }

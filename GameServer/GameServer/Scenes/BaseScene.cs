@@ -32,7 +32,6 @@ namespace Server.Scenes
 
         public override void Update()
         {
-            
             MessageManager.CheckForMessageAvailable();
             base.Update();
         }
