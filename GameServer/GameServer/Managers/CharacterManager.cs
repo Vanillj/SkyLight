@@ -9,16 +9,16 @@ namespace Server.Managers
 {
     class CharacterManager
     {
-        public static HashSet<LoginManagerServer> LoginManagerServerList = new HashSet<LoginManagerServer>();
+        private static HashSet<LoginManagerServer> LoginManagerServerList = new HashSet<LoginManagerServer>();
 
         public static void AddLoginManagerServerToList(LoginManagerServer login)
         {
             LoginManagerServerList.Add(login);
         }
 
-        public static void RemoveLoginManagerServerFromList(LoginManagerServer login)
+        public static void RemoveLoginManagerServerFromList(float UniqueID)
         {
-            LoginManagerServerList.Remove(login);
+            LoginManagerServerList.RemoveWhere(l => l.GetUniqueID().Equals(UniqueID)); ;
         }
         public static void ChangeCharacterPosition(Vector2 vector, float uniqueID)
         {
@@ -29,6 +29,11 @@ namespace Server.Managers
                 c._pos.Y += vector.Y;
             }
 
+        }
+
+        public static HashSet<LoginManagerServer> GetLoginManagerServerList()
+        {
+            return LoginManagerServerList;
         }
 
         public static CharacterPlayer GetCharacterFromUniqueID(float uniqueID)

@@ -33,7 +33,7 @@ namespace GameServer.Types.Components
             timeSpan += Time.DeltaTime;
             if (timeSpan > 0.05)
             {
-                HashSet<LoginManagerServer> characterlist = CharacterManager.LoginManagerServerList;
+                HashSet<LoginManagerServer> characterlist = CharacterManager.GetLoginManagerServerList();
                 if (characterlist != null && characterlist.Count > 0 && loginManager != null)
                 {
                     CharacterPlayer tempc = loginManager.GetCharacter();

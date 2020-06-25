@@ -9,6 +9,7 @@ namespace Server.Types
     enum MessageType
     {
         Login,
+        Disconnected,
         Chat,
         Movement,
         Attack,

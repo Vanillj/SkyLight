@@ -52,17 +52,17 @@ namespace GameClient.Scenes
                 MessageManager.inputManager.CheckForInput();
             if(LoginManagerClient.Othercharacter != null)
             {
-                foreach (CharacterHead others in LoginManagerClient.Othercharacter)
+                foreach (CharacterPlayer others in LoginManagerClient.Othercharacter)
                 {
                     Entity e = Core.Scene.FindEntity(others._name);
                     
                     float delta = Time.DeltaTime;
                     if (e != null)
                     {
-                        Vector2 diff = e.Transform.LocalToWorldTransform.Translation - others._pos;
-                        e.Transform.Position += diff;
-                        //var tween = e.Transform.TweenPositionTo(others._pos, 0.01f);
-                        //tween.Start();
+                        //Vector2 diff = e.Transform.LocalToWorldTransform.Translation - others._pos;
+                        //e.Transform.Position += diff;
+                        var tween = e.Transform.TweenPositionTo(others.physicalPosition, 0.01f);
+                        tween.Start();
                     }
                     else
                     {

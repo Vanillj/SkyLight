@@ -48,7 +48,7 @@ namespace GameServer.Types
                 return;
             total = 0;
 
-            HashSet<LoginManagerServer> characterlist =  CharacterManager.LoginManagerServerList;
+            HashSet<LoginManagerServer> characterlist =  CharacterManager.GetLoginManagerServerList();
             if (characterlist == null || characterlist.Count < 1)
                 return;
 

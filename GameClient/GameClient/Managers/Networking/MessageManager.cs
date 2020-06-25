@@ -56,6 +56,17 @@ namespace GameClient.Managers
             }
         }
 
+        internal static void SendExitMessage()
+        {
+            List<MessageTemplate> tempQueue = new List<MessageTemplate>();
+            tempQueue.Add(new MessageTemplate(Newtonsoft.Json.JsonConvert.SerializeObject(login), MessageType.Disconnected));
+            string send = Newtonsoft.Json.JsonConvert.SerializeObject(tempQueue);
+
+            var messageToSend = ClientNetworkManager.client.CreateMessage(send);
+            ClientNetworkManager.client.SendMessage(messageToSend, NetDeliveryMethod.ReliableOrdered);
+            Debug.WriteLine("Successfully Sent Exit!");
+        }
+
         public static void SendQueue()
         {
             if (!QueueList.Any())
@@ -105,7 +116,7 @@ namespace GameClient.Managers
                     //add other character in area to a list
                     if (dataTemplate.OthersCharacters != null && dataTemplate.OthersCharacters.Count > 0)
                     {
-                        foreach (CharacterHead charac in dataTemplate.OthersCharacters)
+                        foreach (CharacterPlayer charac in dataTemplate.OthersCharacters)
                         {
                             int i = LoginManagerClient.Othercharacter.FindIndex(tempc => tempc._name.Equals(charac._name));
 

@@ -42,7 +42,7 @@ namespace Client.Managers
             {
                 // the player is holding the key down
                 //LoginManagerClient.GetCharacter()._pos.Y += 3*60f * Time.DeltaTime;
-                LoginManagerClient.GetCharacter()._pos.Y += 3;
+                LoginManagerClient.GetCharacter()._pos.Y += 2.5f;
             }
             else if (!newState.IsKeyDown(Keys.S) && oldState.IsKeyDown(Keys.S))
             {
@@ -57,7 +57,7 @@ namespace Client.Managers
             {
                 // the player is holding the key down
                 //LoginManagerClient.GetCharacter()._pos.Y -= 3*60f * Time.DeltaTime;
-                LoginManagerClient.GetCharacter()._pos.Y -= 3;
+                LoginManagerClient.GetCharacter()._pos.Y -= 2.5f;
             }
             else if (!newState.IsKeyDown(Keys.W) && oldState.IsKeyDown(Keys.W))
             {
@@ -73,7 +73,7 @@ namespace Client.Managers
             {
                 // the player is holding the key down
                 //LoginManagerClient.GetCharacter()._pos.X -= 3*60f * Time.DeltaTime;
-                LoginManagerClient.GetCharacter()._pos.X -= 3;
+                LoginManagerClient.GetCharacter()._pos.X -= 2.5f;
             }
             else if (!newState.IsKeyDown(Keys.A) && oldState.IsKeyDown(Keys.A))
             {
@@ -89,7 +89,7 @@ namespace Client.Managers
             {
                 // the player is holding the key down
                 //LoginManagerClient.GetCharacter()._pos.X += 3*60f * Time.DeltaTime;
-                LoginManagerClient.GetCharacter()._pos.X += 3;
+                LoginManagerClient.GetCharacter()._pos.X += 2.5f;
             }
             else if (!newState.IsKeyDown(Keys.D) && oldState.IsKeyDown(Keys.D))
             {

@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Nez;
 using Server.Scenes;
+using System;
 
 namespace GameClient
 {
@@ -35,6 +36,12 @@ namespace GameClient
             LoginScene mainScene = new LoginScene() {  };
             //SceneManager.CurrentScene = mainScene;
             Scene = mainScene;
+        }
+
+        protected override void OnExiting(object sender, EventArgs args)
+        {
+            MessageManager.SendExitMessage();
+            base.OnExiting(sender, args);
         }
 
     }

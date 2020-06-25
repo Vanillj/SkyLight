@@ -8,7 +8,7 @@ namespace Client.Managers
     class LoginManagerClient : LoginManagerHead
     {
         private static CharacterPlayer AccountCharacter;
-        public static List<CharacterHead> Othercharacter = new List<CharacterHead>();
+        public static List<CharacterPlayer> Othercharacter = new List<CharacterPlayer>();
         private static Vector2 RecievedPosition;
         public LoginManagerClient(string username, string password) : base(username, password)
         {}

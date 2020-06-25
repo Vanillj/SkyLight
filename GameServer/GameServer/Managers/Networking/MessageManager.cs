@@ -1,10 +1,13 @@
 ﻿using Client.Managers;
+using GameServer;
 using GameServer.Scenes;
 using Lidgren.Network;
 using Microsoft.Xna.Framework.Input;
+using Nez;
 using Server.Types;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Debug = System.Diagnostics.Debug;
 
 namespace Server.Managers
@@ -15,7 +18,8 @@ namespace Server.Managers
         public static void CheckForMessageAvailable()
         {
             NetIncomingMessage message;
-            if ((message = ServerNetworkManager.server.ReadMessage()) != null)
+            NetServer server = ServerNetworkManager.GetNetServer();
+            if ((message = server.ReadMessage()) != null)
             {
                 CheckForMessage(message);
             }
@@ -73,6 +77,17 @@ namespace Server.Managers
                         LoginManagerServer login = Newtonsoft.Json.JsonConvert.DeserializeObject<LoginManagerServer>(template.JsonMessage);
                         RegisterUser(login);
                         break;
+
+                    case MessageType.Disconnected:
+                        NetServer server = ServerNetworkManager.GetNetServer();
+                        CharacterManager.RemoveLoginManagerServerFromList(message.SenderConnection.RemoteUniqueIdentifier);
+                        server.Connections.Remove(message.SenderConnection);
+                        MainScene.ConnectedCount.SetText("Current connections: " + server.ConnectionsCount);
+                        LoginManagerServer loginManager = CharacterManager.GetLoginManagerServerList().First(l => l.GetUniqueID().Equals(message.SenderConnection.RemoteUniqueIdentifier));
+                        Entity e = GameServer.Server.Scene.FindEntity(loginManager.GetCharacter()._name);
+                        GameServer.Server.Scene.Entities.Remove(e);
+                        break;
+
                 }
             });
 
@@ -100,13 +115,13 @@ namespace Server.Managers
                     string characterString = Newtonsoft.Json.JsonConvert.SerializeObject(temps);
                     MessageTemplate temp = new MessageTemplate(characterString, MessageType.LoginSuccess);
 
-                    NetOutgoingMessage mvmntMessage = ServerNetworkManager.server.CreateMessage(Newtonsoft.Json.JsonConvert.SerializeObject(temp));
+                    NetOutgoingMessage mvmntMessage = ServerNetworkManager.GetNetServer().CreateMessage(Newtonsoft.Json.JsonConvert.SerializeObject(temp));
                     sender.SendMessage(mvmntMessage, NetDeliveryMethod.ReliableOrdered, 0);
                 }
                 else
                 {
                     MessageTemplate temp = new MessageTemplate("Failure.", MessageType.LoginFailure);
-                    NetOutgoingMessage mvmntMessage = ServerNetworkManager.server.CreateMessage(Newtonsoft.Json.JsonConvert.SerializeObject(temp));
+                    NetOutgoingMessage mvmntMessage = ServerNetworkManager.GetNetServer().CreateMessage(Newtonsoft.Json.JsonConvert.SerializeObject(temp));
                     sender.SendMessage(mvmntMessage, NetDeliveryMethod.ReliableOrdered, 0);
                 }
 
@@ -114,7 +129,7 @@ namespace Server.Managers
             else
             {
                 MessageTemplate temp = new MessageTemplate("Failure.", MessageType.LoginFailure);
-                NetOutgoingMessage mvmntMessage = ServerNetworkManager.server.CreateMessage(Newtonsoft.Json.JsonConvert.SerializeObject(temp));
+                NetOutgoingMessage mvmntMessage = ServerNetworkManager.GetNetServer().CreateMessage(Newtonsoft.Json.JsonConvert.SerializeObject(temp));
                 sender.SendMessage(mvmntMessage, NetDeliveryMethod.ReliableOrdered, 0);
             }
 
@@ -140,19 +155,19 @@ namespace Server.Managers
             }
             if (message.SenderConnection.Status == NetConnectionStatus.Disconnected)
             {
-                CharacterManager.LoginManagerServerList.RemoveWhere(l => l.GetUniqueID().Equals(message.SenderConnection.RemoteUniqueIdentifier));
-                Debug.WriteLine("Disconnected! Connected: " + ServerNetworkManager.server.ConnectionsCount);
+                CharacterManager.GetLoginManagerServerList().RemoveWhere(l => l.GetUniqueID().Equals(message.SenderConnection.RemoteUniqueIdentifier));
+                Debug.WriteLine("Disconnected! Connected: " + ServerNetworkManager.GetNetServer().ConnectionsCount);
 
             }
-            MainScene.ConnectedCount.SetText("Current connections: " + ServerNetworkManager.server.ConnectionsCount);
+            MainScene.ConnectedCount.SetText("Current connections: " + ServerNetworkManager.GetNetServer().ConnectionsCount);
         }
 
         public static void SendStringToUniqueID(string message, long UniqueID, MessageType type)
         {
             MessageTemplate temp = new MessageTemplate(message, type);
 
-            NetOutgoingMessage mvmntMessage = ServerNetworkManager.server.CreateMessage(Newtonsoft.Json.JsonConvert.SerializeObject(temp));
-            var connections = ServerNetworkManager.server.Connections;
+            NetOutgoingMessage mvmntMessage = ServerNetworkManager.GetNetServer().CreateMessage(Newtonsoft.Json.JsonConvert.SerializeObject(temp));
+            var connections = ServerNetworkManager.GetNetServer().Connections;
 
             NetConnection reciever = connections.Find(c => c.RemoteUniqueIdentifier.Equals(UniqueID));
             if (reciever != null)
