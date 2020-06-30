@@ -26,21 +26,17 @@ namespace GameClient.Scenes
         public override void Initialize()
         {
             base.Initialize();
+
             playerTexture = Content.Load<Texture2D>("images/playerTexture");
             player = CreateEntity("Player");
             player.SetPosition(new Vector2(0, 0))
-                .AddComponent<FSRigidBody>()
-                .SetBodyType(BodyType.Dynamic)
-                .AddComponent<FSCollisionCircle>()
-                .SetRadius(playerTexture.Width /2)
                 .AddComponent(new SpriteRenderer(playerTexture));
-
-            var body = player.GetComponent<FSRigidBody>();
-            body.Body.FixedRotation = true;
-            body.SetGravityScale(0);
 
             CreateEntity("Object").SetPosition(new Vector2(200, 200))
                 .AddComponent(new SpriteRenderer(playerTexture));
+            FollowCamera fCamera = new FollowCamera(player, FollowCamera.CameraStyle.LockOn);
+            fCamera.FollowLerp = 0.1f;
+            player.AddComponent(fCamera);
 
             Table.Row();
             label = new Label("Logged in!").SetFontScale(3);
@@ -50,6 +46,7 @@ namespace GameClient.Scenes
         {
             if (InputManager != null)
                 MessageManager.inputManager.CheckForInput();
+
             if(LoginManagerClient.Othercharacter != null)
             {
                 foreach (CharacterPlayer others in LoginManagerClient.Othercharacter)
@@ -73,7 +70,8 @@ namespace GameClient.Scenes
                 }
             }
 
-            Vector2 ClientsidePos = LoginManagerClient.GetCharacter()._pos;
+            //Vector2 ClientsidePos = LoginManagerClient.GetCharacter()._pos;
+            Vector2 ClientsidePos = LoginManagerClient.GetCharacter().physicalPosition;
 
             if (ClientsidePos != player.Position)
             {
@@ -83,7 +81,7 @@ namespace GameClient.Scenes
                 float diff = recieved.Length() - ClientsidePos.Length();
                 Console.WriteLine(diff);
 
-                if (Math.Abs(diff) > 25)
+                if (Math.Abs(diff) > 5)
                 {
                     LoginManagerClient.GetCharacter()._pos = recieved;
                     ClientsidePos = recieved;

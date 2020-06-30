@@ -33,7 +33,7 @@ namespace GameServer.Types
                 .SetBodyType(BodyType.Static)
                 .AddComponent<FSCollisionCircle>()
                 .SetRadius(playerTexture.Width / 2)
-                .AddComponent(new SpriteRenderer(playerTexture));
+                .AddComponent(new SpriteRenderer(playerTexture)).AddComponent(new CircleCollider());
         }
 
         float total = 0;
@@ -56,12 +56,7 @@ namespace GameServer.Types
             {
                 CharacterPlayer c = login.AccountCharacter;
                 Entity e = Core.Scene.FindEntity(c._name);
-                if (e != null)
-                {
-                    var tween = e.Transform.TweenPositionTo(c._pos, 0.033f);
-                    tween.Start();
-                }
-                else
+                if (e == null)
                 {
                     Entity temp = Scene.CreateEntity(c._name).SetPosition(c._pos);
                     temp.AddComponent<FSRigidBody>()
@@ -70,10 +65,13 @@ namespace GameServer.Types
                     .SetRadius(playerTexture.Width / 2)
                     .AddComponent(new SpriteRenderer(playerTexture))
                     .AddComponent(new PlayerComponent(login));
+                    temp.AddComponent(new Mover());
+                    temp.AddComponent(new CircleCollider());
 
                     var body = temp.GetComponent<FSRigidBody>();
                     body.Body.FixedRotation = true;
-                    body.SetGravityScale(0);
+                    body.SetIgnoreGravity(true);
+                    body.SetLinearDamping(15f);
                 }
 
             }

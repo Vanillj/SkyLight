@@ -20,6 +20,7 @@ namespace GameServer
         {
 
             base.Initialize();
+            Core.DebugRenderEnabled = true;
             Core.PauseOnFocusLost = false;
             networkManager = new ServerNetworkManager();
             MessageManager = new MessageManager();
