@@ -86,6 +86,7 @@
     <Compile Include="Scenes\BaseScene.cs" />
     <Compile Include="Scenes\LoginScene.cs" />
     <Compile Include="Scenes\MainScene.cs" />
+    <Compile Include="Types\Components\PlayerComponent.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="BCrypt.Net, Version=0.1.4141.31969, Culture=neutral, PublicKeyToken=f3bc8f8c31beeb49, processorArchitecture=MSIL">

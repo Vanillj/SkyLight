@@ -60,7 +60,7 @@ namespace Server.Managers
             List<MessageTemplate> QueueList = Newtonsoft.Json.JsonConvert.DeserializeObject<List<MessageTemplate>>(s);
             CharacterPlayer c = CharacterManager.GetCharacterFromUniqueID(message.SenderConnection.RemoteUniqueIdentifier);
 
-            QueueList.ForEach((template) =>
+            QueueList.ForEach(template =>
             {
                 switch (template.MessageType)
                 {
@@ -79,18 +79,34 @@ namespace Server.Managers
                         break;
 
                     case MessageType.Disconnected:
-                        NetServer server = ServerNetworkManager.GetNetServer();
-                        CharacterManager.RemoveLoginManagerServerFromList(message.SenderConnection.RemoteUniqueIdentifier);
-                        server.Connections.Remove(message.SenderConnection);
-                        MainScene.ConnectedCount.SetText("Current connections: " + server.ConnectionsCount);
-                        LoginManagerServer loginManager = CharacterManager.GetLoginManagerServerList().First(l => l.GetUniqueID().Equals(message.SenderConnection.RemoteUniqueIdentifier));
-                        Entity e = GameServer.Server.Scene.FindEntity(loginManager.GetCharacter()._name);
-                        GameServer.Server.Scene.Entities.Remove(e);
+                        OnDisconnected(message.SenderConnection);
                         break;
 
                 }
             });
 
+        }
+
+        private static void OnDisconnected(NetConnection sender)
+        {
+            NetServer server = ServerNetworkManager.GetNetServer();
+
+            //removes loginmanager
+            CharacterManager.RemoveLoginManagerServerFromList(sender.RemoteUniqueIdentifier);
+            //removes the connection
+            server.Connections.Remove(sender);
+
+            
+            LoginManagerServer loginManager = CharacterManager.GetLoginManagerServerList().FirstOrDefault(l => l.GetUniqueID().Equals(sender.RemoteUniqueIdentifier));
+            if (loginManager != null)
+            {
+                CharacterManager.GetLoginManagerServerList().Remove(loginManager);
+                Entity e = Core.Scene.FindEntity(loginManager.GetCharacter()._name);
+
+                Core.Scene.Entities.Remove(e);
+
+            }
+            MainScene.ConnectedCount.SetText("Current connections: " + server.ConnectionsCount);
         }
 
         private static void LoginAttempt(NetIncomingMessage message, MessageTemplate template)
@@ -117,6 +133,7 @@ namespace Server.Managers
 
                     NetOutgoingMessage mvmntMessage = ServerNetworkManager.GetNetServer().CreateMessage(Newtonsoft.Json.JsonConvert.SerializeObject(temp));
                     sender.SendMessage(mvmntMessage, NetDeliveryMethod.ReliableOrdered, 0);
+                    CharacterManager.AddLoginManagerServerToList(temsp);
                 }
                 else
                 {
@@ -133,7 +150,6 @@ namespace Server.Managers
                 sender.SendMessage(mvmntMessage, NetDeliveryMethod.ReliableOrdered, 0);
             }
 
-            CharacterManager.AddLoginManagerServerToList(temsp);
 
         }
 

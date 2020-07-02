@@ -15,6 +15,7 @@ namespace Client.Managers
         public LoginManagerServer(string username, string password) : base(username, password)
         {}
 
+        /** True if logged in and  **/
         public bool SetupLogin()
         {
             string[] st = SQLManager.GetDataFromSQL(username);
@@ -23,8 +24,9 @@ namespace Client.Managers
             if (testP)
             {
                 AccountCharacter = Newtonsoft.Json.JsonConvert.DeserializeObject<CharacterPlayer>(st[0]);
+                return true;
             }
-            return true;
+            return false;
         }
 
         public void SetCharacter(CharacterPlayer character)

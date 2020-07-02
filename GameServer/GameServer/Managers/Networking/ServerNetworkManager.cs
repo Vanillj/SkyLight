@@ -13,6 +13,7 @@ namespace Server.Managers
         private static NetServer server;
         public ServerNetworkManager()
         {
+            //TODO: proper setup
             NetPeerConfiguration config = new NetPeerConfiguration("test") { Port = 100 };
             server = new NetServer(config);
             server.Start();

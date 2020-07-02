@@ -43,37 +43,38 @@ namespace GameServer.Types
 
             float delta = Time.DeltaTime;
 
+            //updates every 1/20 second
             total += delta;
             if (total < 0.05)
                 return;
             total = 0;
 
             HashSet<LoginManagerServer> characterlist =  CharacterManager.GetLoginManagerServerList();
-            if (characterlist == null || characterlist.Count < 1)
-                return;
-
-            foreach (LoginManagerServer login in characterlist)
+            if (characterlist != null || characterlist.Count > 0)
             {
-                CharacterPlayer c = login.AccountCharacter;
-                Entity e = Core.Scene.FindEntity(c._name);
-                if (e == null)
+                foreach (LoginManagerServer login in characterlist)
                 {
-                    Entity temp = Scene.CreateEntity(c._name).SetPosition(c._pos);
-                    temp.AddComponent<FSRigidBody>()
-                    .SetBodyType(BodyType.Dynamic)
-                    .AddComponent<FSCollisionCircle>()
-                    .SetRadius(playerTexture.Width / 2)
-                    .AddComponent(new SpriteRenderer(playerTexture))
-                    .AddComponent(new PlayerComponent(login));
-                    temp.AddComponent(new Mover());
-                    temp.AddComponent(new CircleCollider());
+                    CharacterPlayer c = login.AccountCharacter;
+                    Entity e = Core.Scene.FindEntity(c._name);
+                    if (e == null)
+                    {
+                        Entity temp = Scene.CreateEntity(c._name).SetPosition(c._pos);
+                        temp.AddComponent<FSRigidBody>()
+                        .SetBodyType(BodyType.Dynamic)
+                        .AddComponent<FSCollisionCircle>()
+                        .SetRadius(playerTexture.Width / 2)
+                        .AddComponent(new SpriteRenderer(playerTexture))
+                        .AddComponent(new PlayerComponent(login));
+                        temp.AddComponent(new Mover());
+                        temp.AddComponent(new CircleCollider());
 
-                    var body = temp.GetComponent<FSRigidBody>();
-                    body.Body.FixedRotation = true;
-                    body.SetIgnoreGravity(true);
-                    body.SetLinearDamping(15f);
+                        var body = temp.GetComponent<FSRigidBody>();
+                        body.Body.FixedRotation = true;
+                        body.SetIgnoreGravity(true);
+                        body.SetLinearDamping(15f);
+                    }
+
                 }
-
             }
         }
     }

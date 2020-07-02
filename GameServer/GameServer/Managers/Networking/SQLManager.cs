@@ -10,28 +10,37 @@ namespace Server.Managers
     class SQLManager
     {
         private const string connectionString = "Server=db4free.net;Port=3306;Connect Timeout=2147483;User Id=skylight;password=Kykz2RxYUGVPeqr;Database=skylighttemp;old guids=true;";
+        private static MySqlConnection cn;
+
+        public static void SetUpSQL()
+        {
+            cn = new MySqlConnection(connectionString);
+            cn.Open();
+            System.Diagnostics.Debug.WriteLine("Connected to database.");
+        }
+
+        public static void CloseSQL()
+        {
+            cn.Close();
+        }
 
         public static void UpdateToSQL(string username, string data)
         {
-            using (MySqlConnection cn = new MySqlConnection(connectionString))
+
+            var updateSQL = "UPDATE Users(accountInfo, accountData, accountInfoSecond) VALUES(@accountData) WHERE accountInfo = @usr";
+            //"UPDATE Users SET accountInfoSecond = 'katt' WHERE accountInfo = '' "
+
+            using (var cmd = new MySqlCommand(updateSQL, cn))
             {
-                
-                //
-                var updateSQL = "UPDATE Users(accountInfo, accountData, accountInfoSecond) VALUES(@accountData) WHERE accountInfo = @usr";
-                //"UPDATE Users SET accountInfoSecond = 'katt' WHERE accountInfo = '' "
 
-                using (var cmd = new MySqlCommand(updateSQL, cn))
-                {
-
-                    //cmd.Parameters.AddWithValue("@accountInfo", username);
-                    cmd.Parameters.AddWithValue("@accountData", data);
-                    cmd.Parameters.AddWithValue("@usr", username);
-                    cmd.Prepare();
-                    cmd.ExecuteNonQuery();
-
-                }
+                //cmd.Parameters.AddWithValue("@accountInfo", username);
+                cmd.Parameters.AddWithValue("@accountData", data);
+                cmd.Parameters.AddWithValue("@usr", username);
+                cmd.Prepare();
+                cmd.ExecuteNonQuery();
 
             }
+
 
         }
 
@@ -45,70 +54,62 @@ namespace Server.Managers
             }
 
             var InserSQL = "INSERT INTO Users(accountInfo, accountData, accountInfoSecond) VALUES(@accountInfo, @accountData, @accountInfoSecond)";
-            using (MySqlConnection cn = new MySqlConnection(connectionString))
-            {
-                cn.Open();
-                using (var cmd = new MySqlCommand(InserSQL, cn))
-                {
-                    cmd.Parameters.AddWithValue("@accountInfo", username);
-                    cmd.Parameters.AddWithValue("@accountData", data);
-                    cmd.Parameters.AddWithValue("@accountInfoSecond", password);
-                    cmd.Prepare();
-                    cmd.ExecuteNonQuery();
-                    Console.WriteLine("Added \"" + username + " : " + data + "\" to Database");
-                }
 
+            using (var cmd = new MySqlCommand(InserSQL, cn))
+            {
+                cmd.Parameters.AddWithValue("@accountInfo", username);
+                cmd.Parameters.AddWithValue("@accountData", data);
+                cmd.Parameters.AddWithValue("@accountInfoSecond", password);
+                cmd.Prepare();
+                cmd.ExecuteNonQuery();
+                Console.WriteLine("Added \"" + username + " : " + data + "\" to Database");
             }
+
+
         }
 
         internal static string[] GetDataFromSQL(string username)
         {
             string[] returner = { "", "" };
-            using (MySqlConnection cn = new MySqlConnection(connectionString))
-            {
-                var sqlGet = "SELECT * FROM Users WHERE accountInfo = '@usr'";
-                sqlGet = "SELECT * FROM Users WHERE accountInfo = '" + username + "'";
-                cn.Open();
-                using (var cmd = new MySqlCommand(sqlGet, cn))
-                {
-                    //cmd.Parameters.AddWithValue("@usr", username);
-                    string s = cmd.CommandText;
-                    cmd.Prepare();
 
-                    using (MySqlDataReader rd = cmd.ExecuteReader())
+            var sqlGet = "SELECT * FROM Users WHERE accountInfo = '@usr'";
+            sqlGet = "SELECT * FROM Users WHERE accountInfo = '" + username + "'";
+
+            using (var cmd = new MySqlCommand(sqlGet, cn))
+            {
+                //cmd.Parameters.AddWithValue("@usr", username);
+                string s = cmd.CommandText;
+                cmd.Prepare();
+
+                using (MySqlDataReader rd = cmd.ExecuteReader())
+                {
+                    while (rd.Read())
                     {
-                        while (rd.Read())
-                        {
-                            returner[0] = rd["accountData"].ToString();
-                            returner[1] = rd["accountInfoSecond"].ToString();
-                        }
+                        returner[0] = rd["accountData"].ToString();
+                        returner[1] = rd["accountInfoSecond"].ToString();
                     }
                 }
-
             }
             return returner;
         }
 
         public static bool CheckIfExistInSQL(string username)
         {
-            using (MySqlConnection cn = new MySqlConnection(connectionString))
+            //TODO: Proper sql request
+            var sqlCheck = "SELECT COUNT(1) FROM Users WHERE accountInfo = '" + username + "'";
+
+            using (var cmd = new MySqlCommand(sqlCheck, cn))
             {
-                cn.Open();
-
-                var sqlCheck = "SELECT COUNT(1) FROM Users WHERE accountInfo = '" + username + "'";
-
-                using (var cmd = new MySqlCommand(sqlCheck, cn))
+                //cmd.Parameters.AddWithValue("@user", username);
+                cmd.Prepare();
+                var c = Convert.ToInt32(cmd.ExecuteScalar());
+                if (c > 0)
                 {
-                    //cmd.Parameters.AddWithValue("@user", username);
-                    cmd.Prepare();
-                    var c = Convert.ToInt32(cmd.ExecuteScalar());
-                    if (c > 0)
-                    {
-                        return true;
-                    }
-
+                    return true;
                 }
+
             }
+
             return false;
         }
 

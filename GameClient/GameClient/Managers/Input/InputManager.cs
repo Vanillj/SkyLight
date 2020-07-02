@@ -19,9 +19,7 @@ namespace Client.Managers
         KeyboardState oldState;
 
         public InputManager()
-        {
-
-        }
+        { }
 
         public void CheckForInput()
         {

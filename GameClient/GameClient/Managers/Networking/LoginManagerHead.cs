@@ -42,7 +42,7 @@ namespace Server.Managers
                 return false;
             else
             {
-                if (character.GetUniqueID() == this.UniqueID)
+                if (character.GetUniqueID() == UniqueID)
                     return true;
                 else
                     return false;

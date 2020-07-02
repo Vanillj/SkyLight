@@ -110,25 +110,29 @@ namespace GameClient.Managers
 
                     //the recieved position
                     LoginManagerClient.SetRecievedPosition(dataTemplate.RecieverCharacter._pos);
-                    LoginManagerClient.GetCharacter().physicalPosition = ((CharacterPlayer)dataTemplate.RecieverCharacter).physicalPosition;
+                    LoginManagerClient.GetCharacter().physicalPosition = dataTemplate.RecieverCharacter.physicalPosition;
                     //TODO: Remove element that are not recieved from list
 
                     //add other character in area to a list
                     if (dataTemplate.OthersCharacters != null && dataTemplate.OthersCharacters.Count > 0)
                     {
+                        //Removes all characters that are not in the recieved list, Entities are destroyed in PlayerComponent later
+                        //LoginManagerClient.Othercharacters = LoginManagerClient.Othercharacters.Intersect(dataTemplate.OthersCharacters).ToList();
+                        //LoginManagerClient.Othercharacters.RemoveAll(x => !dataTemplate.OthersCharacters.Contains(x));
+                        LoginManagerClient.Othercharacters = dataTemplate.OthersCharacters;
+
                         foreach (CharacterPlayer charac in dataTemplate.OthersCharacters)
                         {
-                            int i = LoginManagerClient.Othercharacter.FindIndex(tempc => tempc._name.Equals(charac._name));
-
+                            int i = LoginManagerClient.Othercharacters.FindIndex(tempc => tempc._name.Equals(charac._name));
 
                             if (i == -1)
                             {
-                                LoginManagerClient.Othercharacter.Add(charac);
+                                LoginManagerClient.Othercharacters.Add(charac);
                             }
-                            else
+                            /*else
                             {
-                                LoginManagerClient.Othercharacter[i] = charac;
-                            }
+                                LoginManagerClient.Othercharacters[i] = charac;
+                            }*/
                         }
                     }
                     

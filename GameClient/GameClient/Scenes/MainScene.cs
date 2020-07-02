@@ -1,9 +1,11 @@
 ﻿using Client.Managers;
 using FarseerPhysics.Dynamics;
 using GameClient.Managers;
+using GameClient.Types.Components;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Nez;
+using Nez.BitmapFonts;
 using Nez.Farseer;
 using Nez.Sprites;
 using Nez.Tweens;
@@ -27,15 +29,17 @@ namespace GameClient.Scenes
         {
             base.Initialize();
 
+            //TODO: Setup character from recieved data
+
             playerTexture = Content.Load<Texture2D>("images/playerTexture");
             player = CreateEntity("Player");
+            TextComponent textComponent = new TextComponent(Graphics.Instance.BitmapFont, "Username", new Vector2(0, 0), Color.White).SetHorizontalAlign(HorizontalAlign.Center).SetVerticalAlign(VerticalAlign.Top);
             player.SetPosition(new Vector2(0, 0))
-                .AddComponent(new SpriteRenderer(playerTexture));
+                .AddComponent(new SpriteRenderer(playerTexture)).AddComponent(textComponent);
 
             CreateEntity("Object").SetPosition(new Vector2(200, 200))
                 .AddComponent(new SpriteRenderer(playerTexture));
-            FollowCamera fCamera = new FollowCamera(player, FollowCamera.CameraStyle.LockOn);
-            fCamera.FollowLerp = 0.1f;
+            FollowCamera fCamera = new FollowCamera(player, FollowCamera.CameraStyle.LockOn){ FollowLerp = 0.2f };
             player.AddComponent(fCamera);
 
             Table.Row();
@@ -47,32 +51,30 @@ namespace GameClient.Scenes
             if (InputManager != null)
                 MessageManager.inputManager.CheckForInput();
 
-            if(LoginManagerClient.Othercharacter != null)
+            if(LoginManagerClient.Othercharacters != null)
             {
-                foreach (CharacterPlayer others in LoginManagerClient.Othercharacter)
+                foreach (CharacterPlayer others in LoginManagerClient.Othercharacters)
                 {
-                    Entity e = Core.Scene.FindEntity(others._name);
+                    Entity e = FindEntity(others._name);
                     
                     float delta = Time.DeltaTime;
-                    if (e != null)
+                    if (e == null)
                     {
-                        //Vector2 diff = e.Transform.LocalToWorldTransform.Translation - others._pos;
-                        //e.Transform.Position += diff;
-                        var tween = e.Transform.TweenPositionTo(others.physicalPosition, 0.01f);
-                        tween.Start();
-                    }
-                    else
-                    {
-                        Entity temp = CreateEntity(others._name).SetPosition(others._pos);
-                            temp.AddComponent(new SpriteRenderer(playerTexture));
+                        //TODO: Change so it's based on player size, might not be nessesary
+                        //CreateEntity(others._name).SetPosition(others._pos).AddComponent(new SpriteRenderer(playerTexture)).AddComponent(new PlayerComponent(others)).AddComponent(new TextComponent(Graphics.Instance.BitmapFont, others._name, new Vector2(-others.playerTexture.Width / 2, -others.playerTexture.Height / 2), Color.White));
 
+                        CreateEntity(others._name).SetPosition(others._pos).AddComponent(new SpriteRenderer(playerTexture)).AddComponent(new PlayerComponent(others)).AddComponent(new TextComponent(Graphics.Instance.BitmapFont, others._name, new Vector2(0, 0), Color.White).SetVerticalAlign(VerticalAlign.Top).SetHorizontalAlign(HorizontalAlign.Center));
                     }
                 }
             }
 
+
+
             //Vector2 ClientsidePos = LoginManagerClient.GetCharacter()._pos;
             Vector2 ClientsidePos = LoginManagerClient.GetCharacter().physicalPosition;
 
+
+            //Change later, this is for client side prediction
             if (ClientsidePos != player.Position)
             {
                 //If error is too big, 
