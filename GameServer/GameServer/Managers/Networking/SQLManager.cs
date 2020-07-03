@@ -1,22 +1,28 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace Server.Managers
 {
     class SQLManager
     {
-        private const string connectionString = "Server=db4free.net;Port=3306;Connect Timeout=2147483;User Id=skylight;password=Kykz2RxYUGVPeqr;Database=skylighttemp;old guids=true;";
+
+        private static string connectionString; //= "Server=db4free.net;Port=3306;Connect Timeout=2147483;User Id=skylight;password=Kykz2RxYUGVPeqr;Database=skylighttemp;old guids=true;";
         private static MySqlConnection cn;
 
-        public static void SetUpSQL()
+        public static void SetUpSQL(string ID, string cred)
         {
-            cn = new MySqlConnection(connectionString);
-            cn.Open();
-            System.Diagnostics.Debug.WriteLine("Connected to database.");
+            connectionString = "Server=db4free.net;Port=3306;Connect Timeout=2147483;User Id=" + ID + ";password=" + cred + ";Database=skylighttemp;old guids=true;";
+            try
+            {
+                cn = new MySqlConnection(connectionString);
+                cn.Open();
+                Debug.WriteLine("Connected to database.");
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("Failed to connect to database. " + e.Message);
+            }
         }
 
         public static void CloseSQL()

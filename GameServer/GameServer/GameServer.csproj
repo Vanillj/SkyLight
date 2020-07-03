@@ -44,6 +44,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="General\StaticConstantValues.cs" />
+    <Compile Include="Managers\FileManager.cs" />
     <Compile Include="Scenes\MainScene.cs" />
     <Compile Include="Server.cs" />
     <Compile Include="Managers\CharacterManager.cs" />
@@ -75,9 +76,6 @@
     </Reference>
     <Reference Include="BouncyCastle.Crypto, Version=1.8.3.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
       <HintPath>..\packages\BouncyCastle.1.8.3.1\lib\BouncyCastle.Crypto.dll</HintPath>
-    </Reference>
-    <Reference Include="dotenv.net, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\dotenv.net.2.1.1\lib\netstandard2.0\dotenv.net.dll</HintPath>
     </Reference>
     <Reference Include="Google.Protobuf, Version=3.6.1.0, Culture=neutral, PublicKeyToken=a7d26565bac4d604, processorArchitecture=MSIL">
       <HintPath>..\packages\Google.Protobuf.3.6.1\lib\net45\Google.Protobuf.dll</HintPath>
@@ -190,6 +188,9 @@
     </None>
     <None Include="app.config" />
     <None Include="app.manifest" />
+    <None Include="Credentials.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

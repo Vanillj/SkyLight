@@ -1,5 +1,5 @@
-﻿using dotenv.net;
-using dotenv.net.Utilities;
+﻿using GameServer.General;
+using GameServer.Managers;
 using GameServer.Scenes;
 using Microsoft.Xna.Framework;
 using Nez;
@@ -11,8 +11,6 @@ namespace GameServer
 {
     public class Server : Core
     {
-
-        ServerNetworkManager networkManager;
         MessageManager MessageManager;
         public Server() : base()
         {
@@ -23,16 +21,16 @@ namespace GameServer
         {
 
             base.Initialize();
-            Core.DebugRenderEnabled = true;
-            Core.PauseOnFocusLost = false;
+            DebugRenderEnabled = true;
+            PauseOnFocusLost = false;
+
             var dir = Directory.GetCurrentDirectory();
             Console.WriteLine(dir);
-            DotEnv.Config(true, "GameServer/.env");
-            var envReader = new EnvReader();
-            var value = envReader.GetStringValue("PASSWORD");
+            CredentialInfo credentialInfo = FileManager.GetFileFromString();
+            
 
-            networkManager = new ServerNetworkManager();
-            SQLManager.SetUpSQL();
+            new ServerNetworkManager(credentialInfo.ServerString, credentialInfo.Port);
+            SQLManager.SetUpSQL(credentialInfo.ID, credentialInfo.PSW);
             MessageManager = new MessageManager();
             Scene mainScene = new MainScene() { MessageManager = MessageManager };
             Scene = mainScene;

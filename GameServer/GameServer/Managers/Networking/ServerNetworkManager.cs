@@ -11,10 +11,10 @@ namespace Server.Managers
     class ServerNetworkManager
     {
         private static NetServer server;
-        public ServerNetworkManager()
+        public ServerNetworkManager(string ServerString, int port)
         {
             //TODO: proper setup
-            NetPeerConfiguration config = new NetPeerConfiguration("test") { Port = 100 };
+            NetPeerConfiguration config = new NetPeerConfiguration(ServerString) { Port = port };
             server = new NetServer(config);
             server.Start();
         }
