@@ -7,7 +7,7 @@ namespace GameServer.Types.Item
         public int id { get; set; }
         public string name { get; set; }
 
-        //
+        //use the id to grab texture/texture string, string might not be needed
         public string TextureString { get; set; }
         private Texture2D Texture;
 

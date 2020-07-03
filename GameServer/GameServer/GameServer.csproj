@@ -60,8 +60,9 @@
     <Compile Include="Scenes\BaseScene.cs" />
     <Compile Include="Types\CharacterPlayer.cs" />
     <Compile Include="Types\CharacterHead.cs" />
-    <Compile Include="Types\Components\GameSceneComponent.cs" />
-    <Compile Include="Types\Components\PlayerComponent.cs" />
+    <Compile Include="Types\Components\SceneComponents\GameSceneComponent.cs" />
+    <Compile Include="Types\Components\Components\PlayerComponent.cs" />
+    <Compile Include="Types\Components\SceneComponents\MessageSceneComponent.cs" />
     <Compile Include="Types\Networking\DataTemplate.cs" />
     <Compile Include="Types\Item\ItemBase.cs" />
     <Compile Include="Types\Item\ItemType.cs" />

@@ -5,7 +5,12 @@ namespace GameServer.General
 {
     class StaticConstantValues
     {
+        //Constants
+        public const int EquipmentLength = 10;
 
+
+
+        //Variables that need to be set
         private static string _ConnectionID;
         public static string ConnectionID {
             get { return _ConnectionID; }
@@ -15,18 +20,38 @@ namespace GameServer.General
             }
         }
 
-        public static string _ConnectionPWS;
-        public static string ConnectionPWS
+        private static string _ConnectionCredential;
+        public static string ConnectionCredential
         {
-            get { return _ConnectionPWS; }
+            get { return _ConnectionCredential; }
             set
             {
-                if (_ConnectionPWS == null)
-                    _ConnectionPWS = value;
+                if (_ConnectionCredential == null)
+                    _ConnectionCredential = value;
             }
         }
 
-        public const int EquipmentLength = 10;
+        private static string _Port;
+        public static string Port
+        {
+            get { return _Port; }
+            set
+            {
+                if (_Port == null)
+                    _Port = value;
+            }
+        }
+
+        private static string _ServerString;
+        public static string ServerString
+        {
+            get { return _ServerString; }
+            set
+            {
+                if (_ServerString == null)
+                    _ServerString = value;
+            }
+        }
 
     }
 

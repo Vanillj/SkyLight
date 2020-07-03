@@ -9,7 +9,6 @@ namespace Server.Scenes
     {
         abstract public Table Table { get; set; }
 
-        abstract public MessageManager MessageManager { get; set; }
         public BaseScene()
         {
 
@@ -32,7 +31,6 @@ namespace Server.Scenes
 
         public override void Update()
         {
-            MessageManager.CheckForMessageAvailable();
             base.Update();
         }
 

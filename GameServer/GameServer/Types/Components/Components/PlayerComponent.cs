@@ -1,4 +1,5 @@
 ﻿using Client.Managers;
+using GameServer.Managers.Networking;
 using Nez;
 using Nez.Farseer;
 using Server.Managers;
@@ -48,6 +49,7 @@ namespace GameServer.Types.Components
 
 
                     string posString = Newtonsoft.Json.JsonConvert.SerializeObject(dataTemplate);
+                    
                     MessageManager.SendStringToUniqueID(posString, loginManager.GetUniqueID(), MessageType.GameUpdate);
                 }
             }

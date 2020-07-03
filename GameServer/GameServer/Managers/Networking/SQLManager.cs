@@ -7,7 +7,7 @@ namespace Server.Managers
     class SQLManager
     {
 
-        private static string connectionString; //= "Server=db4free.net;Port=3306;Connect Timeout=2147483;User Id=skylight;password=Kykz2RxYUGVPeqr;Database=skylighttemp;old guids=true;";
+        private static string connectionString; 
         private static MySqlConnection cn;
 
         public static void SetUpSQL(string ID, string cred)

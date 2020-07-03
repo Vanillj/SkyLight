@@ -1,5 +1,6 @@
 ﻿using Client.Managers;
 using GameServer.Types;
+using GameServer.Types.Components.SceneComponents;
 using Lidgren.Network;
 using Microsoft.Xna.Framework;
 using Nez;
@@ -18,7 +19,6 @@ namespace GameServer.Scenes
     class MainScene : BaseScene
     {
         public override Table Table { get; set; }
-        public override MessageManager MessageManager { get; set; }
 
         public static Label ConnectedCount;
         public override void Initialize()
@@ -26,17 +26,19 @@ namespace GameServer.Scenes
             base.Initialize();
             ConnectedCount = new Label("Current connections: 0").SetFontScale(5).SetFontColor(Color.Red);
             Table.Add(ConnectedCount);
+            AddSceneComponent<MessageSceneComponent>();
             AddSceneComponent<GameSceneComponent>();
+
         }
 
         float timeSpan = 0;
         public override void Update()
         {
-            timeSpan += Time.DeltaTime;
+            /*timeSpan += Time.DeltaTime;
             if (timeSpan > 0.05)
             {
                 timeSpan = 0;
-            }
+            }*/
             
             base.Update();
         }

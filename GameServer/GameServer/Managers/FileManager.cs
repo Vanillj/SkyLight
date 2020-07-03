@@ -10,9 +10,9 @@ namespace GameServer.Managers
 {
     class FileManager
     {
-        internal static CredentialInfo GetFileFromString()
+        internal static CredentialInfo GetFileFromString(string FileName)
         {
-            using (var file = File.OpenText("Credentials.json"))
+            using (var file = File.OpenText(FileName))
             {
                 string s = file.ReadToEnd();
                 return Newtonsoft.Json.JsonConvert.DeserializeObject<CredentialInfo>(s);
