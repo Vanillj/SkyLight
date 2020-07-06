@@ -19,6 +19,7 @@ namespace Client.Managers
             if (client.ServerConnection != null)
                 return true;
 
+            //TODO: ADD LATER
             connection = client.Connect(host: "127.0.0.1", port: 100);
             if (connection != null && connection.Status == NetConnectionStatus.Connected)
             {

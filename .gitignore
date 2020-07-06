@@ -10,6 +10,9 @@ GameClient/GameClient/.env
 #Assets
 GameServer/GameServer/Assets/Tiles
 
+#ItemGenerator
+ItemGenerator/
+
 # User-specific files
 *.rsuser
 *.suo
