@@ -13,7 +13,7 @@
     <AssemblyName>GameServer</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MonoGamePlatform>DesktopGL</MonoGamePlatform>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
@@ -190,6 +190,9 @@
     </None>
     <None Include="app.config" />
     <None Include="app.manifest" />
+    <None Include="Assets\map.tmx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Assets\temp.tmx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -199,12 +202,12 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\OneDrive\Documents\Development\Nez\Nez.FarseerPhysics\Nez.FarseerPhysics.csproj">
-      <Project>{9316b45f-8d6a-45f1-b34f-ce209c8d818f}</Project>
+    <ProjectReference Include="..\..\Dependencies\Nez\Nez.FarseerPhysics\Nez.FarseerPhysics.csproj">
+      <Project>{50faa288-a841-487b-b3df-97dffd7d09fd}</Project>
       <Name>Nez.FarseerPhysics</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\OneDrive\Documents\Development\Nez\Nez.Portable\Nez.csproj">
-      <Project>{74d63cad-fabe-4724-9cff-c56467b759c2}</Project>
+    <ProjectReference Include="..\..\Dependencies\Nez\Nez.Portable\Nez.csproj">
+      <Project>{9e5a430b-86b4-4f27-b125-a0de019567d5}</Project>
       <Name>Nez</Name>
     </ProjectReference>
   </ItemGroup>

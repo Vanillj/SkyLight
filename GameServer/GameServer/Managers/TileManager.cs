@@ -20,7 +20,7 @@ namespace GameServer.Types.Components.SceneComponents
             if (Core.Scene == null || enabled)
                 return;
             //enabled = true;
-            TmxMap map =  Core.Scene.Content.LoadTiledMap("Assets/temp.tmx");
+            TmxMap map =  Core.Scene.Content.LoadTiledMap("Assets/map.tmx");
             Entity entity = Core.Scene.CreateEntity("tiled-map");
 
             TiledMapRenderer tmr = entity.AddComponent(new TiledMapRenderer(map, "Collision", true));

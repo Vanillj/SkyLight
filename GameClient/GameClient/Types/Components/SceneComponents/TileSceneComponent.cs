@@ -20,7 +20,7 @@ namespace GameClient.Types.Components.SceneComponents
             if (Core.Scene == null)
                 return;
 
-            TmxMap map = Core.Scene.Content.LoadTiledMap("Assets/temp.tmx");
+            TmxMap map = Core.Scene.Content.LoadTiledMap("Assets/map.tmx");
             Entity entity = Core.Scene.CreateEntity("tiled-map");
 
             TiledMapRenderer tmr = entity.AddComponent(new TiledMapRenderer(map));

@@ -41,6 +41,7 @@ namespace GameServer.Types.Components
 
                     //sets the position of the entity's physical body as the physical position
                     FSRigidBody v = Core.Scene.FindEntity(tempc._name).GetComponent<FSRigidBody>();
+                    
                     tempc.physicalPosition = v.Transform.Position;
 
                     DataTemplate dataTemplate = new DataTemplate { 
