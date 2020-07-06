@@ -8,7 +8,7 @@ GameServer/GameServer/Credentials.json
 GameClient/GameClient/.env
 
 #Assets
-GameServer/GameServer/Assets/Tiles
+GameServer/GameServer/Assets/Tiles/
 
 #ItemGenerator
 ItemGenerator/
