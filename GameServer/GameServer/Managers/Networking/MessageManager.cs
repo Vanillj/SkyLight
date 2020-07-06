@@ -15,8 +15,8 @@ namespace GameServer.Managers.Networking
         {
             MessageTemplate temp = new MessageTemplate(message, type);
 
-            NetOutgoingMessage mvmntMessage = ServerNetworkManager.GetNetServer().CreateMessage(Newtonsoft.Json.JsonConvert.SerializeObject(temp));
-            var connections = ServerNetworkManager.GetNetServer().Connections;
+            NetOutgoingMessage mvmntMessage = ServerNetworkSceneComponent.GetNetServer().CreateMessage(Newtonsoft.Json.JsonConvert.SerializeObject(temp));
+            var connections = ServerNetworkSceneComponent.GetNetServer().Connections;
 
             NetConnection reciever = connections.Find(c => c.RemoteUniqueIdentifier.Equals(UniqueID));
             if (reciever != null)

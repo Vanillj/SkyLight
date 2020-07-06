@@ -24,7 +24,7 @@ namespace GameServer.Types.Components.SceneComponents
         public static void CheckForMessageAvailable()
         {
             NetIncomingMessage message;
-            NetServer server = ServerNetworkManager.GetNetServer();
+            NetServer server = ServerNetworkSceneComponent.GetNetServer();
             if ((message = server.ReadMessage()) != null)
             {
                 CheckForMessage(message);
@@ -95,7 +95,7 @@ namespace GameServer.Types.Components.SceneComponents
 
         private static void OnDisconnected(NetConnection sender)
         {
-            NetServer server = ServerNetworkManager.GetNetServer();
+            NetServer server = ServerNetworkSceneComponent.GetNetServer();
 
             //removes loginmanager
             CharacterManager.RemoveLoginManagerServerFromList(sender.RemoteUniqueIdentifier);
@@ -137,14 +137,14 @@ namespace GameServer.Types.Components.SceneComponents
                     string characterString = Newtonsoft.Json.JsonConvert.SerializeObject(temps);
                     MessageTemplate temp = new MessageTemplate(characterString, MessageType.LoginSuccess);
 
-                    NetOutgoingMessage mvmntMessage = ServerNetworkManager.GetNetServer().CreateMessage(Newtonsoft.Json.JsonConvert.SerializeObject(temp));
+                    NetOutgoingMessage mvmntMessage = ServerNetworkSceneComponent.GetNetServer().CreateMessage(Newtonsoft.Json.JsonConvert.SerializeObject(temp));
                     sender.SendMessage(mvmntMessage, NetDeliveryMethod.ReliableOrdered, 0);
                     CharacterManager.AddLoginManagerServerToList(temsp);
                 }
                 else
                 {
                     MessageTemplate temp = new MessageTemplate("Failure.", MessageType.LoginFailure);
-                    NetOutgoingMessage mvmntMessage = ServerNetworkManager.GetNetServer().CreateMessage(Newtonsoft.Json.JsonConvert.SerializeObject(temp));
+                    NetOutgoingMessage mvmntMessage = ServerNetworkSceneComponent.GetNetServer().CreateMessage(Newtonsoft.Json.JsonConvert.SerializeObject(temp));
                     sender.SendMessage(mvmntMessage, NetDeliveryMethod.ReliableOrdered, 0);
                 }
 
@@ -152,7 +152,7 @@ namespace GameServer.Types.Components.SceneComponents
             else
             {
                 MessageTemplate temp = new MessageTemplate("Failure.", MessageType.LoginFailure);
-                NetOutgoingMessage mvmntMessage = ServerNetworkManager.GetNetServer().CreateMessage(Newtonsoft.Json.JsonConvert.SerializeObject(temp));
+                NetOutgoingMessage mvmntMessage = ServerNetworkSceneComponent.GetNetServer().CreateMessage(Newtonsoft.Json.JsonConvert.SerializeObject(temp));
                 sender.SendMessage(mvmntMessage, NetDeliveryMethod.ReliableOrdered, 0);
             }
 
@@ -178,10 +178,10 @@ namespace GameServer.Types.Components.SceneComponents
             if (message.SenderConnection.Status == NetConnectionStatus.Disconnected)
             {
                 CharacterManager.GetLoginManagerServerList().RemoveWhere(l => l.GetUniqueID().Equals(message.SenderConnection.RemoteUniqueIdentifier));
-                Debug.WriteLine("Disconnected! Connected: " + ServerNetworkManager.GetNetServer().ConnectionsCount);
+                Debug.WriteLine("Disconnected! Connected: " + ServerNetworkSceneComponent.GetNetServer().ConnectionsCount);
 
             }
-            MainScene.ConnectedCount.SetText("Current connections: " + ServerNetworkManager.GetNetServer().ConnectionsCount);
+            MainScene.ConnectedCount.SetText("Current connections: " + ServerNetworkSceneComponent.GetNetServer().ConnectionsCount);
         }
 
     }

@@ -30,6 +30,7 @@ namespace GameServer.Types.Components
             CheckIfConnected();
 
             timeSpan += Time.DeltaTime;
+            //Updates every 1/20 second
             if (timeSpan > 0.05)
             {
                 HashSet<LoginManagerServer> characterlist = CharacterManager.GetLoginManagerServerList();
@@ -76,7 +77,7 @@ namespace GameServer.Types.Components
 
         private void CheckIfConnected()
         {
-            if (ServerNetworkManager.GetNetServer().Connections.Find(c => c.RemoteUniqueIdentifier.Equals(loginManager.GetUniqueID())) == null)
+            if (ServerNetworkSceneComponent.GetNetServer().Connections.Find(c => c.RemoteUniqueIdentifier.Equals(loginManager.GetUniqueID())) == null)
             {
                 HashSet<LoginManagerServer> characterlist = CharacterManager.GetLoginManagerServerList();
                 characterlist.Remove(loginManager);

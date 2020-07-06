@@ -1,11 +1,6 @@
 ﻿using Client.Managers;
 using Nez;
 using Server.Types;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GameClient.Types.Components
 {
@@ -33,8 +28,8 @@ namespace GameClient.Types.Components
             }
             if(character != null)
                 _character = character;
-            //Find doesn't work here.
-            //CharacterPlayer character = LoginManagerClient.Othercharacters.Find(item => item.Equals(_character));
+            //Change to find later
+            //CharacterPlayer character = LoginManagerClient.Othercharacters.Find(item => item._name.Equals(_character._name));
             if (LoginManagerClient.Othercharacters != null && character == null)
             {
                 Entity.Destroy();
@@ -43,6 +38,7 @@ namespace GameClient.Types.Components
             {
 
                 var tween = Entity.Transform.TweenPositionTo(_character.physicalPosition, 0.01f);
+                
                 TextComponent text = Entity.GetComponent<TextComponent>();
                 
                 tween.Start();

@@ -1,4 +1,5 @@
-﻿using MySql.Data.MySqlClient;
+﻿using GameServer.General;
+using MySql.Data.MySqlClient;
 using System;
 using System.Diagnostics;
 
@@ -10,9 +11,9 @@ namespace Server.Managers
         private static string connectionString; 
         private static MySqlConnection cn;
 
-        public static void SetUpSQL(string ID, string cred)
+        public static void SetUpSQL()
         {
-            connectionString = "Server=db4free.net;Port=3306;Connect Timeout=2147483;User Id=" + ID + ";password=" + cred + ";Database=skylighttemp;old guids=true;";
+            connectionString = "Server=db4free.net;Port=3306;Connect Timeout=2147483;User Id=" + StaticConstantValues.ConnectionID + ";password=" + StaticConstantValues.ConnectionCredential + ";Database=skylighttemp;old guids=true;";
             try
             {
                 cn = new MySqlConnection(connectionString);

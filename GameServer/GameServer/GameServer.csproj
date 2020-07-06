@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="General\StaticConstantValues.cs" />
     <Compile Include="Managers\FileManager.cs" />
+    <Compile Include="Managers\Networking\MessageManager.cs" />
     <Compile Include="Scenes\MainScene.cs" />
     <Compile Include="Server.cs" />
     <Compile Include="Managers\CharacterManager.cs" />
@@ -52,8 +53,7 @@
     <Compile Include="Managers\Input\InputManager.cs" />
     <Compile Include="Managers\Networking\LoginManagerHead.cs" />
     <Compile Include="Managers\Networking\LoginManagerServer.cs" />
-    <Compile Include="Managers\Networking\MessageManager.cs" />
-    <Compile Include="Managers\Networking\ServerNetworkManager.cs" />
+    <Compile Include="Types\Components\SceneComponents\ServerNetworkSceneComponent.cs" />
     <Compile Include="Managers\Networking\SQLManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -63,6 +63,7 @@
     <Compile Include="Types\Components\SceneComponents\GameSceneComponent.cs" />
     <Compile Include="Types\Components\Components\PlayerComponent.cs" />
     <Compile Include="Types\Components\SceneComponents\MessageSceneComponent.cs" />
+    <Compile Include="Managers\TileManager.cs" />
     <Compile Include="Types\Networking\DataTemplate.cs" />
     <Compile Include="Types\Item\ItemBase.cs" />
     <Compile Include="Types\Item\ItemType.cs" />
@@ -189,6 +190,9 @@
     </None>
     <None Include="app.config" />
     <None Include="app.manifest" />
+    <None Include="Assets\temp.tmx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Credentials.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -205,7 +209,82 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Assets\" />
+    <None Include="Assets\Grasstiles.tsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Assets\tiles.tsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Assets\Tiles\Ground\Grass\Grassland%4064x64.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Tiles\Ground\Grass\GrasslandColor2%4064x64.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Tiles\Ground\Grass\GrasslandColor3%4064x64.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Tiles\Ground\Grass\Shadows%4064x64.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Tiles\Ground\Grass\Water%4064x64.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Tiles\Ground\Grass\WaterColor2%4064x64.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Tiles\Ground\Grass\WaterColor3%4064x64.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Tiles\Ground\Grass\Waterfall%4064x64.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Tiles\Ground\Grass\WaterfallColor2%4064x64.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Tiles\Ground\Grass\WaterfallColor3%4064x64.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Tiles\Objects\Chests\blue-closed.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Tiles\Objects\Chests\blue-open.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Tiles\Objects\Chests\dark-wood-closed.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Tiles\Objects\Chests\dark-wood-open.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Tiles\Objects\Chests\green-closed.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Tiles\Objects\Chests\green-open.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Tiles\Objects\Chests\light-wood-closed.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Tiles\Objects\Chests\light-wood-open.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Tiles\Objects\Chests\purple-closed.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Tiles\Objects\Chests\purple-open.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Tiles\Objects\Chests\red-closed.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Tiles\Objects\Chests\red-open.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />

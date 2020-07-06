@@ -76,7 +76,6 @@
     <Compile Include="GameClient.cs" />
     <Compile Include="Managers\LoadManager.cs" />
     <Compile Include="Managers\Networking\ClientNetworkManager.cs" />
-    <Compile Include="Managers\Input\InputManager.cs" />
     <Compile Include="Managers\Networking\LoginManagerClient.cs" />
     <Compile Include="Managers\Networking\LoginManagerHead.cs" />
     <Compile Include="Managers\Networking\MessageManager.cs" />
@@ -86,7 +85,10 @@
     <Compile Include="Scenes\BaseScene.cs" />
     <Compile Include="Scenes\LoginScene.cs" />
     <Compile Include="Scenes\MainScene.cs" />
-    <Compile Include="Types\Components\PlayerComponent.cs" />
+    <Compile Include="Types\Components\Components\PlayerComponent.cs" />
+    <Compile Include="Types\Components\SceneComponents\InputComponent.cs" />
+    <Compile Include="Types\Components\SceneComponents\MessageSceneComponent.cs" />
+    <Compile Include="Types\Components\SceneComponents\TileSceneComponent.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="BCrypt.Net, Version=0.1.4141.31969, Culture=neutral, PublicKeyToken=f3bc8f8c31beeb49, processorArchitecture=MSIL">
@@ -154,6 +156,10 @@
       <Link>MonoGame.Framework.dll.config</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\..\GameServer\GameServer\Assets\temp.tmx">
+      <Link>Assets\temp.tmx</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="app.config" />
     <None Include="app.manifest" />
     <None Include="packages.config" />
@@ -169,7 +175,107 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Assets\" />
+    <Folder Include="Managers\Input\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\GameServer\GameServer\Assets\Grasstiles.tsx">
+      <Link>Assets\Grasstiles.tsx</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\GameServer\GameServer\Assets\tiles.tsx">
+      <Link>Assets\tiles.tsx</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\GameServer\GameServer\Assets\Tiles\Ground\Grass\Grassland%4064x64.png">
+      <Link>Assets\Tiles\Ground\Grass\Grassland%4064x64.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GameServer\GameServer\Assets\Tiles\Ground\Grass\GrasslandColor2%4064x64.png">
+      <Link>Assets\Tiles\Ground\Grass\GrasslandColor2%4064x64.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GameServer\GameServer\Assets\Tiles\Ground\Grass\GrasslandColor3%4064x64.png">
+      <Link>Assets\Tiles\Ground\Grass\GrasslandColor3%4064x64.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GameServer\GameServer\Assets\Tiles\Ground\Grass\Shadows%4064x64.png">
+      <Link>Assets\Tiles\Ground\Grass\Shadows%4064x64.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GameServer\GameServer\Assets\Tiles\Ground\Grass\Water%4064x64.png">
+      <Link>Assets\Tiles\Ground\Grass\Water%4064x64.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GameServer\GameServer\Assets\Tiles\Ground\Grass\WaterColor2%4064x64.png">
+      <Link>Assets\Tiles\Ground\Grass\WaterColor2%4064x64.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GameServer\GameServer\Assets\Tiles\Ground\Grass\WaterColor3%4064x64.png">
+      <Link>Assets\Tiles\Ground\Grass\WaterColor3%4064x64.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GameServer\GameServer\Assets\Tiles\Ground\Grass\Waterfall%4064x64.png">
+      <Link>Assets\Tiles\Ground\Grass\Waterfall%4064x64.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GameServer\GameServer\Assets\Tiles\Ground\Grass\WaterfallColor2%4064x64.png">
+      <Link>Assets\Tiles\Ground\Grass\WaterfallColor2%4064x64.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GameServer\GameServer\Assets\Tiles\Ground\Grass\WaterfallColor3%4064x64.png">
+      <Link>Assets\Tiles\Ground\Grass\WaterfallColor3%4064x64.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GameServer\GameServer\Assets\Tiles\Objects\Chests\blue-closed.png">
+      <Link>Assets\Tiles\Objects\Chests\blue-closed.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GameServer\GameServer\Assets\Tiles\Objects\Chests\blue-open.png">
+      <Link>Assets\Tiles\Objects\Chests\blue-open.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GameServer\GameServer\Assets\Tiles\Objects\Chests\dark-wood-closed.png">
+      <Link>Assets\Tiles\Objects\Chests\dark-wood-closed.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GameServer\GameServer\Assets\Tiles\Objects\Chests\dark-wood-open.png">
+      <Link>Assets\Tiles\Objects\Chests\dark-wood-open.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GameServer\GameServer\Assets\Tiles\Objects\Chests\green-closed.png">
+      <Link>Assets\Tiles\Objects\Chests\green-closed.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GameServer\GameServer\Assets\Tiles\Objects\Chests\green-open.png">
+      <Link>Assets\Tiles\Objects\Chests\green-open.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GameServer\GameServer\Assets\Tiles\Objects\Chests\light-wood-closed.png">
+      <Link>Assets\Tiles\Objects\Chests\light-wood-closed.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GameServer\GameServer\Assets\Tiles\Objects\Chests\light-wood-open.png">
+      <Link>Assets\Tiles\Objects\Chests\light-wood-open.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GameServer\GameServer\Assets\Tiles\Objects\Chests\purple-closed.png">
+      <Link>Assets\Tiles\Objects\Chests\purple-closed.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GameServer\GameServer\Assets\Tiles\Objects\Chests\purple-open.png">
+      <Link>Assets\Tiles\Objects\Chests\purple-open.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GameServer\GameServer\Assets\Tiles\Objects\Chests\red-closed.png">
+      <Link>Assets\Tiles\Objects\Chests\red-closed.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\GameServer\GameServer\Assets\Tiles\Objects\Chests\red-open.png">
+      <Link>Assets\Tiles\Objects\Chests\red-open.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />

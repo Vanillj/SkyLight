@@ -26,14 +26,6 @@ namespace GameServer.Types
         {
             base.OnEnabled();
             playerTexture = Scene.Content.Load<Texture2D>("images/playerTexture");
-
-            //Create world later
-            Scene.CreateEntity("Object").SetPosition(new Vector2(200, 200))
-                .AddComponent<FSRigidBody>()
-                .SetBodyType(BodyType.Static)
-                .AddComponent<FSCollisionCircle>()
-                .SetRadius(playerTexture.Width / 2)
-                .AddComponent(new SpriteRenderer(playerTexture)).AddComponent(new CircleCollider());
         }
 
         float total = 0;

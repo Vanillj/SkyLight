@@ -9,7 +9,6 @@ namespace Server.Scenes
     {
         abstract public Table Table { get; set; }
 
-        public static MessageManager messageManager { get; set; }
         public BaseScene()
         {
 
@@ -34,7 +33,7 @@ namespace Server.Scenes
         float timeSpan = 0;
         public override void Update()
         {
-            timeSpan += Time.DeltaTime;
+            /*timeSpan += Time.DeltaTime;
             if (messageManager != null)
             {
                 MessageManager.CheckForMessage();
@@ -44,7 +43,7 @@ namespace Server.Scenes
                     MessageManager.SendQueue();
                     timeSpan = 0;
                 }
-            }
+            }*/
             base.Update(); 
             
         }

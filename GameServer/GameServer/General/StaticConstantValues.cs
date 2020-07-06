@@ -31,8 +31,8 @@ namespace GameServer.General
             }
         }
 
-        private static string _Port;
-        public static string Port
+        private static int? _Port;
+        public static int? Port
         {
             get { return _Port; }
             set
@@ -60,7 +60,7 @@ namespace GameServer.General
     public class CredentialInfo
     {
         public string ID { get; set; }
-        public string PSW { get; set; }
+        public string ConnectionCredential { get; set; }
         public string ServerString { get; set; }
         public int Port { get; set; }
     }

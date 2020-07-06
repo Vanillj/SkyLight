@@ -61,7 +61,7 @@ namespace Server.Managers
                     var movement = dir * speed * Time.DeltaTime;
                     Entity e = Core.Scene.FindEntity(character._name);
                     FSRigidBody body = e.GetComponent<FSRigidBody>();
-                    //body.SetMass(0.1f);
+
                     Mover mover = e.GetComponent<Mover>();
                     if(mover.Move(movement, out CollisionResult collisionResult))
                     {

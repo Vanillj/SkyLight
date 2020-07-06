@@ -11,22 +11,27 @@ namespace GameServer
     {
         public Server() : base()
         {
+            //Setup game settings
             Window.AllowUserResizing = true;
             DebugRenderEnabled = true;
             PauseOnFocusLost = false;
+
+            //setup constant values
+            //Getting credentials from file
+            CredentialInfo credentialInfo = FileManager.GetFileFromString("Credentials.json");
+            StaticConstantValues.ConnectionID = credentialInfo.ID;
+            StaticConstantValues.ConnectionCredential = credentialInfo.ConnectionCredential;
+            StaticConstantValues.ServerString = credentialInfo.ServerString;
+            StaticConstantValues.Port = credentialInfo.Port;
         }
 
         protected override void Initialize()
         {
             base.Initialize();
 
-            //Getting credentials from file
-            CredentialInfo credentialInfo = FileManager.GetFileFromString("Credentials.json");
-            
-            new ServerNetworkManager(credentialInfo.ServerString, credentialInfo.Port);
-            SQLManager.SetUpSQL(credentialInfo.ID, credentialInfo.PSW);
-
+            SQLManager.SetUpSQL();
             Scene = new MainScene();
+            //Scene.Camera.ZoomOut(0.1f);
         }
 
         protected override void OnExiting(object sender, EventArgs args)

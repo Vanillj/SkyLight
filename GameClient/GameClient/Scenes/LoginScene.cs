@@ -1,5 +1,6 @@
 ﻿using Client.Managers;
 using GameClient.Managers;
+using GameClient.Types.Components.SceneComponents;
 using Microsoft.Xna.Framework;
 using Nez.UI;
 using Server.Managers;
@@ -63,6 +64,12 @@ namespace GameClient.Scenes
             Table.Row().SetPadTop(10);
             Table.Add(buttonr);
 
+        }
+
+        public override void OnStart()
+        {
+            AddSceneComponent<MessageSceneComponent>();
+            base.OnStart();
         }
 
         private void SendLogin(Button obj)

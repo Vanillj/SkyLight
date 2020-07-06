@@ -1,12 +1,10 @@
 ﻿using Client.Managers;
-using FarseerPhysics.Dynamics;
 using GameClient.Managers;
 using GameClient.Types.Components;
+using GameClient.Types.Components.SceneComponents;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Nez;
-using Nez.BitmapFonts;
-using Nez.Farseer;
 using Nez.Sprites;
 using Nez.Tweens;
 using Nez.UI;
@@ -19,12 +17,14 @@ namespace GameClient.Scenes
     class MainScene : BaseScene
     {
         public override Table Table { get; set; }
-        //public override MessageManager MessageManager { get; set; }
-        public InputManager InputManager { get; set; }
 
         private Label label;
         private Entity player;
         Texture2D playerTexture;
+
+        public MainScene()
+        { }
+
         public override void Initialize()
         {
             base.Initialize();
@@ -35,11 +35,9 @@ namespace GameClient.Scenes
             player = CreateEntity("Player");
             TextComponent textComponent = new TextComponent(Graphics.Instance.BitmapFont, "Username", new Vector2(0, 0), Color.White).SetHorizontalAlign(HorizontalAlign.Center).SetVerticalAlign(VerticalAlign.Top);
             player.SetPosition(new Vector2(0, 0))
-                .AddComponent(new SpriteRenderer(playerTexture)).AddComponent(textComponent);
+                .AddComponent(new SpriteRenderer(playerTexture)).AddComponent(textComponent).SetRenderLayer(-200);
 
-            CreateEntity("Object").SetPosition(new Vector2(200, 200))
-                .AddComponent(new SpriteRenderer(playerTexture));
-            FollowCamera fCamera = new FollowCamera(player, FollowCamera.CameraStyle.LockOn){ FollowLerp = 0.2f };
+            FollowCamera fCamera = new FollowCamera(player, FollowCamera.CameraStyle.CameraWindow){ FollowLerp = 0.2f };
             player.AddComponent(fCamera);
 
             Table.Row();
@@ -48,9 +46,6 @@ namespace GameClient.Scenes
         }
         public override void Update()
         {
-            if (InputManager != null)
-                MessageManager.inputManager.CheckForInput();
-
             if(LoginManagerClient.Othercharacters != null)
             {
                 foreach (CharacterPlayer others in LoginManagerClient.Othercharacters)
@@ -63,18 +58,28 @@ namespace GameClient.Scenes
                         //TODO: Change so it's based on player size, might not be nessesary
                         //CreateEntity(others._name).SetPosition(others._pos).AddComponent(new SpriteRenderer(playerTexture)).AddComponent(new PlayerComponent(others)).AddComponent(new TextComponent(Graphics.Instance.BitmapFont, others._name, new Vector2(-others.playerTexture.Width / 2, -others.playerTexture.Height / 2), Color.White));
 
-                        CreateEntity(others._name).SetPosition(others._pos).AddComponent(new SpriteRenderer(playerTexture)).AddComponent(new PlayerComponent(others)).AddComponent(new TextComponent(Graphics.Instance.BitmapFont, others._name, new Vector2(0, 0), Color.White).SetVerticalAlign(VerticalAlign.Top).SetHorizontalAlign(HorizontalAlign.Center));
+                        CreateEntity(others._name).SetPosition(others._pos).AddComponent(new SpriteRenderer(playerTexture)).AddComponent(new PlayerComponent(others)).AddComponent(new TextComponent(Graphics.Instance.BitmapFont, others._name, new Vector2(0, 0), Color.White).SetVerticalAlign(VerticalAlign.Top).SetHorizontalAlign(HorizontalAlign.Center)).SetRenderLayer(2);
                     }
                 }
             }
 
 
 
-            //Vector2 ClientsidePos = LoginManagerClient.GetCharacter()._pos;
-            Vector2 ClientsidePos = LoginManagerClient.GetCharacter().physicalPosition;
+            Vector2 ClientsidePos = LoginManagerClient.GetCharacter()._pos;
+            //Vector2 ClientsidePos = LoginManagerClient.GetCharacter().physicalPosition;
 
 
             //Change later, this is for client side prediction
+            MovementPrediction(ClientsidePos, player);
+            
+            //TODO: Ability prediction etc.
+            
+            base.Update();
+            
+        }
+
+        private void MovementPrediction(Vector2 ClientsidePos, Entity player)
+        {
             if (ClientsidePos != player.Position)
             {
                 //If error is too big, 
@@ -83,7 +88,7 @@ namespace GameClient.Scenes
                 float diff = recieved.Length() - ClientsidePos.Length();
                 Console.WriteLine(diff);
 
-                if (Math.Abs(diff) > 5)
+                if (Math.Abs(diff) > 25)
                 {
                     LoginManagerClient.GetCharacter()._pos = recieved;
                     ClientsidePos = recieved;
@@ -92,9 +97,15 @@ namespace GameClient.Scenes
                 ITween<Vector2> tween = player.Transform.TweenPositionTo(ClientsidePos, 0.01f);
                 tween.Start();
             }
-            
-            base.Update();
-            
         }
+
+        public override void OnStart()
+        {
+            AddSceneComponent<MessageSceneComponent>();
+            AddSceneComponent<TileSceneComponent>();
+            AddSceneComponent(new InputComponent(player, Core.Scene.Camera));
+            base.OnStart();
+        }
+
     }
 }
