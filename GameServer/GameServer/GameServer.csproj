@@ -193,9 +193,6 @@
     <None Include="Assets\map.tmx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\temp.tmx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="Credentials.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
