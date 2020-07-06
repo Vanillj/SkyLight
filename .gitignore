@@ -7,6 +7,9 @@
 GameServer/GameServer/Credentials.json
 GameClient/GameClient/.env
 
+#Assets
+GameServer/GameServer/Assets/Tiles
+
 # User-specific files
 *.rsuser
 *.suo
