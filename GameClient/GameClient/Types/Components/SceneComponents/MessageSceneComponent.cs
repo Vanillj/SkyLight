@@ -90,9 +90,15 @@ namespace GameClient.Types.Components.SceneComponents
                 case MessageType.LoginSuccess:
                     Debug.WriteLine("Login and recieved sucessfully!");
                     MainScene mainScene = new MainScene();
+                    CharacterPlayer player = Newtonsoft.Json.JsonConvert.DeserializeObject<CharacterPlayer>(template.JsonMessage);
+                    MessageManager.GetLoginManagerClient().SetCharacter(player);
+                    PlayerManager.CreatePlayer(player, mainScene);
+
+                    FollowCamera fCamera = new FollowCamera(mainScene.FindEntity(player._name), FollowCamera.CameraStyle.CameraWindow) { FollowLerp = 0.0f };
+                    //mainScene.FindEntity(player._name).AddComponent(fCamera);
+                    mainScene.Camera.AddComponent(fCamera);
+
                     Core.StartSceneTransition(new FadeTransition(() => mainScene));
-                    CharacterPlayer c = Newtonsoft.Json.JsonConvert.DeserializeObject<CharacterPlayer>(template.JsonMessage);
-                    MessageManager.GetLoginManagerClient().SetCharacter(c);
                     break;
 
                 case MessageType.LoginFailure:
@@ -104,38 +110,44 @@ namespace GameClient.Types.Components.SceneComponents
                     LoginManagerClient.GetCharacter().MoveToPos(vector2);
                     break;
                 case MessageType.GameUpdate:
-                    DataTemplate dataTemplate = Newtonsoft.Json.JsonConvert.DeserializeObject<DataTemplate>(template.JsonMessage);
-
-                    //the recieved position
-                    LoginManagerClient.SetRecievedPosition(dataTemplate.RecieverCharacter._pos);
-                    LoginManagerClient.GetCharacter().physicalPosition = dataTemplate.RecieverCharacter.physicalPosition;
-                    //TODO: Remove element that are not recieved from list
-
-                    //add other character in area to a list
-                    if (dataTemplate.OthersCharacters != null && dataTemplate.OthersCharacters.Count > 0)
-                    {
-                        //Removes all characters that are not in the recieved list, Entities are destroyed in PlayerComponent later
-                        //LoginManagerClient.Othercharacters = LoginManagerClient.Othercharacters.Intersect(dataTemplate.OthersCharacters).ToList();
-                        //LoginManagerClient.Othercharacters.RemoveAll(x => !dataTemplate.OthersCharacters.Contains(x));
-                        LoginManagerClient.Othercharacters = dataTemplate.OthersCharacters;
-
-                        foreach (CharacterPlayer charac in dataTemplate.OthersCharacters)
-                        {
-                            int i = LoginManagerClient.Othercharacters.FindIndex(tempc => tempc._name.Equals(charac._name));
-
-                            if (i == -1)
-                            {
-                                LoginManagerClient.Othercharacters.Add(charac);
-                            }
-                            /*else
-                            {
-                                LoginManagerClient.Othercharacters[i] = charac;
-                            }*/
-                        }
-                    }
-
+                    GameUpdateState(template.JsonMessage);
                     break;
             }
+        }
+
+        private static void GameUpdateState(string jsonMessage)
+        {
+            DataTemplate dataTemplate = Newtonsoft.Json.JsonConvert.DeserializeObject<DataTemplate>(jsonMessage);
+
+            //the recieved position
+            LoginManagerClient.SetRecievedPosition(dataTemplate.RecieverCharacter._pos);
+            LoginManagerClient.GetCharacter().physicalPosition = dataTemplate.RecieverCharacter.physicalPosition;
+
+            //removes the caracters that are not close to the player
+            LoginManagerClient.OtherCharacters.RemoveAll(tempc => !dataTemplate.OthersCharacters.Contains(tempc));
+
+            //add other characters in the area to a list
+            if (dataTemplate.OthersCharacters != null && dataTemplate.OthersCharacters.Count > 0)
+            {
+
+                foreach (CharacterPlayer charac in dataTemplate.OthersCharacters)
+                {
+                    int i = LoginManagerClient.OtherCharacters.FindIndex(tempc => tempc._name.Equals(charac._name));
+
+
+                    if (i == -1)
+                    {
+                        LoginManagerClient.OtherCharacters.Add(charac);
+                    }
+                    else
+                    {
+                        //List<CharacterPlayer> playerList = LoginManagerClient.OtherCharacters.FindAll();
+                        CharacterPlayer character = dataTemplate.OthersCharacters.Find(tempc => tempc._name.Equals(charac._name));
+                        LoginManagerClient.OtherCharacters[i] = character;
+                    }
+                }
+            }
+
         }
 
         private static void ConnectionChange(NetIncomingMessage message)

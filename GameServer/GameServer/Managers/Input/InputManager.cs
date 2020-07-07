@@ -63,12 +63,12 @@ namespace Server.Managers
                     FSRigidBody body = e.GetComponent<FSRigidBody>();
 
                     Mover mover = e.GetComponent<Mover>();
+
                     if(mover.Move(movement, out CollisionResult collisionResult))
                     {
                         //Debug.DrawLine(e.Position, e.Position + collisionResult.Normal * 100, Color.Black, 1f);
                     }
-                    
-                    body.Body.ApplyLinearImpulse(new Vector2(movement.X, movement.Y));
+
                 }
             }
             catch (Exception e)

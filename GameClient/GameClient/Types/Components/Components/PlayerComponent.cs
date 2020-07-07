@@ -1,4 +1,5 @@
 ﻿using Client.Managers;
+using Microsoft.Xna.Framework;
 using Nez;
 using Server.Types;
 
@@ -17,31 +18,28 @@ namespace GameClient.Types.Components
         {
             //gets character, if it exists move it
             CharacterPlayer character = null;
-            foreach (CharacterPlayer characterPlayer in LoginManagerClient.Othercharacters)
+            foreach (CharacterPlayer characterPlayer in LoginManagerClient.OtherCharacters)
             {
-                float f1 = _character.GetHashCode();
-                float f2 = characterPlayer.GetHashCode();
                 if (_character._name.Equals(characterPlayer._name))
                 {
                     character = characterPlayer;
                 }
             }
-            if(character != null)
+            if (character != null)
                 _character = character;
             //Change to find later
             //CharacterPlayer character = LoginManagerClient.Othercharacters.Find(item => item._name.Equals(_character._name));
-            if (LoginManagerClient.Othercharacters != null && character == null)
+            if (LoginManagerClient.OtherCharacters != null && character == null)
             {
                 Entity.Destroy();
             }
             else
             {
 
-                var tween = Entity.Transform.TweenPositionTo(_character.physicalPosition, 0.01f);
+                //var tween = Entity.Transform.TweenPositionTo(_character.physicalPosition, 0.01f);
                 
-                TextComponent text = Entity.GetComponent<TextComponent>();
-                
-                tween.Start();
+                //tween.Start();
+                Entity.Transform.Position = new Vector2(MathHelper.Lerp(Entity.Transform.Position.X, _character.physicalPosition.X, 0.02f), MathHelper.Lerp(Entity.Transform.Position.Y, _character.physicalPosition.Y, 0.02f));
             }
 
         }

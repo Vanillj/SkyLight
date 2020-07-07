@@ -30,23 +30,9 @@ namespace Server.Scenes
 
         }
 
-        float timeSpan = 0;
         public override void Update()
         {
-            /*timeSpan += Time.DeltaTime;
-            if (messageManager != null)
-            {
-                MessageManager.CheckForMessage();
-                //delay
-                if (timeSpan > 0.033)
-                {
-                    MessageManager.SendQueue();
-                    timeSpan = 0;
-                }
-            }*/
             base.Update(); 
-            
         }
-
     }
 }

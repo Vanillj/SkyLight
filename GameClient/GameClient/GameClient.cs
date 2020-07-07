@@ -10,9 +10,6 @@ using System;
 
 namespace GameClient
 {
-    /// <summary>
-    /// This is the main type for your game.
-    /// </summary>
     public class GameClient : Core
     {
         Scene.SceneResolutionPolicy policy;
@@ -30,8 +27,6 @@ namespace GameClient
             ClientNetworkManager.SetupClient();
             PauseOnFocusLost = false;
             IsFixedTimeStep = false;
-
-            
 
             Scene = new LoginScene();
         }

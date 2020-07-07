@@ -17,15 +17,19 @@ namespace GameServer.Types
 
         public GameSceneComponent()
         {
-            
+
         }
-        
+
         Texture2D playerTexture;
+
+        //TEMP
+        const int playerRadius = 100;
 
         public override void OnEnabled()
         {
             base.OnEnabled();
             playerTexture = Scene.Content.Load<Texture2D>("images/playerTexture");
+
         }
 
         float total = 0;
@@ -41,7 +45,7 @@ namespace GameServer.Types
                 return;
             total = 0;
 
-            HashSet<LoginManagerServer> characterlist =  CharacterManager.GetLoginManagerServerList();
+            HashSet<LoginManagerServer> characterlist = CharacterManager.GetLoginManagerServerList();
             if (characterlist != null || characterlist.Count > 0)
             {
                 foreach (LoginManagerServer login in characterlist)
@@ -50,22 +54,18 @@ namespace GameServer.Types
                     Entity e = Core.Scene.FindEntity(c._name);
                     if (e == null)
                     {
-                        Entity temp = Scene.CreateEntity(c._name).SetPosition(c._pos);
-                        temp.AddComponent<FSRigidBody>()
-                        .SetBodyType(BodyType.Dynamic)
-                        .AddComponent<FSCollisionCircle>()
-                        .SetRadius(playerTexture.Width / 2)
-                        .AddComponent(new SpriteRenderer(playerTexture))
-                        .AddComponent(new PlayerComponent(login));
-                        temp.AddComponent(new Mover());
-                        temp.AddComponent(new CircleCollider());
+                        FSRigidBody fbody = new FSRigidBody().SetBodyType(BodyType.Dynamic).SetIgnoreGravity(true).SetLinearDamping(15f);
+                        
 
-                        var body = temp.GetComponent<FSRigidBody>();
-                        body.Body.FixedRotation = true;
-                        body.SetIgnoreGravity(true);
-                        body.SetLinearDamping(15f);
+                        Scene.CreateEntity(c._name).SetPosition(c._pos)
+                            .AddComponent(fbody)
+                            .AddComponent(new FSCollisionCircle(100))
+                            .AddComponent(new PlayerComponent(login))
+                            .AddComponent(new Mover())
+                            .AddComponent(new CircleCollider(100));
+                        fbody.Body.FixedRotation = true;
+
                     }
-
                 }
             }
         }

@@ -5,11 +5,6 @@ using Microsoft.Xna.Framework;
 using Nez.UI;
 using Server.Managers;
 using Server.Scenes;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GameClient.Scenes
 {
@@ -90,7 +85,6 @@ namespace GameClient.Scenes
                     ClientNetworkManager.TryToConnect(loginManagerClient);
 
                 MessageManager.SendLoginRequest();
-
             }
         }
 
@@ -99,7 +93,7 @@ namespace GameClient.Scenes
             string usr = textFieldu.GetText();
             string pass = CryptoManager.ToHash(textFieldp.GetText());
 
-            if (string.IsNullOrWhiteSpace(usr) || string.IsNullOrWhiteSpace(usr))
+            if (string.IsNullOrWhiteSpace(usr) || string.IsNullOrEmpty(usr))
                 return;
 
             LoginManagerClient loginManagerClient = new LoginManagerClient(usr, pass);

@@ -58,6 +58,8 @@ namespace GameClient.Types.Components.SceneComponents
         }
         public void KeyboardChange(KeyboardState newState)
         {
+            float speed = 100;
+            var dir = Vector2.Zero;
             //might be usable later for abilities and more.
             if (newState.IsKeyDown(Keys.S) && !oldState.IsKeyDown(Keys.S))
             {
@@ -66,7 +68,9 @@ namespace GameClient.Types.Components.SceneComponents
             {
                 // the player is holding the key down
                 //LoginManagerClient.GetCharacter()._pos.Y += 3*60f * Time.DeltaTime;
-                LoginManagerClient.GetCharacter()._pos.Y += 4.5f;
+                //LoginManagerClient.GetCharacter()._pos.Y += 1f;
+
+                dir.Y = 1f;
             }
             else if (!newState.IsKeyDown(Keys.S) && oldState.IsKeyDown(Keys.S))
             {
@@ -81,7 +85,8 @@ namespace GameClient.Types.Components.SceneComponents
             {
                 // the player is holding the key down
                 //LoginManagerClient.GetCharacter()._pos.Y -= 3*60f * Time.DeltaTime;
-                LoginManagerClient.GetCharacter()._pos.Y -= 4.5f;
+                //LoginManagerClient.GetCharacter()._pos.Y -= 1f;
+                dir.Y = -1f;
             }
             else if (!newState.IsKeyDown(Keys.W) && oldState.IsKeyDown(Keys.W))
             {
@@ -97,7 +102,9 @@ namespace GameClient.Types.Components.SceneComponents
             {
                 // the player is holding the key down
                 //LoginManagerClient.GetCharacter()._pos.X -= 3*60f * Time.DeltaTime;
-                LoginManagerClient.GetCharacter()._pos.X -= 4.5f;
+                //LoginManagerClient.GetCharacter()._pos.X -= 1f;
+
+                dir.X = -1f;
             }
             else if (!newState.IsKeyDown(Keys.A) && oldState.IsKeyDown(Keys.A))
             {
@@ -113,13 +120,18 @@ namespace GameClient.Types.Components.SceneComponents
             {
                 // the player is holding the key down
                 //LoginManagerClient.GetCharacter()._pos.X += 3*60f * Time.DeltaTime;
-                LoginManagerClient.GetCharacter()._pos.X += 4.5f;
+                //LoginManagerClient.GetCharacter()._pos.X += 1f;
+
+                dir.X = 1f;
             }
             else if (!newState.IsKeyDown(Keys.D) && oldState.IsKeyDown(Keys.D))
             {
                 // the player was holding the key down, but has just let it go
 
             }
+            var movement = dir * speed * Time.DeltaTime * 4;
+            if (movement != Vector2.Zero)
+                LoginManagerClient.GetCharacter()._pos += movement;
             oldState = newState;
         }
 
