@@ -10,7 +10,7 @@ namespace Client.Managers
     class LoginManagerServer : LoginManagerHead
     {
 
-        public CharacterPlayer AccountCharacter;
+        private CharacterPlayer AccountCharacter;
 
         public LoginManagerServer(string username, string password) : base(username, password)
         {}

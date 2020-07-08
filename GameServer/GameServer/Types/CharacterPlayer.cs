@@ -6,8 +6,8 @@ namespace Server.Types
 {
     class CharacterPlayer : CharacterHead
     {
-        private ItemBase[] Equipment = new ItemBase[StaticConstantValues.EquipmentLength];
-        public int[] EquipmentInt = new int[StaticConstantValues.EquipmentLength];
+        private ItemBase[] Equipment = new ItemBase[StaticConstantValues.EquipmentLength]; //Added later from the ID
+        public int[] EquipmentInt = new int[StaticConstantValues.EquipmentLength]; //Holds the ID for all the equipement
         public Vector2 physicalPosition = new Vector2(0, 0);
 
         public CharacterPlayer(float x, float y, string name) : base(x, y, name)

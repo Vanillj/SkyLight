@@ -44,15 +44,10 @@ namespace GameClient.Scenes
                     float delta = Time.DeltaTime;
                     if (e == null)
                     {
-                        //TODO: Change so it's based on player size, might not be nessesary
-                        //CreateEntity(others._name).SetPosition(others._pos).AddComponent(new SpriteRenderer(playerTexture)).AddComponent(new PlayerComponent(others)).AddComponent(new TextComponent(Graphics.Instance.BitmapFont, others._name, new Vector2(-others.playerTexture.Width / 2, -others.playerTexture.Height / 2), Color.White));
-
                         CreateEntity(others._name).SetPosition(others._pos).AddComponent(new SpriteRenderer(playerTexture)).AddComponent(new PlayerComponent(others)).AddComponent(new TextComponent(Graphics.Instance.BitmapFont, others._name, new Vector2(0, 0), Color.White).SetVerticalAlign(VerticalAlign.Top).SetHorizontalAlign(HorizontalAlign.Center)).SetRenderLayer(2);
-                        
                     }
                 }
             }
-
 
 
             //Vector2 ClientsidePos = LoginManagerClient.GetCharacter()._pos;

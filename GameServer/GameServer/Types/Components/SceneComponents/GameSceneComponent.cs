@@ -45,12 +45,13 @@ namespace GameServer.Types
                 return;
             total = 0;
 
-            HashSet<LoginManagerServer> characterlist = CharacterManager.GetLoginManagerServerList();
+            //Moved to loggin and disconnect
+            /*HashSet<LoginManagerServer> characterlist = CharacterManager.GetLoginManagerServerList();
             if (characterlist != null || characterlist.Count > 0)
             {
                 foreach (LoginManagerServer login in characterlist)
                 {
-                    CharacterPlayer c = login.AccountCharacter;
+                    CharacterPlayer c = login.GetCharacter();
                     Entity e = Core.Scene.FindEntity(c._name);
                     if (e == null)
                     {
@@ -67,7 +68,7 @@ namespace GameServer.Types
 
                     }
                 }
-            }
+            }*/
         }
     }
 }

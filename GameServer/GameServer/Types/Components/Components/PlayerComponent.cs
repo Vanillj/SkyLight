@@ -27,7 +27,7 @@ namespace GameServer.Types.Components
         public void Update()
         {
             //checks if client is still connected
-            CheckIfConnected();
+            //CheckIfConnected();
 
             timeSpan += Time.DeltaTime;
             //Updates every 1/20 second
@@ -48,7 +48,6 @@ namespace GameServer.Types.Components
                         RecieverCharacter = tempc, 
                         OthersCharacters = FillRecieverList(characterlist) 
                     };
-
 
                     string posString = Newtonsoft.Json.JsonConvert.SerializeObject(dataTemplate);
                     
@@ -80,9 +79,10 @@ namespace GameServer.Types.Components
         {
             if (ServerNetworkSceneComponent.GetNetServer().Connections.Find(c => c.RemoteUniqueIdentifier.Equals(loginManager.GetUniqueID())) == null)
             {
-                HashSet<LoginManagerServer> characterlist = CharacterManager.GetLoginManagerServerList();
-                characterlist.Remove(loginManager);
-                Entity.Destroy();
+                //HashSet<LoginManagerServer> characterlist = CharacterManager.GetLoginManagerServerList();
+                //characterlist.Remove(loginManager);
+                //CharacterManager.RemoveLoginManagerServerFromList(loginManager);
+                //Entity.Destroy();
             }
         }
     }

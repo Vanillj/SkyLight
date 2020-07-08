@@ -1,6 +1,7 @@
 ﻿using GameServer.General;
 using MySql.Data.MySqlClient;
 using System;
+using System.Data.SqlClient;
 using System.Diagnostics;
 
 namespace Server.Managers
@@ -34,20 +35,21 @@ namespace Server.Managers
         public static void UpdateToSQL(string username, string data)
         {
 
-            var updateSQL = "UPDATE Users(accountInfo, accountData, accountInfoSecond) VALUES(@accountData) WHERE accountInfo = @usr";
-            //"UPDATE Users SET accountInfoSecond = 'katt' WHERE accountInfo = '' "
+            var updateSQL = "UPDATE Users SET accountData = @data WHERE accountInfo = @usr";
 
             using (var cmd = new MySqlCommand(updateSQL, cn))
             {
-
-                //cmd.Parameters.AddWithValue("@accountInfo", username);
-                cmd.Parameters.AddWithValue("@accountData", data);
+                cmd.Parameters.AddWithValue("@data", data);
                 cmd.Parameters.AddWithValue("@usr", username);
+                string tmp = cmd.CommandText.ToString();
+                foreach (MySqlParameter p in cmd.Parameters)
+                {
+                    tmp = tmp.Replace(p.ParameterName.ToString(), "'" + p.Value.ToString() + "'");
+                }
+                Debug.WriteLine(tmp);
                 cmd.Prepare();
                 cmd.ExecuteNonQuery();
-
             }
-
 
         }
 
@@ -56,7 +58,6 @@ namespace Server.Managers
             //if username already in database
             if (CheckIfExistInSQL(username))
             {
-
                 return;
             }
 
@@ -75,17 +76,16 @@ namespace Server.Managers
 
         }
 
+        //TODO: Create SQL with parameters
         internal static string[] GetDataFromSQL(string username)
         {
             string[] returner = { "", "" };
 
-            var sqlGet = "SELECT * FROM Users WHERE accountInfo = '@usr'";
-            sqlGet = "SELECT * FROM Users WHERE accountInfo = '" + username + "'";
+            var sqlGet = "SELECT * FROM Users WHERE accountInfo = @usr";
 
             using (var cmd = new MySqlCommand(sqlGet, cn))
             {
-                //cmd.Parameters.AddWithValue("@usr", username);
-                string s = cmd.CommandText;
+                cmd.Parameters.AddWithValue("@usr", username);
                 cmd.Prepare();
 
                 using (MySqlDataReader rd = cmd.ExecuteReader())
@@ -103,11 +103,11 @@ namespace Server.Managers
         public static bool CheckIfExistInSQL(string username)
         {
             //TODO: Proper sql request
-            var sqlCheck = "SELECT COUNT(1) FROM Users WHERE accountInfo = '" + username + "'";
+            var sqlCheck = "SELECT COUNT(1) FROM Users WHERE accountInfo = @user";
 
             using (var cmd = new MySqlCommand(sqlCheck, cn))
             {
-                //cmd.Parameters.AddWithValue("@user", username);
+                cmd.Parameters.AddWithValue("@user", username);
                 cmd.Prepare();
                 var c = Convert.ToInt32(cmd.ExecuteScalar());
                 if (c > 0)

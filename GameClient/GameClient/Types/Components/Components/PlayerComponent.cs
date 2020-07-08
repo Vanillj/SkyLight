@@ -35,10 +35,6 @@ namespace GameClient.Types.Components
             }
             else
             {
-
-                //var tween = Entity.Transform.TweenPositionTo(_character.physicalPosition, 0.01f);
-                
-                //tween.Start();
                 Entity.Transform.Position = new Vector2(MathHelper.Lerp(Entity.Transform.Position.X, _character.physicalPosition.X, 0.02f), MathHelper.Lerp(Entity.Transform.Position.Y, _character.physicalPosition.Y, 0.02f));
             }
 

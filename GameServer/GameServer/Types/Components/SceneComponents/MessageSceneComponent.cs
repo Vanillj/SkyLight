@@ -8,6 +8,7 @@ using Server.Types;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Debug = System.Diagnostics.Debug;
 
 namespace GameServer.Types.Components.SceneComponents
@@ -21,7 +22,7 @@ namespace GameServer.Types.Components.SceneComponents
             base.Update();
         }
 
-        public static void CheckForMessageAvailable()
+        public void CheckForMessageAvailable()
         {
             NetIncomingMessage message;
             NetServer server = ServerNetworkSceneComponent.GetNetServer();
@@ -32,7 +33,7 @@ namespace GameServer.Types.Components.SceneComponents
 
         }
 
-        private static void CheckForMessage(NetIncomingMessage message)
+        private void CheckForMessage(NetIncomingMessage message)
         {
             switch (message.MessageType)
             {
@@ -60,11 +61,10 @@ namespace GameServer.Types.Components.SceneComponents
             }
         }
 
-        private static void CustomMessage(NetIncomingMessage message)
+        private void CustomMessage(NetIncomingMessage message)
         {
             string s = message.ReadString();
             List<MessageTemplate> QueueList = Newtonsoft.Json.JsonConvert.DeserializeObject<List<MessageTemplate>>(s);
-            CharacterPlayer c = CharacterManager.GetCharacterFromUniqueID(message.SenderConnection.RemoteUniqueIdentifier);
 
             QueueList.ForEach(template =>
             {
@@ -72,6 +72,7 @@ namespace GameServer.Types.Components.SceneComponents
                 {
                     case MessageType.Movement:
                         Keys[] state = Newtonsoft.Json.JsonConvert.DeserializeObject<Keys[]>(template.JsonMessage);
+                        CharacterPlayer c = CharacterManager.GetLoginManagerFromUniqueID(message.SenderConnection.RemoteUniqueIdentifier).GetCharacter();
                         InputManager.CalculateMovement(c, state);
                         break;
 
@@ -84,8 +85,9 @@ namespace GameServer.Types.Components.SceneComponents
                         RegisterUser(login);
                         break;
 
+                    //send by selfmade function, not Lidgren
                     case MessageType.Disconnected:
-                        OnDisconnected(message.SenderConnection);
+                        //OnDisconnected(message.SenderConnection);
                         break;
 
                 }
@@ -93,53 +95,30 @@ namespace GameServer.Types.Components.SceneComponents
 
         }
 
-        private static void OnDisconnected(NetConnection sender)
+        private void LoginAttempt(NetIncomingMessage message, MessageTemplate template)
         {
-            NetServer server = ServerNetworkSceneComponent.GetNetServer();
+            LoginManagerServer LoginManagerServerUser = Newtonsoft.Json.JsonConvert.DeserializeObject<LoginManagerServer>(template.JsonMessage);
 
-            //removes loginmanager
-            CharacterManager.RemoveLoginManagerServerFromList(sender.RemoteUniqueIdentifier);
-            //removes the connection
-            server.Connections.Remove(sender);
-
-
-            LoginManagerServer loginManager = CharacterManager.GetLoginManagerServerList().FirstOrDefault(l => l.GetUniqueID().Equals(sender.RemoteUniqueIdentifier));
-            if (loginManager != null)
-            {
-                CharacterManager.GetLoginManagerServerList().Remove(loginManager);
-                Entity e = Core.Scene.FindEntity(loginManager.GetCharacter()._name);
-
-                Core.Scene.Entities.Remove(e);
-
-            }
-            MainScene.ConnectedCount.SetText("Current connections: " + server.ConnectionsCount);
-        }
-
-        private static void LoginAttempt(NetIncomingMessage message, MessageTemplate template)
-        {
-            var temsp = Newtonsoft.Json.JsonConvert.DeserializeObject<LoginManagerServer>(template.JsonMessage);
-
-            temsp.SetUniqueID(message.SenderConnection.RemoteUniqueIdentifier);
-            Console.WriteLine("Login attempt by: " + temsp.username);
+            LoginManagerServerUser.SetUniqueID(message.SenderConnection.RemoteUniqueIdentifier);
+            Console.WriteLine("Login attempt by: " + LoginManagerServerUser.username);
             NetConnection sender = message.SenderConnection;
 
-            if (SQLManager.CheckIfExistInSQL(temsp.username))
+            if (SQLManager.CheckIfExistInSQL(LoginManagerServerUser.username))
             {
                 //true if logged in
-                bool success = temsp.SetupLogin();
+                bool success = LoginManagerServerUser.SetupLogin();
                 if (success)
                 {
-                    Console.WriteLine("Logged in with \"" + temsp.username + "\" to Database");
+                    Console.WriteLine("Logged in with \"" + LoginManagerServerUser.username + "\" to Database");
 
-                    //remove later
-                    CharacterPlayer temps = new CharacterPlayer(temsp.AccountCharacter._pos.X, temsp.AccountCharacter._pos.Y, temsp.username);
+                    string characterString = Newtonsoft.Json.JsonConvert.SerializeObject(LoginManagerServerUser.GetCharacter());
+                    MessageTemplate TempMessageTemplate = new MessageTemplate(characterString, MessageType.LoginSuccess);
 
-                    string characterString = Newtonsoft.Json.JsonConvert.SerializeObject(temps);
-                    MessageTemplate temp = new MessageTemplate(characterString, MessageType.LoginSuccess);
-
-                    NetOutgoingMessage mvmntMessage = ServerNetworkSceneComponent.GetNetServer().CreateMessage(Newtonsoft.Json.JsonConvert.SerializeObject(temp));
+                    //Returns the character to the player
+                    NetOutgoingMessage mvmntMessage = ServerNetworkSceneComponent.GetNetServer().CreateMessage(Newtonsoft.Json.JsonConvert.SerializeObject(TempMessageTemplate));
                     sender.SendMessage(mvmntMessage, NetDeliveryMethod.ReliableOrdered, 0);
-                    CharacterManager.AddLoginManagerServerToList(temsp);
+                    CharacterManager.AddLoginManagerServerToList(LoginManagerServerUser);
+                    CharacterManager.AddCharacterToScene(Scene, LoginManagerServerUser);
                 }
                 else
                 {
@@ -159,7 +138,7 @@ namespace GameServer.Types.Components.SceneComponents
 
         }
 
-        private static void RegisterUser(LoginManagerServer login)
+        private void RegisterUser(LoginManagerServer login)
         {
             //TODO: Move register to its own function
             //TODO: add better character creation later
@@ -169,7 +148,7 @@ namespace GameServer.Types.Components.SceneComponents
             SQLManager.AddToSQL(login.username, login.password, tempC);
         }
 
-        private static void ConnectionChange(NetIncomingMessage message)
+        private void ConnectionChange(NetIncomingMessage message)
         {
             if (message.SenderConnection.Status == NetConnectionStatus.Connected || message.SenderConnection.Status == NetConnectionStatus.RespondedConnect)
             {
@@ -177,11 +156,32 @@ namespace GameServer.Types.Components.SceneComponents
             }
             if (message.SenderConnection.Status == NetConnectionStatus.Disconnected)
             {
-                CharacterManager.GetLoginManagerServerList().RemoveWhere(l => l.GetUniqueID().Equals(message.SenderConnection.RemoteUniqueIdentifier));
-                Debug.WriteLine("Disconnected! Connected: " + ServerNetworkSceneComponent.GetNetServer().ConnectionsCount);
-
+                OnDisconnected(message.SenderConnection);
             }
             MainScene.ConnectedCount.SetText("Current connections: " + ServerNetworkSceneComponent.GetNetServer().ConnectionsCount);
+        }
+        private void OnDisconnected(NetConnection sender)
+        {
+            NetServer server = ServerNetworkSceneComponent.GetNetServer();
+
+            LoginManagerServer login = CharacterManager.GetLoginManagerFromUniqueID(sender.RemoteUniqueIdentifier);
+            CharacterPlayer characterPlayer = login.GetCharacter();
+            
+            //Saves data to SQL database
+            string characterString = Newtonsoft.Json.JsonConvert.SerializeObject(characterPlayer);
+            SQLManager.UpdateToSQL(login.username, characterString);
+
+            //removes login manager
+            CharacterManager.RemoveLoginManagerServerFromListLoginManager(login);
+            //removes the connection
+            server.Connections.Remove(sender);
+            //removes entity
+            if (characterPlayer != null)
+            {
+                CharacterManager.RemoveCharacterFromScene(Scene, characterPlayer._name);
+            }
+            Debug.WriteLine("Disconnected! Connected: " + ServerNetworkSceneComponent.GetNetServer().ConnectionsCount);
+            MainScene.ConnectedCount.SetText("Current connections: " + server.ConnectionsCount);
         }
 
     }

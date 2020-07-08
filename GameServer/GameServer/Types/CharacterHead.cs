@@ -7,8 +7,8 @@ namespace Server.Types
     {
         public Vector2 _pos;
         public string _name;
-        public Texture2D playerTexture { get; set; }
-
+        private Texture2D playerTexture { get; set; }
+        public int playerTextureID { get; set; }
         public CharacterHead(float x, float y, string name)
         {
             _pos.X = x;
