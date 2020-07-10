@@ -3,11 +3,12 @@ using System.Runtime.CompilerServices;
 
 namespace GameServer.General
 {
-    class StaticConstantValues
+    class ConstatValues
     {
         //Constants
         public const int EquipmentLength = 10;
-
+        public const int BaseInventoryLength = 10;
+        public const string ItemDataFileName = "ItemData.json";
 
 
         //Variables that need to be set

@@ -1,7 +1,10 @@
 ﻿using Client.Managers;
+using GameClient.General;
 using GameClient.Managers;
 using GameClient.Types.Components;
 using GameClient.Types.Components.SceneComponents;
+using GameClient.Types.Item;
+using GameServer.General;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Nez;
@@ -28,6 +31,12 @@ namespace GameClient.Scenes
         public override void Initialize()
         {
             base.Initialize();
+
+            //Load Assets, always load textures before generating items so they can match texture and ID
+            new TextureContainer().LoadTextures();
+            int TextureArrayLength = 2;
+
+            new ItemContainer().GenerateItems(TextureContainer.Texture2DEList);
 
             Table.Row();
             label = new Label("Logged in!").SetFontScale(3);

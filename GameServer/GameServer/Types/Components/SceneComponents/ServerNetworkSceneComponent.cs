@@ -14,7 +14,7 @@ namespace Server.Managers
         }
         public override void OnEnabled()
         {
-            NetPeerConfiguration Configuration = new NetPeerConfiguration(StaticConstantValues.ServerString) { Port = (int)StaticConstantValues.Port };
+            NetPeerConfiguration Configuration = new NetPeerConfiguration(ConstatValues.ServerString) { Port = (int)ConstatValues.Port };
             server = new NetServer(Configuration);
             server.Start();
 

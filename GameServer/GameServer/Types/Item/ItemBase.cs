@@ -1,52 +1,36 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿
+using GameClient.Types.Item;
 
 namespace GameServer.Types.Item
 {
     class ItemBase
     {
+        //Information
         public int id { get; set; }
         public string name { get; set; }
 
-        //use the id to grab texture/texture string, string might not be needed
-        public string TextureString { get; set; }
-        private Texture2D Texture;
+        private Texture2DE Texture;
 
         public ItemType Type { get; set; }
-        public WeaponTypes weaponType { get; set; }
+        public ItemRarity Rarity { get; set; }
 
-        public int Intelligence { get; set; }
-        public int Strength { get; set; }
-        public int Dexterity { get; set; }
-        public int[] WeaponDamageRange { get; set; }
 
-        public ItemBase(int id, string name, string TextureString, ItemType Type, int Intelligence, int Strength, int Dexterity)
+        public ItemBase(int id, string name, ItemType Type, ItemRarity rarity)
         {
             this.id = id;
             this.name = name;
-            this.TextureString = TextureString;
             this.Type = Type;
-            this.Intelligence = Intelligence;
-            this.Strength = Strength;
-            this.Dexterity = Dexterity;
+            Rarity = rarity;
         }
 
-        public ItemBase(int id, string name, string TextureString, ItemType Type, WeaponTypes weaponType, int Intelligence, int Strength, int Dexterity, int Lower, int Upper)
-        {
-            this.id = id;
-            this.name = name;
-            this.TextureString = TextureString;
-            this.Type = Type;
-            this.weaponType = weaponType;
-            this.Intelligence = Intelligence;
-            this.Strength = Strength;
-            this.Dexterity = Dexterity;
-            int[] temp = { Lower, Upper };
-            WeaponDamageRange = temp;
-        }
-
-        public Texture2D GetTexture()
+        public Texture2DE GetTexture()
         {
             return Texture;
+        }
+        public ItemBase SetTexture(Texture2DE texture2DE)
+        {
+            Texture = texture2DE;
+            return this;
         }
     }
 }

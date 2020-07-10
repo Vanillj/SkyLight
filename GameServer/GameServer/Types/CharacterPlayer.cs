@@ -1,4 +1,5 @@
-﻿using GameServer.General;
+﻿using GameClient.Types.Item;
+using GameServer.General;
 using GameServer.Types.Item;
 using Microsoft.Xna.Framework;
 
@@ -6,12 +7,14 @@ namespace Server.Types
 {
     class CharacterPlayer : CharacterHead
     {
-        private ItemBase[] Equipment = new ItemBase[StaticConstantValues.EquipmentLength]; //Added later from the ID
-        public int[] EquipmentInt = new int[StaticConstantValues.EquipmentLength]; //Holds the ID for all the equipement
+        public EqupmentBase[] Equipment; //Added later from the ID
+        public ItemBase[] Inventory;
         public Vector2 physicalPosition = new Vector2(0, 0);
 
-        public CharacterPlayer(float x, float y, string name) : base(x, y, name)
+        public CharacterPlayer(float x, float y, string name, EqupmentBase[] equipment, ItemBase[] inventory) : base(x, y, name)
         {
+            Equipment = equipment;
+            Inventory = inventory;
         }
 
         //help methods bellow to create character and such

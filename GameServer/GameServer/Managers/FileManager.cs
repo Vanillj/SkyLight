@@ -1,22 +1,29 @@
 ﻿using GameServer.General;
-using System;
+using GameServer.Types.Item;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GameServer.Managers
 {
     class FileManager
     {
-        internal static CredentialInfo GetFileFromString(string FileName)
+        private static string GetFileFromString(string FileName)
         {
             using (var file = File.OpenText(FileName))
             {
-                string s = file.ReadToEnd();
-                return Newtonsoft.Json.JsonConvert.DeserializeObject<CredentialInfo>(s);
+                return file.ReadToEnd();
             }
         }
+        
+        public static CredentialInfo GetCredentialInformation(string FileName)
+        {
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<CredentialInfo>(GetFileFromString(FileName));
+        }
+
+        public static HashSet<ItemBase> GetItemInformation(string FileName)
+        {
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<HashSet <ItemBase>>(GetFileFromString(FileName));
+        }
+
     }
 }

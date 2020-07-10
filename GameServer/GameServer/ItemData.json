@@ -1,0 +1,26 @@
+[
+  { "id": 1, "name": "Cape", "Type": 4, "Rarity": 0 },
+  { "id": 2, "name": "Bone Helm", "Type": 0, "Rarity": 0 },
+  { "id": 3, "name": "Bone Chest", "Type": 1, "Rarity": 0 },
+  { "id": 4, "name": "Bone Legs", "Type": 2, "Rarity": 0 },
+  { "id": 5, "name": "Bone Cape", "Type": 4, "Rarity": 0 },
+  { "id": 6, "name": "Bone Sword", "Type": 3, "Rarity": 0 },
+  { "id": 7, "name": "Bone Cape", "Type": 4, "Rarity": 0 },
+  { "id": 8, "name": "Bone Glove", "Type": 5, "Rarity": 0 },
+  { "id": 9, "name": "Bone Ring", "Type": 6, "Rarity": 0 },
+  { "id": 10, "name": "Bone Boots", "Type": 7, "Rarity": 0 },
+  { "id": 11, "name": "Bone Quiver", "Type": 8, "Rarity": 0 },
+  {
+    "Intelligence": 0,
+    "Strength": 0,
+    "Dexterity": 0,
+    "IntelligenceReq": 120,
+    "StrengthReq": 0,
+    "DexterityReq": 0,
+    "LevelReq": 70,
+    "id": 12,
+    "name": "Bone Quiver",
+    "Type": 8,
+    "Rarity": 0
+  }
+]

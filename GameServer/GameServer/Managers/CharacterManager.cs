@@ -1,14 +1,10 @@
 ﻿using Client.Managers;
 using FarseerPhysics.Dynamics;
 using GameServer.Types.Components;
-using Microsoft.Xna.Framework;
 using Nez;
 using Nez.Farseer;
-using Server.Scenes;
 using Server.Types;
 using System.Collections.Generic;
-using System.Linq;
-using System.Security.Policy;
 
 namespace Server.Managers
 {
@@ -29,16 +25,6 @@ namespace Server.Managers
         public static void RemoveLoginManagerServerFromListLoginManager(LoginManagerServer login)
         {
             LoginManagerServerList.Remove(login);
-        }
-        public static void ChangeCharacterPosition(Vector2 vector, float uniqueID)
-        {
-            CharacterPlayer c = GetLoginManagerFromUniqueID(uniqueID).GetCharacter();
-            if (c != null)
-            {
-                c._pos.X += vector.X;
-                c._pos.Y += vector.Y;
-            }
-
         }
 
         public static HashSet<LoginManagerServer> GetLoginManagerServerList()

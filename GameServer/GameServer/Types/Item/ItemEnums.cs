@@ -13,4 +13,11 @@ namespace GameServer.Types.Item
         Boot,
         Quiver
     }
+    enum ItemRarity
+    {
+        Normal, //White
+        Magical, //Blue
+        Exotic, //Yellow
+        Legendary //Orange, green, purple or black
+    }
 }

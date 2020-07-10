@@ -43,8 +43,10 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="General\StaticConstantValues.cs" />
+    <Compile Include="General\ItemContainer.cs" />
+    <Compile Include="General\ConstatValues.cs" />
     <Compile Include="Managers\FileManager.cs" />
+    <Compile Include="Managers\ItemManager.cs" />
     <Compile Include="Managers\Networking\MessageManager.cs" />
     <Compile Include="Scenes\MainScene.cs" />
     <Compile Include="Server.cs" />
@@ -64,9 +66,12 @@
     <Compile Include="Types\Components\Components\PlayerComponent.cs" />
     <Compile Include="Types\Components\SceneComponents\MessageSceneComponent.cs" />
     <Compile Include="Managers\TileManager.cs" />
+    <Compile Include="Types\Item\EqupmentBase.cs" />
+    <Compile Include="Types\Item\Texture2DE.cs" />
+    <Compile Include="Types\Item\WeaponItem.cs" />
     <Compile Include="Types\Networking\DataTemplate.cs" />
     <Compile Include="Types\Item\ItemBase.cs" />
-    <Compile Include="Types\Item\ItemType.cs" />
+    <Compile Include="Types\Item\ItemEnums.cs" />
     <Compile Include="Types\Item\WeaponTypes.cs" />
     <Compile Include="Types\Networking\MessageTemplate.cs" />
     <Compile Include="Types\Networking\MessageType.cs" />
@@ -194,6 +199,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Credentials.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="ItemData.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />

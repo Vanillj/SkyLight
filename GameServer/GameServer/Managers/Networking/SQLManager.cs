@@ -14,7 +14,7 @@ namespace Server.Managers
 
         public static void SetUpSQL()
         {
-            connectionString = "Server=db4free.net;Port=3306;Connect Timeout=2147483;User Id=" + StaticConstantValues.ConnectionID + ";password=" + StaticConstantValues.ConnectionCredential + ";Database=skylighttemp;old guids=true;";
+            connectionString = "Server=db4free.net;Port=3306;Connect Timeout=2147483;User Id=" + ConstatValues.ConnectionID + ";password=" + ConstatValues.ConnectionCredential + ";Database=skylighttemp;old guids=true;";
             try
             {
                 cn = new MySqlConnection(connectionString);

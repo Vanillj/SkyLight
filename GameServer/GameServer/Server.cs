@@ -15,14 +15,15 @@ namespace GameServer
             Window.AllowUserResizing = true;
             DebugRenderEnabled = true;
             PauseOnFocusLost = false;
+            new ItemContainer().GenerateItems(null);
 
             //setup constant values
             //Getting credentials from file
-            CredentialInfo credentialInfo = FileManager.GetFileFromString("Credentials.json");
-            StaticConstantValues.ConnectionID = credentialInfo.ID;
-            StaticConstantValues.ConnectionCredential = credentialInfo.ConnectionCredential;
-            StaticConstantValues.ServerString = credentialInfo.ServerString;
-            StaticConstantValues.Port = credentialInfo.Port;
+            CredentialInfo credentialInfo = FileManager.GetCredentialInformation("Credentials.json");
+            ConstatValues.ConnectionID = credentialInfo.ID;
+            ConstatValues.ConnectionCredential = credentialInfo.ConnectionCredential;
+            ConstatValues.ServerString = credentialInfo.ServerString;
+            ConstatValues.Port = credentialInfo.Port;
         }
 
         protected override void Initialize()

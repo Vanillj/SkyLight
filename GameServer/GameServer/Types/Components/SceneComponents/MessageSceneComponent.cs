@@ -1,5 +1,7 @@
 ﻿using Client.Managers;
+using GameServer.General;
 using GameServer.Scenes;
+using GameServer.Types.Item;
 using Lidgren.Network;
 using Microsoft.Xna.Framework.Input;
 using Nez;
@@ -143,7 +145,7 @@ namespace GameServer.Types.Components.SceneComponents
             //TODO: Move register to its own function
             //TODO: add better character creation later
             //TODO: Change login.username to requrested character name
-            login.SetCharacter(new CharacterPlayer(0, 0, login.username));
+            login.SetCharacter(new CharacterPlayer(0, 0, login.username, new EqupmentBase[ConstatValues.EquipmentLength], new ItemBase[ConstatValues.BaseInventoryLength]));
             string tempC = Newtonsoft.Json.JsonConvert.SerializeObject(login.GetCharacter());
             SQLManager.AddToSQL(login.username, login.password, tempC);
         }
