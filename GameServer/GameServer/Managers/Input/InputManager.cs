@@ -1,4 +1,6 @@
 ﻿using FarseerPhysics.Dynamics;
+using GameServer.Managers;
+using GameServer.Types.Item;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Nez;
@@ -48,7 +50,7 @@ namespace Server.Managers
                             Entity e = Core.Scene.FindEntity(character._name);
                             e.Position = Vector2.Zero;
                             e.Transform.Position = Vector2.Zero;
-                            
+                            character.AddItemToInventory(ItemManager.GenerateItem());
                             break;
 
                         default:

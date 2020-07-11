@@ -1,4 +1,5 @@
-﻿using GameServer.General;
+﻿using GameClient.Types.Item;
+using GameServer.General;
 using GameServer.Types.Item;
 using System.Collections.Generic;
 using System.IO;
@@ -20,9 +21,9 @@ namespace GameServer.Managers
             return Newtonsoft.Json.JsonConvert.DeserializeObject<CredentialInfo>(GetFileFromString(FileName));
         }
 
-        public static HashSet<ItemBase> GetItemInformation(string FileName)
+        public static HashSet<WeaponItem> GetItemInformation(string FileName)
         {
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<HashSet <ItemBase>>(GetFileFromString(FileName));
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<HashSet<WeaponItem>>(GetFileFromString(FileName));
         }
 
     }

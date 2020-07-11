@@ -9,10 +9,10 @@ namespace GameServer.General
 {
     class ItemContainer
     {
-        public static HashSet<ItemBase> itemBasesList = new HashSet<ItemBase>();
+        public static HashSet<WeaponItem> itemBasesList = new HashSet<WeaponItem>();
 
-        public static HashSet<ItemBase> itemBaseLegendary = new HashSet<ItemBase>();
-        public static HashSet<ItemBase> itemBaseNormal = new HashSet<ItemBase>();
+        public static HashSet<WeaponItem> itemBaseLegendary = new HashSet<WeaponItem>();
+        public static HashSet<WeaponItem> itemBaseNormal = new HashSet<WeaponItem>();
 
         public void LoadFromFile()
         {

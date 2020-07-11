@@ -1,4 +1,5 @@
 ﻿using Client.Managers;
+using GameClient.Types.Item;
 using GameServer.General;
 using GameServer.Scenes;
 using GameServer.Types.Item;
@@ -73,9 +74,9 @@ namespace GameServer.Types.Components.SceneComponents
                 switch (template.MessageType)
                 {
                     case MessageType.Movement:
-                        Keys[] state = Newtonsoft.Json.JsonConvert.DeserializeObject<Keys[]>(template.JsonMessage);
+                        Keys[] KeyState = Newtonsoft.Json.JsonConvert.DeserializeObject<Keys[]>(template.JsonMessage);
                         CharacterPlayer c = CharacterManager.GetLoginManagerFromUniqueID(message.SenderConnection.RemoteUniqueIdentifier).GetCharacter();
-                        InputManager.CalculateMovement(c, state);
+                        InputManager.CalculateMovement(c, KeyState);
                         break;
 
                     case MessageType.Login:
@@ -145,7 +146,7 @@ namespace GameServer.Types.Components.SceneComponents
             //TODO: Move register to its own function
             //TODO: add better character creation later
             //TODO: Change login.username to requrested character name
-            login.SetCharacter(new CharacterPlayer(0, 0, login.username, new EqupmentBase[ConstatValues.EquipmentLength], new ItemBase[ConstatValues.BaseInventoryLength]));
+            login.SetCharacter(new CharacterPlayer(0, 0, login.username, new WeaponItem[ConstatValues.EquipmentLength], new WeaponItem[ConstatValues.BaseInventoryLength]));
             string tempC = Newtonsoft.Json.JsonConvert.SerializeObject(login.GetCharacter());
             SQLManager.AddToSQL(login.username, login.password, tempC);
         }

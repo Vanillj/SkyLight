@@ -6,21 +6,22 @@ namespace GameServer.Types.Item
     class ItemBase
     {
         //Information
-        public int id { get; set; }
-        public string name { get; set; }
+        public int ID { get; set; }
+        public string Name { get; set; }
 
         private Texture2DE Texture;
 
-        public ItemType Type { get; set; }
+        public EqupmentType EquipmentType { get; }
         public ItemRarity Rarity { get; set; }
+        public ItemTypes ItemType { get; }
 
-
-        public ItemBase(int id, string name, ItemType Type, ItemRarity rarity)
+        public ItemBase(int id, string name, EqupmentType Type, ItemRarity rarity, ItemTypes itemType)
         {
-            this.id = id;
-            this.name = name;
-            this.Type = Type;
+            ID = id;
+            Name = name;
+            EquipmentType = Type;
             Rarity = rarity;
+            ItemType = itemType;
         }
 
         public Texture2DE GetTexture()

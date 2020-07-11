@@ -2,16 +2,18 @@
 using GameServer.General;
 using GameServer.Types.Item;
 using Microsoft.Xna.Framework;
+using System;
+using System.Dynamic;
 
 namespace Server.Types
 {
     class CharacterPlayer : CharacterHead
     {
-        public EqupmentBase[] Equipment; //Added later from the ID
-        public ItemBase[] Inventory;
+        public WeaponItem[] Equipment; //Added later from the ID
+        public WeaponItem[] Inventory;
         public Vector2 physicalPosition = new Vector2(0, 0);
 
-        public CharacterPlayer(float x, float y, string name, EqupmentBase[] equipment, ItemBase[] inventory) : base(x, y, name)
+        public CharacterPlayer(float x, float y, string name, WeaponItem[] equipment, WeaponItem[] inventory) : base(x, y, name)
         {
             Equipment = equipment;
             Inventory = inventory;
@@ -22,11 +24,6 @@ namespace Server.Types
         {
             //Change later with animations etc.
             _pos = vector;
-        }
-
-        public ItemBase[] GetEquipment()
-        {
-            return Equipment;
         }
 
         public static CharacterPlayer CreateCharacterFromJson(string json)
@@ -44,6 +41,31 @@ namespace Server.Types
         public string CreateJsonFromCharacter()
         {
             return Newtonsoft.Json.JsonConvert.SerializeObject(this);
+        }
+
+        public void AddItemToInventory(WeaponItem item)
+        {
+            //findst first empty inventory spot
+            int lowestPos = Array.IndexOf(Inventory, null);
+            //-1 if no found, else add it
+            if (lowestPos != -1)
+            {
+                Inventory[lowestPos] = item;
+            }
+            else
+            {
+                //Drop item else
+            }
+        }
+
+        //GET SET METHODS
+        public EqupmentBase[] GetEquipment()
+        {
+            return Equipment;
+        }
+        public ItemBase[] GetInventory()
+        {
+            return Inventory;
         }
     }
 

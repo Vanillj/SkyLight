@@ -1,9 +1,5 @@
-﻿using BCrypt.Net;
-using MySql.Data.MySqlClient;
-using Server.Managers;
+﻿using Server.Managers;
 using Server.Types;
-using System;
-using System.Dynamic;
 
 namespace Client.Managers
 {

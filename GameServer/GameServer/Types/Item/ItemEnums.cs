@@ -1,7 +1,7 @@
 ﻿
 namespace GameServer.Types.Item
 {
-    enum ItemType
+    enum EqupmentType
     {
         Helm,
         Chest,
@@ -12,6 +12,12 @@ namespace GameServer.Types.Item
         Ring,
         Boot,
         Quiver
+    }
+    enum ItemTypes
+    {
+        Normal,
+        Equipment,
+        Quest
     }
     enum ItemRarity
     {

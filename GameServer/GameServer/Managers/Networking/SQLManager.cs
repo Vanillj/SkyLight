@@ -1,8 +1,7 @@
 ﻿using GameServer.General;
-using MySql.Data.MySqlClient;
 using System;
-using System.Data.SqlClient;
 using System.Diagnostics;
+using Npgsql;
 
 namespace Server.Managers
 {
@@ -10,14 +9,14 @@ namespace Server.Managers
     {
 
         private static string connectionString; 
-        private static MySqlConnection cn;
+        private static NpgsqlConnection cn;
 
         public static void SetUpSQL()
         {
-            connectionString = "Server=db4free.net;Port=3306;Connect Timeout=2147483;User Id=" + ConstatValues.ConnectionID + ";password=" + ConstatValues.ConnectionCredential + ";Database=skylighttemp;old guids=true;";
+            connectionString = "Server=balarama.db.elephantsql.com; Port=5432;User Id=" + ConstatValues.ConnectionID + "; Password=" + ConstatValues.ConnectionCredential + "; Database=hxhyscft;";
             try
             {
-                cn = new MySqlConnection(connectionString);
+                cn = new NpgsqlConnection(connectionString);
                 cn.Open();
                 Debug.WriteLine("Connected to database.");
             }
@@ -37,15 +36,12 @@ namespace Server.Managers
 
             var updateSQL = "UPDATE Users SET accountData = @data WHERE accountInfo = @usr";
 
-            using (var cmd = new MySqlCommand(updateSQL, cn))
+            using (var cmd = new NpgsqlCommand(updateSQL, cn))
             {
                 cmd.Parameters.AddWithValue("@data", data);
                 cmd.Parameters.AddWithValue("@usr", username);
                 string tmp = cmd.CommandText.ToString();
-                foreach (MySqlParameter p in cmd.Parameters)
-                {
-                    tmp = tmp.Replace(p.ParameterName.ToString(), "'" + p.Value.ToString() + "'");
-                }
+
                 Debug.WriteLine(tmp);
                 cmd.Prepare();
                 cmd.ExecuteNonQuery();
@@ -63,7 +59,7 @@ namespace Server.Managers
 
             var InserSQL = "INSERT INTO Users(accountInfo, accountData, accountInfoSecond) VALUES(@accountInfo, @accountData, @accountInfoSecond)";
 
-            using (var cmd = new MySqlCommand(InserSQL, cn))
+            using (var cmd = new NpgsqlCommand(InserSQL, cn))
             {
                 cmd.Parameters.AddWithValue("@accountInfo", username);
                 cmd.Parameters.AddWithValue("@accountData", data);
@@ -72,8 +68,6 @@ namespace Server.Managers
                 cmd.ExecuteNonQuery();
                 Console.WriteLine("Added \"" + username + " : " + data + "\" to Database");
             }
-
-
         }
 
         //TODO: Create SQL with parameters
@@ -83,12 +77,12 @@ namespace Server.Managers
 
             var sqlGet = "SELECT * FROM Users WHERE accountInfo = @usr";
 
-            using (var cmd = new MySqlCommand(sqlGet, cn))
+            using (var cmd = new NpgsqlCommand(sqlGet, cn))
             {
                 cmd.Parameters.AddWithValue("@usr", username);
                 cmd.Prepare();
 
-                using (MySqlDataReader rd = cmd.ExecuteReader())
+                using (NpgsqlDataReader rd = cmd.ExecuteReader())
                 {
                     while (rd.Read())
                     {
@@ -105,7 +99,7 @@ namespace Server.Managers
             //TODO: Proper sql request
             var sqlCheck = "SELECT COUNT(1) FROM Users WHERE accountInfo = @user";
 
-            using (var cmd = new MySqlCommand(sqlCheck, cn))
+            using (var cmd = new NpgsqlCommand(sqlCheck, cn))
             {
                 cmd.Parameters.AddWithValue("@user", username);
                 cmd.Prepare();
