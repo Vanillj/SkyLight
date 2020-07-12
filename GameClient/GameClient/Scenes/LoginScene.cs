@@ -19,6 +19,8 @@ namespace GameClient.Scenes
         public override void Initialize()
         {
             base.Initialize();
+            var skin = Skin.CreateDefaultSkin();
+
             TextFieldStyle textFields = TextFieldStyle.Create(Color.White, Color.White, Color.Black, Color.DarkGray);
             Label label = new Label("Menu").SetFontScale(5).SetFontColor(Color.MediumVioletRed);
             Table.Add(label);
@@ -26,7 +28,7 @@ namespace GameClient.Scenes
             Label user = new Label("Username").SetFontScale(2).SetFontColor(Color.MediumVioletRed);
             Table.Row().SetPadTop(10);
             Table.Add(user);
-            textFieldu = new TextField("", textFields);
+            textFieldu = new TextField("", skin);
             Table.Row().SetPadTop(10);
             Table.Add(textFieldu);
 
@@ -34,7 +36,7 @@ namespace GameClient.Scenes
             
             Table.Row().SetPadTop(10);
             Table.Add(pass);
-            textFieldp = new TextField("", textFields);
+            textFieldp = new TextField("", skin);
             Table.Row().SetPadTop(10);
             Table.Add(textFieldp);
 
@@ -43,7 +45,7 @@ namespace GameClient.Scenes
             buttonStyle.FontColor = Color.DimGray;
             buttonStyle.OverFontColor = Color.White;
             
-            TextButton button = new TextButton("Login", buttonStyle);
+            TextButton button = new TextButton("Login", skin);
             button.Pad(10);
             button.PadLeft(20);
             button.PadRight(20);
@@ -51,7 +53,7 @@ namespace GameClient.Scenes
             Table.Row().SetPadTop(10);
             Table.Add(button);
 
-            TextButton buttonr = new TextButton("Register", buttonStyle);
+            TextButton buttonr = new TextButton("Register", skin);
             buttonr.Pad(10);
             buttonr.PadLeft(20);
             buttonr.PadRight(20);

@@ -7,8 +7,6 @@ using Microsoft.Xna.Framework;
 using Nez;
 using Server.Managers;
 using Server.Types;
-using System.Collections.Generic;
-using System.Linq;
 using Debug = System.Diagnostics.Debug;
 
 namespace GameClient.Types.Components.SceneComponents
@@ -32,7 +30,7 @@ namespace GameClient.Types.Components.SceneComponents
             base.Update();
         }
 
-        public static void CheckForMessage()
+        public void CheckForMessage()
         {
             CheckConnection();
             NetIncomingMessage message;
@@ -62,7 +60,7 @@ namespace GameClient.Types.Components.SceneComponents
                 }
             }
         }
-        private static void CheckConnection()
+        private void CheckConnection()
         {
             if (ClientNetworkManager.connection == null)
                 return;
@@ -80,7 +78,7 @@ namespace GameClient.Types.Components.SceneComponents
         }
 
         //TODO: Put into their own functions
-        private static void CustomMessage(NetIncomingMessage message)
+        private void CustomMessage(NetIncomingMessage message)
         {
             var template = Newtonsoft.Json.JsonConvert.DeserializeObject<MessageTemplate>(message.ReadString());
 
@@ -92,8 +90,9 @@ namespace GameClient.Types.Components.SceneComponents
                     MainScene mainScene = new MainScene();
                     CharacterPlayer player = Newtonsoft.Json.JsonConvert.DeserializeObject<CharacterPlayer>(template.JsonMessage);
                     MessageManager.GetLoginManagerClient().SetCharacter(player);
-                    PlayerManager.CreatePlayer(player, mainScene);
-
+                    
+                    mainScene.player = PlayerManager.CreatePlayer(player, mainScene);
+                    
                     FollowCamera fCamera = new FollowCamera(mainScene.FindEntity(player._name), FollowCamera.CameraStyle.CameraWindow) { FollowLerp = 0.0f };
                     //mainScene.FindEntity(player._name).AddComponent(fCamera);
                     mainScene.Camera.AddComponent(fCamera);
@@ -115,7 +114,7 @@ namespace GameClient.Types.Components.SceneComponents
             }
         }
 
-        private static void GameUpdateState(string jsonMessage)
+        private void GameUpdateState(string jsonMessage)
         {
             DataTemplate dataTemplate = Newtonsoft.Json.JsonConvert.DeserializeObject<DataTemplate>(jsonMessage);
 
@@ -134,7 +133,6 @@ namespace GameClient.Types.Components.SceneComponents
                 {
                     int i = LoginManagerClient.OtherCharacters.FindIndex(tempc => tempc._name.Equals(charac._name));
 
-
                     if (i == -1)
                     {
                         LoginManagerClient.OtherCharacters.Add(charac);
@@ -150,7 +148,7 @@ namespace GameClient.Types.Components.SceneComponents
 
         }
 
-        private static void ConnectionChange(NetIncomingMessage message)
+        private void ConnectionChange(NetIncomingMessage message)
         {
             ClientNetworkManager.connection = message.SenderConnection;
             if (message.SenderConnection.Status == NetConnectionStatus.Connected)
@@ -161,6 +159,7 @@ namespace GameClient.Types.Components.SceneComponents
             if (message.SenderConnection.Status == NetConnectionStatus.Disconnected)
             {
                 Debug.WriteLine("Disconnected!");
+                Core.StartSceneTransition(new FadeTransition(() => new LoginScene()));
             }
         }
 

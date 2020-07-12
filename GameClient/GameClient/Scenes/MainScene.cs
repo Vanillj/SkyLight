@@ -22,7 +22,6 @@ namespace GameClient.Scenes
         Texture2D playerTexture = Core.Content.Load<Texture2D>("images/playerTexture");
         public override Table Table { get; set; }
 
-        private Label label;
         public Entity player;
 
         public MainScene()
@@ -37,10 +36,7 @@ namespace GameClient.Scenes
             int TextureArrayLength = 2;
 
             new ItemContainer().GenerateItems(TextureContainer.Texture2DEList);
-
-            Table.Row();
-            label = new Label("Logged in!").SetFontScale(3);
-            Table.Add(label);
+            
         }
         public override void Update()
         {

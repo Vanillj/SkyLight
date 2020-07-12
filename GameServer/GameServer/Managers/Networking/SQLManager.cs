@@ -26,8 +26,17 @@ namespace Server.Managers
             }
         }
 
+        public static void SaveAllToSQL()
+        {
+            foreach (var user in CharacterManager.GetLoginManagerServerList())
+            {
+                UpdateToSQL(user.username, user.GetCharacter().CreateJsonFromCharacter());
+            }
+        }
+
         public static void CloseSQL()
         {
+            SaveAllToSQL();
             cn.Close();
         }
 

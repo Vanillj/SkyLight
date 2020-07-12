@@ -3,17 +3,12 @@ using GameClient.Managers;
 using GameClient.Scenes;
 using Lidgren.Network;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Nez;
-using Nez.BitmapFonts;
+using Nez.UI;
 using Server.Managers;
 using Server.Types;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GameClient.Types.Components.SceneComponents
 {
@@ -48,28 +43,84 @@ namespace GameClient.Types.Components.SceneComponents
             var newState = Keyboard.GetState();
 
             if (newState.GetPressedKeys().Length > 0)
-                SendMovementRequest(newState);
+                SendMovementRequest(new KeyboardState(KeyboardChange(newState)));
 
-            KeyboardChange(newState);
+            oldState = newState;
 
             previousMouseWheelValue = currentMouseWheelValue;
             currentMouseWheelValue = Mouse.GetState().ScrollWheelValue;
             ScrollChange();
         }
-        public void KeyboardChange(KeyboardState newState)
+
+        public Keys[] KeyboardChange(KeyboardState newState)
         {
+            List<Keys> keys = new List<Keys>();
             float speed = 100;
             var dir = Vector2.Zero;
             //might be usable later for abilities and more.
+            if (newState.IsKeyDown(Keys.T) && !oldState.IsKeyDown(Keys.T))
+            {
+                keys.Add(Keys.T);
+            }
+
+            //Opens Inventory
+            if (newState.IsKeyDown(Keys.I) && oldState.IsKeyUp(Keys.I))
+            {
+
+                bool found = false;
+                Table t = null;
+                foreach (var item in ((MainScene)Scene).Table.GetChildren())
+                {
+                    if (item is Table && !found)
+                    {
+                        t = item as Table;
+                        foreach (var cell in t.GetChildren())
+                        {
+                            if (cell is Label)
+                            {
+                                Label l = cell as Label;
+                                if (l.GetText().Equals("Inventory"))
+                                {
+                                    found = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+                if (!found)
+                {
+                    Table table = new Table();
+                    table.SetBounds(Core.GraphicsDevice.Viewport.Width - 100, Core.GraphicsDevice.Viewport.Height - 100, 100, 100);
+                    table.Add(new Label("Inventory").SetFontColor(Color.WhiteSmoke).SetFontScale(1.5f));
+                    table.Row().SetPadTop(10);
+                    foreach (var i in LoginManagerClient.GetCharacter().Inventory)
+                    {
+                        if (i != null)
+                        {
+                            table.Add(new Label(i.Name).SetFontColor(Color.WhiteSmoke));
+                            table.Row().SetPadTop(10);
+                        }
+                    }
+                    ((MainScene)Scene).Table.Add(table);
+                }
+                else
+                {
+                    ((MainScene)Scene).Table.RemoveElement(t);
+                }
+                
+            }
+
             if (newState.IsKeyDown(Keys.S) && !oldState.IsKeyDown(Keys.S))
             {
+
             }
             else if (newState.IsKeyDown(Keys.S) && oldState.IsKeyDown(Keys.S))
             {
                 // the player is holding the key down
                 //LoginManagerClient.GetCharacter()._pos.Y += 3*60f * Time.DeltaTime;
                 //LoginManagerClient.GetCharacter()._pos.Y += 1f;
-
+                keys.Add(Keys.S);
                 dir.Y = 1f;
             }
             else if (!newState.IsKeyDown(Keys.S) && oldState.IsKeyDown(Keys.S))
@@ -87,6 +138,7 @@ namespace GameClient.Types.Components.SceneComponents
                 //LoginManagerClient.GetCharacter()._pos.Y -= 3*60f * Time.DeltaTime;
                 //LoginManagerClient.GetCharacter()._pos.Y -= 1f;
                 dir.Y = -1f;
+                keys.Add(Keys.W);
             }
             else if (!newState.IsKeyDown(Keys.W) && oldState.IsKeyDown(Keys.W))
             {
@@ -103,7 +155,7 @@ namespace GameClient.Types.Components.SceneComponents
                 // the player is holding the key down
                 //LoginManagerClient.GetCharacter()._pos.X -= 3*60f * Time.DeltaTime;
                 //LoginManagerClient.GetCharacter()._pos.X -= 1f;
-
+                keys.Add(Keys.A);
                 dir.X = -1f;
             }
             else if (!newState.IsKeyDown(Keys.A) && oldState.IsKeyDown(Keys.A))
@@ -121,7 +173,7 @@ namespace GameClient.Types.Components.SceneComponents
                 // the player is holding the key down
                 //LoginManagerClient.GetCharacter()._pos.X += 3*60f * Time.DeltaTime;
                 //LoginManagerClient.GetCharacter()._pos.X += 1f;
-
+                keys.Add(Keys.D);
                 dir.X = 1f;
             }
             else if (!newState.IsKeyDown(Keys.D) && oldState.IsKeyDown(Keys.D))
@@ -132,7 +184,7 @@ namespace GameClient.Types.Components.SceneComponents
             var movement = dir * speed * Time.DeltaTime * 4;
             if (movement != Vector2.Zero)
                 LoginManagerClient.GetCharacter()._pos += movement;
-            oldState = newState;
+            return keys.ToArray();
         }
 
         public void ScrollChange()
@@ -165,6 +217,5 @@ namespace GameClient.Types.Components.SceneComponents
             MessageManager.AddToQueue(new MessageTemplate(messageS, MessageType.Movement));
         }
 
-        
     }
 }

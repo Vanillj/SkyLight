@@ -25,8 +25,9 @@ namespace Server.Scenes
             
             AddRenderer(new DefaultRenderer());
             var UICanvas = CreateEntity("ui-canvas").AddComponent(new UICanvas());
-            Table = UICanvas.Stage.AddElement(new Table());
-            Table.SetFillParent(true).Top().PadLeft(10).PadTop(50);
+            var skin = Skin.CreateDefaultSkin();
+            Table = UICanvas.Stage.AddElement(new Window("test", skin).SetMovable(true).SetResizable(true));
+            Table.SetFillParent(true).Top();
 
         }
 

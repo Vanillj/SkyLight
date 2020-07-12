@@ -66,7 +66,9 @@ namespace Server.Managers
 
         public static void RemoveCharacterFromScene(Scene scene, string name)
         {
-            scene.FindEntity(name).Destroy();
+            var e = scene.FindEntity(name);
+            if (e != null)
+                e.Destroy();
         }
 
     }
