@@ -49,7 +49,7 @@ namespace GameClient.Scenes
                     float delta = Time.DeltaTime;
                     if (e == null)
                     {
-                        CreateEntity(others._name).SetPosition(others._pos).AddComponent(new SpriteRenderer(playerTexture)).AddComponent(new PlayerComponent(others)).AddComponent(new TextComponent(Graphics.Instance.BitmapFont, others._name, new Vector2(0, 0), Color.White).SetVerticalAlign(VerticalAlign.Top).SetHorizontalAlign(HorizontalAlign.Center)).SetRenderLayer(2);
+                        CreateEntity(others._name).SetPosition(others.physicalPosition).AddComponent(new SpriteRenderer(playerTexture)).AddComponent(new PlayerComponent(others)).AddComponent(new TextComponent(Graphics.Instance.BitmapFont, others._name, new Vector2(0, 0), Color.White).SetVerticalAlign(VerticalAlign.Top).SetHorizontalAlign(HorizontalAlign.Center)).SetRenderLayer(2);
                     }
                 }
             }

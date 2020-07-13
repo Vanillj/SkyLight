@@ -1,5 +1,6 @@
 ﻿using Client.Managers;
 using GameClient.Managers;
+using GameClient.Managers.UI;
 using GameClient.Scenes;
 using Lidgren.Network;
 using Microsoft.Xna.Framework;
@@ -19,7 +20,7 @@ namespace GameClient.Types.Components.SceneComponents
         private KeyboardState oldState;
         private float currentMouseWheelValue, previousMouseWheelValue;
         private Entity Entity;
-
+        Skin skin = Skin.CreateDefaultSkin();
         public InputComponent(Entity entity, Camera camera)
         {
             Entity = entity;
@@ -69,8 +70,10 @@ namespace GameClient.Types.Components.SceneComponents
 
                 bool found = false;
                 Table t = null;
-                foreach (var item in ((MainScene)Scene).Table.GetChildren())
+                foreach (var item in ((MainScene)Scene).UICanvas.Stage.GetElements())
                 {
+                    if (found)
+                        break;
                     if (item is Table && !found)
                     {
                         t = item as Table;
@@ -90,23 +93,15 @@ namespace GameClient.Types.Components.SceneComponents
                 }
                 if (!found)
                 {
-                    Table table = new Table();
-                    table.SetBounds(Core.GraphicsDevice.Viewport.Width - 100, Core.GraphicsDevice.Viewport.Height - 100, 100, 100);
-                    table.Add(new Label("Inventory").SetFontColor(Color.WhiteSmoke).SetFontScale(1.5f));
-                    table.Row().SetPadTop(10);
-                    foreach (var i in LoginManagerClient.GetCharacter().Inventory)
-                    {
-                        if (i != null)
-                        {
-                            table.Add(new Label(i.Name).SetFontColor(Color.WhiteSmoke));
-                            table.Row().SetPadTop(10);
-                        }
-                    }
-                    ((MainScene)Scene).Table.Add(table);
+                    Table table = UIManager.GenerateInventory(skin);
+                    table.SetPosition(Core.GraphicsDevice.Viewport.Width - 200, Core.GraphicsDevice.Viewport.Height - 200);
+                    //(Scene as MainScene).Table.Add(table);
+                    (Scene as MainScene).UICanvas.Stage.AddElement(table);
                 }
                 else
                 {
-                    ((MainScene)Scene).Table.RemoveElement(t);
+                    if(t != null)
+                        t.Remove();
                 }
                 
             }

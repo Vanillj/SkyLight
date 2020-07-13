@@ -55,10 +55,10 @@ namespace Server.Managers
 
                 scene.CreateEntity(character._name).SetPosition(character.physicalPosition)
                     .AddComponent(fbody)
-                    .AddComponent(new FSCollisionCircle(100))
+                    .AddComponent(new FSCollisionCircle(10))
                     .AddComponent(new PlayerComponent(login))
                     .AddComponent(new Mover())
-                    .AddComponent(new CircleCollider(100));
+                    .AddComponent(new CircleCollider(10));
                 fbody.Body.FixedRotation = true;
 
             }

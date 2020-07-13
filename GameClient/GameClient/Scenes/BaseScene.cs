@@ -8,7 +8,7 @@ namespace Server.Scenes
     abstract class BaseScene : Scene
     {
         abstract public Table Table { get; set; }
-
+        public UICanvas UICanvas;
         public BaseScene()
         {
 
@@ -24,9 +24,9 @@ namespace Server.Scenes
         {
             
             AddRenderer(new DefaultRenderer());
-            var UICanvas = CreateEntity("ui-canvas").AddComponent(new UICanvas());
-            var skin = Skin.CreateDefaultSkin();
-            Table = UICanvas.Stage.AddElement(new Window("test", skin).SetMovable(true).SetResizable(true));
+            UICanvas = CreateEntity("ui-canvas").AddComponent(new UICanvas());
+
+            Table = UICanvas.Stage.AddElement(new Table());
             Table.SetFillParent(true).Top();
 
         }

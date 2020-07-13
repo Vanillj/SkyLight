@@ -118,6 +118,7 @@
     <Compile Include="Managers\Networking\MessageManager.cs" />
     <Compile Include="Managers\PlayerManager.cs" />
     <Compile Include="Managers\UI\SceneManager.cs" />
+    <Compile Include="Managers\UI\UIManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scenes\BaseScene.cs" />

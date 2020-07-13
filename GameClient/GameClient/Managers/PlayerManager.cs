@@ -5,12 +5,6 @@ using Nez;
 using Nez.Sprites;
 using Server.Scenes;
 using Server.Types;
-using System;
-using System.Collections.Generic;
-using System.Dynamic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GameClient.Managers
 {
@@ -23,9 +17,8 @@ namespace GameClient.Managers
              
             Entity ePlayer = scene.CreateEntity("player");
             TextComponent textComponent = new TextComponent(Graphics.Instance.BitmapFont, player._name, Vector2.Zero, Color.White).SetHorizontalAlign(HorizontalAlign.Center).SetVerticalAlign(VerticalAlign.Top);
-            ePlayer.SetPosition(player._pos)
+            ePlayer.SetPosition(player.physicalPosition)
                 .AddComponent(new SpriteRenderer(playerTexture)).AddComponent(textComponent).SetRenderLayer(-200);
-
             return ePlayer;
         }
     }

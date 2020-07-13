@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.4" tiledversion="1.4.1" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="64" tileheight="64" infinite="0" nextlayerid="4" nextobjectid="1">
  <tileset firstgid="1" source="Grasstiles.tsx"/>
- <layer id="3" name="Tile" width="100" height="100">
-  <data encoding="base64" compression="zlib">
-   eJztwTEBAAAAwqD1T+1lC6AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAbnEAAAQ==
-  </data>
- </layer>
  <layer id="1" name="Collision" width="100" height="100">
   <data encoding="base64" compression="zlib">
-   eJztzsENgCAABEEULECF/lv1auBDDDPJ/rcUgP860plqaulau7O9Oz3pTT2NtTsAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAUz4fJwBv
+   eJzt1NsJwkAQQNEtRNvRlkSjDfhoIGoDPhrwUZujbiAEv7NCzoHLQPIzMLBVSmkZVXk2raNNtI12rf+UUafvLd4dC++Ce/yLSTSNbtE9ekTPaBbNC+41VItoFI1bs2lVcK+hWufZvcmbd6t/9Y9vhzx3fS7Cx6977PN0j/6donOnS57XgnsBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADBsL/jOG1w=
+  </data>
+ </layer>
+ <layer id="3" name="Tile" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJzt0ckJQjEUhtEUon2oDTiUZDGuXhcODTg04FCL/yLC2+nmGcFz4CNwyeKSlPLe5oM7DGNem6Rpbdab812vd1+kZW1V/Edr27RL+3Sos3W7df5al47plM7pUme0c023dE+PxrtQyiiNeycAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAC/6Ql3JBCp
   </data>
  </layer>
  <layer id="2" name="CustomCollision" width="100" height="100">
   <data encoding="base64" compression="zlib">
-   eJztzkEJAAAIBLDrbH8wxAl+tgRLAKAz3wEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAQwv8yQB0
+   eJzt07EJADEIBVAHiVNmnQx7HKRLikDgvOK9RrH6KEYAwJ1eHYCtdjjjGxnrr7hHnXf3OeuYfZYmAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/uQBscwCgw==
   </data>
  </layer>
 </map>

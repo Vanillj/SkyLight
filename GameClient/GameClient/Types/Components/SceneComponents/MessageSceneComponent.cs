@@ -93,7 +93,7 @@ namespace GameClient.Types.Components.SceneComponents
                     
                     mainScene.player = PlayerManager.CreatePlayer(player, mainScene);
                     
-                    FollowCamera fCamera = new FollowCamera(mainScene.FindEntity(player._name), FollowCamera.CameraStyle.CameraWindow) { FollowLerp = 0.0f };
+                    FollowCamera fCamera = new FollowCamera(mainScene.FindEntity(player._name), FollowCamera.CameraStyle.CameraWindow) { FollowLerp = 0.01f };
                     //mainScene.FindEntity(player._name).AddComponent(fCamera);
                     mainScene.Camera.AddComponent(fCamera);
 
