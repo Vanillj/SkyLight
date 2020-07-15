@@ -10,7 +10,6 @@ namespace Nez.UI
 		Label label;
 		TextButtonStyle style;
 
-
 		public TextButton(string text, TextButtonStyle style) : base(style)
 		{
 			SetStyle(style);

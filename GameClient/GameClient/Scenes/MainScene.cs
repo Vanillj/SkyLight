@@ -77,7 +77,7 @@ namespace GameClient.Scenes
                 Vector2 recieved = LoginManagerClient.GetCharacter().physicalPosition;
 
                 float diff = recieved.Length() - ClientsidePos.Length();
-                Console.WriteLine(diff);
+                //Console.WriteLine(diff);
 
                 if (Math.Abs(diff) > 25)
                 {

@@ -209,6 +209,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Managers\Input\" />
+    <Folder Include="Managers\UI\Elements\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\GameServer\GameServer\Assets\Grasstiles.tsx">

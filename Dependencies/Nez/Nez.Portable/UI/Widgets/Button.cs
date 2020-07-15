@@ -8,7 +8,11 @@ namespace Nez.UI
 	{
 		public event Action<bool> OnChanged;
 		public event Action<Button> OnClicked;
+		public event Action<Button> OnHovered;
+		public event Action<Button> OnExited;
+		public event Action<Button> OnMoved;
 
+		public Window HoverWindow;
 		public override float PreferredWidth
 		{
 			get
@@ -95,13 +99,22 @@ namespace Nez.UI
 
 		void IInputListener.OnMouseEnter()
 		{
+			if (_isDisabled)
+				return;
 			_mouseOver = true;
+
+			OnHovered?.Invoke(this);
+
 		}
 
 
 		void IInputListener.OnMouseExit()
 		{
+			if (_isDisabled)
+				return;
 			_mouseOver = _mouseDown = false;
+
+			OnExited?.Invoke(this);
 		}
 
 
@@ -117,12 +130,17 @@ namespace Nez.UI
 
 		void IInputListener.OnMouseMoved(Vector2 mousePos)
 		{
+			if (!_isDisabled)
+				if (_mouseOver)
+					OnMoved?.Invoke(this);
+
 			// if we get too far outside the button cancel future events
 			if (DistanceOutsideBoundsToPoint(mousePos) > ButtonBoundaryThreshold)
 			{
 				_mouseDown = _mouseOver = false;
 				GetStage().RemoveInputFocusListener(this);
 			}
+			
 		}
 
 

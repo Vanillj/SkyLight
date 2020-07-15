@@ -168,21 +168,26 @@ namespace GameServer.Types.Components.SceneComponents
             NetServer server = ServerNetworkSceneComponent.GetNetServer();
 
             LoginManagerServer login = CharacterManager.GetLoginManagerFromUniqueID(sender.RemoteUniqueIdentifier);
-            CharacterPlayer characterPlayer = login.GetCharacter();
-            
-            //Saves data to SQL database
-            string characterString = Newtonsoft.Json.JsonConvert.SerializeObject(characterPlayer);
-            SQLManager.UpdateToSQL(login.username, characterString);
+            if (login != null)
+            {
+                CharacterPlayer characterPlayer = login.GetCharacter();
 
-            //removes login manager
-            CharacterManager.RemoveLoginManagerServerFromListLoginManager(login);
+                //Saves data to SQL database
+                string characterString = Newtonsoft.Json.JsonConvert.SerializeObject(characterPlayer);
+                SQLManager.UpdateToSQL(login.username, characterString);
+
+                //removes login manager
+                CharacterManager.RemoveLoginManagerServerFromListLoginManager(login);
+                if (characterPlayer != null)
+                {
+                    //removes entity
+                    CharacterManager.RemoveCharacterFromScene(Scene, characterPlayer._name);
+                }
+            }
+
             //removes the connection
             server.Connections.Remove(sender);
-            //removes entity
-            if (characterPlayer != null)
-            {
-                CharacterManager.RemoveCharacterFromScene(Scene, characterPlayer._name);
-            }
+
             Debug.WriteLine("Disconnected! Connected: " + ServerNetworkSceneComponent.GetNetServer().ConnectionsCount);
             MainScene.ConnectedCount.SetText("Current connections: " + server.ConnectionsCount);
         }

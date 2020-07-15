@@ -9,6 +9,7 @@ using Nez;
 using Nez.UI;
 using Server.Managers;
 using Server.Types;
+using System;
 using System.Collections.Generic;
 
 namespace GameClient.Types.Components.SceneComponents
@@ -17,7 +18,6 @@ namespace GameClient.Types.Components.SceneComponents
     {
         public Camera Camera { get; set; }
 
-        private KeyboardState oldState;
         private float currentMouseWheelValue, previousMouseWheelValue;
         private Entity Entity;
         Skin skin = Skin.CreateDefaultSkin();
@@ -41,61 +41,74 @@ namespace GameClient.Types.Components.SceneComponents
             if (ClientNetworkManager.client.ConnectionStatus != NetConnectionStatus.Connected || Core.Scene is LoginScene)
                 return;
 
-            var newState = Keyboard.GetState();
+            //Update Keyboard
 
-            if (newState.GetPressedKeys().Length > 0)
-                SendMovementRequest(new KeyboardState(KeyboardChange(newState)));
+            if (Input.CurrentKeyboardState.GetPressedKeys().Length > 0)
+                SendKeyboardRequest(new KeyboardState(KeyboardChange()));
 
-            oldState = newState;
+            //Update mouse
+            //if (Input.LeftMouseButtonPressed || Input.RightMouseButtonPressed ||Input.MousePositionDelta != Point.Zero)
+                //MouseChange();
 
             previousMouseWheelValue = currentMouseWheelValue;
             currentMouseWheelValue = Mouse.GetState().ScrollWheelValue;
             ScrollChange();
         }
 
-        public Keys[] KeyboardChange(KeyboardState newState)
+        private Keys[] KeyboardChange()
         {
+            KeyboardState newState = Input.CurrentKeyboardState;
+            KeyboardState OldKeyboardState = Input.PreviousKeyboardState;
+
             List<Keys> keys = new List<Keys>();
             float speed = 100;
             var dir = Vector2.Zero;
             //might be usable later for abilities and more.
-            if (newState.IsKeyDown(Keys.T) && !oldState.IsKeyDown(Keys.T))
+            if (newState.IsKeyDown(Keys.T) && !OldKeyboardState.IsKeyDown(Keys.T))
             {
                 keys.Add(Keys.T);
             }
 
             //Opens Inventory
-            if (newState.IsKeyDown(Keys.I) && oldState.IsKeyUp(Keys.I))
+            if (newState.IsKeyDown(Keys.I) && OldKeyboardState.IsKeyUp(Keys.I))
             {
 
                 bool found = false;
-                Table t = null;
-                foreach (var item in ((MainScene)Scene).UICanvas.Stage.GetElements())
+                Window t = null;
+                foreach (var item in (Scene as MainScene).UICanvas.Stage.GetElements())
                 {
                     if (found)
                         break;
-                    if (item is Table && !found)
+                    if (item is Window && !found)
                     {
-                        t = item as Table;
-                        foreach (var cell in t.GetChildren())
+                        if ((item as Window).GetTitleLabel().GetText().Equals("Inventory"))
                         {
-                            if (cell is Label)
+                            found = true;
+                            t = item as Window;
+                            break;
+                        }
+                        /*
+                        foreach (var cell in (item as Window).GetChildren())
+                        {
+                            
+                            if (cell is GLabel)
                             {
-                                Label l = cell as Label;
-                                if (l.GetText().Equals("Inventory"))
+                                if ((cell as GLabel).GetText().Equals("Inventory"))
                                 {
                                     found = true;
                                     break;
                                 }
                             }
-                        }
+                        }*/
                     }
                 }
                 if (!found)
                 {
-                    Table table = UIManager.GenerateInventory(skin);
-                    table.SetPosition(Core.GraphicsDevice.Viewport.Width - 200, Core.GraphicsDevice.Viewport.Height - 200);
-                    //(Scene as MainScene).Table.Add(table);
+                    Window table = UIManager.GenerateInventory(skin, (Scene as MainScene).UICanvas.Stage);
+
+                    table.SetPosition(Core.GraphicsDevice.Viewport.Width - table.GetWidth(), Core.GraphicsDevice.Viewport.Height - table.GetHeight());
+                    table.DebugAll();
+
                     (Scene as MainScene).UICanvas.Stage.AddElement(table);
                 }
                 else
@@ -106,11 +119,11 @@ namespace GameClient.Types.Components.SceneComponents
                 
             }
 
-            if (newState.IsKeyDown(Keys.S) && !oldState.IsKeyDown(Keys.S))
+            if (newState.IsKeyDown(Keys.S) && !OldKeyboardState.IsKeyDown(Keys.S))
             {
 
             }
-            else if (newState.IsKeyDown(Keys.S) && oldState.IsKeyDown(Keys.S))
+            else if (newState.IsKeyDown(Keys.S) && OldKeyboardState.IsKeyDown(Keys.S))
             {
                 // the player is holding the key down
                 //LoginManagerClient.GetCharacter()._pos.Y += 3*60f * Time.DeltaTime;
@@ -118,16 +131,16 @@ namespace GameClient.Types.Components.SceneComponents
                 keys.Add(Keys.S);
                 dir.Y = 1f;
             }
-            else if (!newState.IsKeyDown(Keys.S) && oldState.IsKeyDown(Keys.S))
+            else if (!newState.IsKeyDown(Keys.S) && OldKeyboardState.IsKeyDown(Keys.S))
             {
                 // the player was holding the key down, but has just let it go
 
             }
 
-            if (newState.IsKeyDown(Keys.W) && !oldState.IsKeyDown(Keys.W))
+            if (newState.IsKeyDown(Keys.W) && !OldKeyboardState.IsKeyDown(Keys.W))
             {
             }
-            else if (newState.IsKeyDown(Keys.W) && oldState.IsKeyDown(Keys.W))
+            else if (newState.IsKeyDown(Keys.W) && OldKeyboardState.IsKeyDown(Keys.W))
             {
                 // the player is holding the key down
                 //LoginManagerClient.GetCharacter()._pos.Y -= 3*60f * Time.DeltaTime;
@@ -135,17 +148,17 @@ namespace GameClient.Types.Components.SceneComponents
                 dir.Y = -1f;
                 keys.Add(Keys.W);
             }
-            else if (!newState.IsKeyDown(Keys.W) && oldState.IsKeyDown(Keys.W))
+            else if (!newState.IsKeyDown(Keys.W) && OldKeyboardState.IsKeyDown(Keys.W))
             {
                 // the player was holding the key down, but has just let it go
 
             }
 
-            if (newState.IsKeyDown(Keys.A) && !oldState.IsKeyDown(Keys.A))
+            if (newState.IsKeyDown(Keys.A) && !OldKeyboardState.IsKeyDown(Keys.A))
             {
 
             }
-            else if (newState.IsKeyDown(Keys.A) && oldState.IsKeyDown(Keys.A))
+            else if (newState.IsKeyDown(Keys.A) && OldKeyboardState.IsKeyDown(Keys.A))
             {
                 // the player is holding the key down
                 //LoginManagerClient.GetCharacter()._pos.X -= 3*60f * Time.DeltaTime;
@@ -153,17 +166,17 @@ namespace GameClient.Types.Components.SceneComponents
                 keys.Add(Keys.A);
                 dir.X = -1f;
             }
-            else if (!newState.IsKeyDown(Keys.A) && oldState.IsKeyDown(Keys.A))
+            else if (!newState.IsKeyDown(Keys.A) && OldKeyboardState.IsKeyDown(Keys.A))
             {
                 // the player was holding the key down, but has just let it go
 
             }
 
-            if (newState.IsKeyDown(Keys.D) && !oldState.IsKeyDown(Keys.D))
+            if (newState.IsKeyDown(Keys.D) && !OldKeyboardState.IsKeyDown(Keys.D))
             {
 
             }
-            else if (newState.IsKeyDown(Keys.D) && oldState.IsKeyDown(Keys.D))
+            else if (newState.IsKeyDown(Keys.D) && OldKeyboardState.IsKeyDown(Keys.D))
             {
                 // the player is holding the key down
                 //LoginManagerClient.GetCharacter()._pos.X += 3*60f * Time.DeltaTime;
@@ -171,7 +184,7 @@ namespace GameClient.Types.Components.SceneComponents
                 keys.Add(Keys.D);
                 dir.X = 1f;
             }
-            else if (!newState.IsKeyDown(Keys.D) && oldState.IsKeyDown(Keys.D))
+            else if (!newState.IsKeyDown(Keys.D) && OldKeyboardState.IsKeyDown(Keys.D))
             {
                 // the player was holding the key down, but has just let it go
 
@@ -180,6 +193,94 @@ namespace GameClient.Types.Components.SceneComponents
             if (movement != Vector2.Zero)
                 LoginManagerClient.GetCharacter()._pos += movement;
             return keys.ToArray();
+        }
+
+        private void MouseChange()
+        {
+            Vector2 mousePosition = Input.MousePosition;
+            //Console.WriteLine(mousePosition);
+            if (Scene is MainScene)
+            {
+                MainScene scene = Scene as MainScene;
+
+                if (scene.UICanvas.Stage != null)
+                {
+                    foreach (var item in scene.UICanvas.Stage.GetElements())
+                    {
+                        
+                        if (item is Table)
+                        {
+                            foreach (var child in (item as Table).GetChildren())
+                            {
+                                if (child is Table)
+                                {
+                                    Table tab = child as Table;
+
+                                    foreach (var chilli in tab.GetChildren())
+                                    {
+                                        
+                                    }
+                                    
+                                }
+                            }
+                            int countX = 0;
+                            int countY = 0;
+                            Table t = item as Table;
+                            Element e = t.Hit(Input.MousePosition);
+
+                            if (e is Label)
+                            {
+                                (e as Label).SetFontColor(Color.Red);
+                            }
+                            Rectangle rt = new Rectangle((int)t.GetX(), (int)t.GetY(), (int)t.GetWidth(), (int)t.GetHeight());
+                            if (rt.Contains(mousePosition))
+                            {
+                                string s = "";
+                                foreach (var child in t.GetChildren())
+                                {
+                                    if (child is Label)
+                                    {
+                                        (child as Label).SetFontColor(Color.Red);
+                                    }
+                                }
+                            }
+                            if (e != null)
+                            {
+                                string s = "";
+                            }
+                            foreach (var child in t.GetChildren())
+                            {
+                                if (countX % 4 == 0)
+                                {
+                                    countX = 0;
+                                    countY++;
+                                }
+                                if (child is Label)
+                                {
+                                    Label l = child as Label;
+
+
+                                    float f = l.GetX();
+                                    float relativeX = t.GetX() + l.GetX() + countX * l.GetWidth();
+                                    float relativeY = t.GetY() + l.GetY() + countY * l.GetWidth();
+                                    Rectangle r = new Rectangle((int)relativeX, (int)relativeY, (int)l.GetWidth(), (int)l.GetHeight());
+
+                                    if (r.Contains(mousePosition))
+                                    {
+                                        Console.WriteLine("Inside");
+                                        l.SetFontColor(Color.Red);
+                                    }
+                                    else
+                                    {
+                                        l.SetFontColor(Color.White);
+                                    }
+                                }
+                                countX++;
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         public void ScrollChange()
@@ -206,7 +307,7 @@ namespace GameClient.Types.Components.SceneComponents
             }
             
         }
-        private void SendMovementRequest(KeyboardState keyboardState)
+        private void SendKeyboardRequest(KeyboardState keyboardState)
         {
             string messageS = Newtonsoft.Json.JsonConvert.SerializeObject(keyboardState.GetPressedKeys());
             MessageManager.AddToQueue(new MessageTemplate(messageS, MessageType.Movement));

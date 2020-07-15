@@ -15,7 +15,7 @@ namespace GameClient.Managers
             //TODO: Get Textures from ID later
             Texture2D playerTexture = Core.Content.Load<Texture2D>("images/playerTexture");
              
-            Entity ePlayer = scene.CreateEntity("player");
+            Entity ePlayer = scene.CreateEntity(player._name);
             TextComponent textComponent = new TextComponent(Graphics.Instance.BitmapFont, player._name, Vector2.Zero, Color.White).SetHorizontalAlign(HorizontalAlign.Center).SetVerticalAlign(VerticalAlign.Top);
             ePlayer.SetPosition(player.physicalPosition)
                 .AddComponent(new SpriteRenderer(playerTexture)).AddComponent(textComponent).SetRenderLayer(-200);

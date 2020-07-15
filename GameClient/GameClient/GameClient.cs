@@ -1,11 +1,8 @@
 ﻿using Client.Managers;
 using GameClient.Managers;
 using GameClient.Scenes;
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using Nez;
-using Server.Scenes;
 using System;
 
 namespace GameClient

@@ -1,6 +1,4 @@
-﻿using GameClient.Managers;
-using Microsoft.Xna.Framework;
-using Nez;
+﻿using Nez;
 using Nez.UI;
 
 namespace Server.Scenes
@@ -28,7 +26,7 @@ namespace Server.Scenes
 
             Table = UICanvas.Stage.AddElement(new Table());
             Table.SetFillParent(true).Top();
-
+            UICanvas.SetRenderLayer(-1000);
         }
 
         public override void Update()

@@ -194,8 +194,8 @@ namespace Nez.UI
 				_lastMousePosition = currentMousePosition;
 			}
 
-			var inputPos = ScreenToStageCoordinates(currentMousePosition);
-
+			//var inputPos = ScreenToStageCoordinates(currentMousePosition);
+			var inputPos = currentMousePosition;
 			UpdateInputPoint(inputPos, Input.LeftMouseButtonPressed, Input.LeftMouseButtonReleased,
 				mouseMoved, ref _mouseOverElement);
 		}
@@ -249,7 +249,9 @@ namespace Nez.UI
 		{
 			var over = Hit(inputPos);
 			if (over != null)
+			{
 				HandleMouseWheel(over);
+			}
 
 			if (inputPressed)
 			{
@@ -311,6 +313,7 @@ namespace Nez.UI
 				(over as IInputListener)?.OnMouseEnter();
 				(lastOver as IInputListener)?.OnMouseExit();
 			}
+			(over as IInputListener)?.OnMouseMoved(inputPos);
 		}
 
 
