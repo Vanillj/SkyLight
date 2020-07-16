@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Input;
 
-
 namespace Nez.UI
 {
 	public class Stage
@@ -313,7 +312,10 @@ namespace Nez.UI
 				(over as IInputListener)?.OnMouseEnter();
 				(lastOver as IInputListener)?.OnMouseExit();
 			}
-			(over as IInputListener)?.OnMouseMoved(inputPos);
+			if(!Input.LeftMouseButtonPressed && !(over is Window) && over != null)
+			{
+				(over as IInputListener)?.OnMouseMoved(inputPos);
+			}
 		}
 
 

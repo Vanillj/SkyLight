@@ -3,6 +3,7 @@ using GameClient.Types.Item;
 using Microsoft.Xna.Framework;
 using Nez;
 using Nez.UI;
+using System;
 
 namespace GameClient.Managers.UI
 {
@@ -11,7 +12,8 @@ namespace GameClient.Managers.UI
         public static Window GenerateInventory(Skin skin, Stage stage)
         {
             Window window = new Window("Inventory", skin).SetMovable(true).SetResizable(true);
-            
+            window.SetResizeBorderSize(20);
+
             int count = 0;
             foreach (var i in LoginManagerClient.GetCharacter().Inventory)
             {
@@ -20,31 +22,42 @@ namespace GameClient.Managers.UI
 
                 if (i != null)
                 {
-                    TextButton l = new TextButton(i.Name, skin);
-                    l.SetTouchable(Touchable.Enabled);
-                    l.OnHovered += delegate { OnHovered(l, i, skin, stage); };
-                    l.OnExited += delegate { OnExit(l, stage); };
-                    l.OnMoved += delegate { OnMovedAndHovered(l, stage); };
-                    window.Add(l).Pad(10);
+                    var textButtonStyle = new ImageButtonStyle
+                    {
+                        Up = new PrimitiveDrawable(Color.DimGray, 6, 2),
+                        Over = new PrimitiveDrawable(Color.DimGray),
+                        Down = new PrimitiveDrawable(Color.DimGray),
+                        PressedOffsetX = 0,
+                        PressedOffsetY = 0
+                    };
+
+                    ImageButton imButton = new ImageButton(textButtonStyle);
+                    imButton.Add(new Label(i.Name)).Fill().Expand().Left().SetAlign(Align.BottomLeft);
+                    imButton.SetTouchable(Touchable.Enabled);
+                    imButton.OnHovered += delegate { OnHovered(imButton, i, skin, stage); };
+                    imButton.OnExited += delegate { OnExit(imButton, stage); };
+                    imButton.OnMoved += delegate { OnMovedAndHovered(imButton, stage); };
+                    window.Add(imButton).Pad(4).Fill().Expand();
                 }
                 count++;
             }
             window.Pack();
             window.DebugAll();
-
+                
             return window;
         }
 
-        private static void OnMovedAndHovered(TextButton obj, Stage stage)
+        private static void OnMovedAndHovered(ImageButton obj, Stage stage)
         {
             if (obj.HoverWindow != null)
             {
                 Vector2 tempPos = CalculatePosition(obj.HoverWindow);
-                obj.HoverWindow.MoveBy(obj.HoverWindow.GetX() - tempPos.X, obj.HoverWindow.GetY() - tempPos.Y);
+
+                obj.HoverWindow.SetBounds(tempPos.X, tempPos.Y, obj.HoverWindow.GetWidth(), obj.HoverWindow.GetHeight());
             }
         }
 
-        private static void OnExit(TextButton obj, Stage stage)
+        private static void OnExit(ImageButton obj, Stage stage)
         {
             if (obj.HoverWindow != null)
             {
@@ -54,18 +67,23 @@ namespace GameClient.Managers.UI
             }
         }
 
-        private static void OnHovered(TextButton obj, WeaponItem item, Skin skin, Stage stage)
+        private static void OnHovered(ImageButton obj, WeaponItem item, Skin skin, Stage stage)
         {
-            obj.GetLabel().SetFontColor(Color.Red);
 
-            Window window = new Window(item.Name, skin);
+            Window window = new Window("Inventory", skin);
+            window.GetTitleLabel().SetVisible(false);
+            window.GetTitleLabel().SetIsVisible(false);
+
+            window.Add(new Label(item.Name, skin).SetFontScale(1.5f)).Expand().SetRow();
             window.Add(new Label("Attributes", skin)).SetRow();
-            window.Add(new Label("Int:" + item.Intelligence.ToString(), skin)).Fill().Expand().SetRow();
-            window.Add(new Label("Str:" + item.Strength.ToString(), skin)).Fill().Expand().SetRow();
+            window.Add(new Label("Intelligence:" + item.Intelligence.ToString(), skin)).Fill().Expand().SetRow();
+            window.Add(new Label("Strength:" + item.Strength.ToString(), skin)).Fill().Expand().SetRow();
+            window.Add(new Label("Dexterity:" + item.Dexterity.ToString(), skin)).Fill().Expand().SetRow();
 
             window.Add(new Label("Reqs", skin)).SetRow();
-            window.Add(new Label("Int:" + item.IntelligenceReq.ToString(), skin)).Fill().Expand().SetRow();
-            window.Add(new Label("Str:" + item.StrengthReq.ToString(), skin)).Fill().Expand().SetRow();
+            window.Add(new Label("Intelligence:" + item.IntelligenceReq.ToString(), skin)).Fill().Expand().SetRow();
+            window.Add(new Label("Strength:" + item.StrengthReq.ToString(), skin)).Fill().Expand().SetRow();
+            window.Add(new Label("Dexterity:" + item.DexterityReq.ToString(), skin)).Fill().Expand().SetRow();
 
             Vector2 tempPos = CalculatePosition(window);
             window.SetPosition(tempPos.X, tempPos.Y);
@@ -79,7 +97,7 @@ namespace GameClient.Managers.UI
         //HELP METHODS
         private static Vector2 CalculatePosition(Window window)
         {
-            return Input.RawMousePosition.ToVector2() + new Vector2(0, -30 - window.GetHeight());
+            return  new Vector2(Input.ScaledMousePosition.X, Input.ScaledMousePosition.Y - 30 - window.GetHeight());
         }
     }
 }

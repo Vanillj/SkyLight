@@ -131,8 +131,7 @@ namespace Nez.UI
 		void IInputListener.OnMouseMoved(Vector2 mousePos)
 		{
 			if (!_isDisabled)
-				if (_mouseOver)
-					OnMoved?.Invoke(this);
+				OnMoved?.Invoke(this);
 
 			// if we get too far outside the button cancel future events
 			if (DistanceOutsideBoundsToPoint(mousePos) > ButtonBoundaryThreshold)
