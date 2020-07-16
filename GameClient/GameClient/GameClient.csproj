@@ -117,6 +117,7 @@
     <Compile Include="Managers\Networking\LoginManagerHead.cs" />
     <Compile Include="Managers\Networking\MessageManager.cs" />
     <Compile Include="Managers\PlayerManager.cs" />
+    <Compile Include="Managers\UI\Elements\ItemButton.cs" />
     <Compile Include="Managers\UI\SceneManager.cs" />
     <Compile Include="Managers\UI\UIManager.cs" />
     <Compile Include="Program.cs" />
@@ -209,7 +210,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Managers\Input\" />
-    <Folder Include="Managers\UI\Elements\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\GameServer\GameServer\Assets\Grasstiles.tsx">

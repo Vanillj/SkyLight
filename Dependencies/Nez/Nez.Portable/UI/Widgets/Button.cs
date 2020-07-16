@@ -12,7 +12,6 @@ namespace Nez.UI
 		public event Action<Button> OnExited;
 		public event Action<Button> OnMoved;
 
-		public Window HoverWindow;
 		public override float PreferredWidth
 		{
 			get

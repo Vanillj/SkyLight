@@ -32,5 +32,11 @@ namespace Client.Managers
         {
             RecievedPosition = pos;
         }
+        
+        public static void SetCharacterStatic(CharacterPlayer character)
+        {
+            AccountCharacter = character;
+        }
+        
     }
 }

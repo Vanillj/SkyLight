@@ -119,6 +119,7 @@ namespace GameClient.Types.Components.SceneComponents
             DataTemplate dataTemplate = Newtonsoft.Json.JsonConvert.DeserializeObject<DataTemplate>(jsonMessage);
 
             //the recieved position
+            LoginManagerClient.SetCharacterStatic(dataTemplate.RecieverCharacter);
             LoginManagerClient.SetRecievedPosition(dataTemplate.RecieverCharacter._pos);
             LoginManagerClient.GetCharacter().physicalPosition = dataTemplate.RecieverCharacter.physicalPosition;
 

@@ -11,7 +11,6 @@ using Server.Types;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using Debug = System.Diagnostics.Debug;
 
 namespace GameServer.Types.Components.SceneComponents
@@ -92,6 +91,28 @@ namespace GameServer.Types.Components.SceneComponents
                     case MessageType.Disconnected:
                         //OnDisconnected(message.SenderConnection);
                         break;
+                    case MessageType.EquipItem:
+                        int index = -1;
+                        try
+                        {
+                            int.TryParse(template.JsonMessage, out index);
+                        }
+                        catch
+                        {
+
+                        }
+                        if (index != -1)
+                        {
+                            CharacterPlayer characterPlayer = CharacterManager.GetLoginManagerFromUniqueID(message.SenderConnection.RemoteUniqueIdentifier).GetCharacter();
+                            WeaponItem item = characterPlayer.Inventory.ElementAt(index);
+                            if (item != null)
+                            {
+                                characterPlayer.Inventory[index] = null;
+                                int firstnull = Array.IndexOf(characterPlayer.Inventory, null);
+                                characterPlayer.Equipment[firstnull] = item;
+                            }
+                        }
+                        break;
 
                 }
             });
@@ -163,6 +184,7 @@ namespace GameServer.Types.Components.SceneComponents
             }
             MainScene.ConnectedCount.SetText("Current connections: " + ServerNetworkSceneComponent.GetNetServer().ConnectionsCount);
         }
+
         private void OnDisconnected(NetConnection sender)
         {
             NetServer server = ServerNetworkSceneComponent.GetNetServer();

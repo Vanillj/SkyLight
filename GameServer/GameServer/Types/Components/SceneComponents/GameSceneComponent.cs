@@ -22,9 +22,6 @@ namespace GameServer.Types
 
         Texture2D playerTexture;
 
-        //TEMP
-        const int playerRadius = 100;
-
         public override void OnEnabled()
         {
             base.OnEnabled();
@@ -44,31 +41,6 @@ namespace GameServer.Types
             if (total < 0.05)
                 return;
             total = 0;
-
-            //Moved to loggin and disconnect
-            /*HashSet<LoginManagerServer> characterlist = CharacterManager.GetLoginManagerServerList();
-            if (characterlist != null || characterlist.Count > 0)
-            {
-                foreach (LoginManagerServer login in characterlist)
-                {
-                    CharacterPlayer c = login.GetCharacter();
-                    Entity e = Core.Scene.FindEntity(c._name);
-                    if (e == null)
-                    {
-                        FSRigidBody fbody = new FSRigidBody().SetBodyType(BodyType.Dynamic).SetIgnoreGravity(true).SetLinearDamping(15f);
-                        
-
-                        Scene.CreateEntity(c._name).SetPosition(c._pos)
-                            .AddComponent(fbody)
-                            .AddComponent(new FSCollisionCircle(100))
-                            .AddComponent(new PlayerComponent(login))
-                            .AddComponent(new Mover())
-                            .AddComponent(new CircleCollider(100));
-                        fbody.Body.FixedRotation = true;
-
-                    }
-                }
-            }*/
         }
     }
 }

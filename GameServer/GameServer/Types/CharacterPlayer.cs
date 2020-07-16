@@ -59,11 +59,11 @@ namespace Server.Types
         }
 
         //GET SET METHODS
-        public EqupmentBase[] GetEquipment()
+        public WeaponItem[] GetEquipment()
         {
             return Equipment;
         }
-        public ItemBase[] GetInventory()
+        public WeaponItem[] GetInventory()
         {
             return Inventory;
         }

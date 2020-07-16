@@ -48,13 +48,14 @@ namespace GameClient.Types.Components.SceneComponents
 
             //Update mouse
             //if (Input.LeftMouseButtonPressed || Input.RightMouseButtonPressed ||Input.MousePositionDelta != Point.Zero)
-                //MouseChange();
+            //MouseChange();
 
             previousMouseWheelValue = currentMouseWheelValue;
             currentMouseWheelValue = Mouse.GetState().ScrollWheelValue;
             ScrollChange();
         }
 
+        //TODO: Change to customizable keybindings later
         private Keys[] KeyboardChange()
         {
             KeyboardState newState = Input.CurrentKeyboardState;
@@ -63,60 +64,38 @@ namespace GameClient.Types.Components.SceneComponents
             List<Keys> keys = new List<Keys>();
             float speed = 100;
             var dir = Vector2.Zero;
+
             //might be usable later for abilities and more.
             if (newState.IsKeyDown(Keys.T) && !OldKeyboardState.IsKeyDown(Keys.T))
             {
                 keys.Add(Keys.T);
             }
 
-            //Opens Inventory
+            //Generated inventory
             if (newState.IsKeyDown(Keys.I) && OldKeyboardState.IsKeyUp(Keys.I))
             {
-
-                bool found = false;
-                Window t = null;
-                foreach (var item in (Scene as MainScene).UICanvas.Stage.GetElements())
+                if (UIManager.FindElementByString("Inventory", Scene))
                 {
-                    if (found)
-                        break;
-                    if (item is Window && !found)
-                    {
-                        if ((item as Window).GetTitleLabel().GetText().Equals("Inventory"))
-                        {
-                            found = true;
-                            t = item as Window;
-                            break;
-                        }
-                        /*
-                        foreach (var cell in (item as Window).GetChildren())
-                        {
-                            
-                            if (cell is GLabel)
-                            {
-                                if ((cell as GLabel).GetText().Equals("Inventory"))
-                                {
-                                    found = true;
-                                    break;
-                                }
-                            }
-                        }*/
-                    }
-                }
-                if (!found)
-                {
-                    Window table = UIManager.GenerateInventory(skin, (Scene as MainScene).UICanvas.Stage);
+                    Window table = UIManager.GenerateInventoryWindow(skin, (Scene as MainScene).UICanvas.Stage);
 
                     table.SetPosition(Core.GraphicsDevice.Viewport.Width - table.GetWidth(), Core.GraphicsDevice.Viewport.Height - table.GetHeight());
                     table.DebugAll();
 
                     (Scene as MainScene).UICanvas.Stage.AddElement(table);
                 }
-                else
+            }
+
+            if (newState.IsKeyDown(Keys.C) && OldKeyboardState.IsKeyUp(Keys.C))
+            {
+                if (UIManager.FindElementByString("Character Information", Scene))
                 {
-                    if(t != null)
-                        t.Remove();
+                    Window table = UIManager.GenerateCharacterWindow(skin, (Scene as MainScene).UICanvas.Stage);
+
+                    table.SetPosition(Core.GraphicsDevice.Viewport.Width - table.GetWidth(), 50);
+                    table.DebugAll();
+                    List<Element> l = (Scene as MainScene).UICanvas.Stage.GetElements();
+                    (Scene as MainScene).UICanvas.Stage.AddElement(table);
                 }
-                
             }
 
             if (newState.IsKeyDown(Keys.S) && !OldKeyboardState.IsKeyDown(Keys.S))
@@ -207,7 +186,7 @@ namespace GameClient.Types.Components.SceneComponents
                 {
                     foreach (var item in scene.UICanvas.Stage.GetElements())
                     {
-                        
+
                         if (item is Table)
                         {
                             foreach (var child in (item as Table).GetChildren())
@@ -218,9 +197,9 @@ namespace GameClient.Types.Components.SceneComponents
 
                                     foreach (var chilli in tab.GetChildren())
                                     {
-                                        
+
                                     }
-                                    
+
                                 }
                             }
                             int countX = 0;
@@ -305,7 +284,7 @@ namespace GameClient.Types.Components.SceneComponents
 
                 }
             }
-            
+
         }
         private void SendKeyboardRequest(KeyboardState keyboardState)
         {
