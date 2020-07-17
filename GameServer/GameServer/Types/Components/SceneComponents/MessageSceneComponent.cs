@@ -98,18 +98,20 @@ namespace GameServer.Types.Components.SceneComponents
                             int.TryParse(template.JsonMessage, out index);
                         }
                         catch
-                        {
+                        { }
 
-                        }
                         if (index != -1)
                         {
                             CharacterPlayer characterPlayer = CharacterManager.GetLoginManagerFromUniqueID(message.SenderConnection.RemoteUniqueIdentifier).GetCharacter();
                             WeaponItem item = characterPlayer.Inventory.ElementAt(index);
                             if (item != null)
                             {
-                                characterPlayer.Inventory[index] = null;
-                                int firstnull = Array.IndexOf(characterPlayer.Inventory, null);
-                                characterPlayer.Equipment[firstnull] = item;
+                                int firstnull = Array.IndexOf(characterPlayer.Equipment, null);
+                                if (firstnull != -1)
+                                {
+                                    characterPlayer.Inventory[index] = null;
+                                    characterPlayer.Equipment[firstnull] = item;
+                                }
                             }
                         }
                         break;

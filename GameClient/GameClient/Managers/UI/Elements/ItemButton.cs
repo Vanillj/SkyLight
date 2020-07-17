@@ -8,8 +8,14 @@ namespace GameClient.Managers.UI.Elements
 
         public Window HoverWindow;
         public WeaponItem item;
+        public int position = -1;
         public ItemButton(ImageButtonStyle style) : base(style)
         {
+        }
+        public ItemButton(ImageButtonStyle style, int pos, WeaponItem item) : base(style)
+        {
+            this.item = item;
+            position = pos;
         }
 
         public ItemButton(IDrawable imageUp) : base(imageUp)

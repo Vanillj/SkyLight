@@ -20,7 +20,7 @@ namespace GameClient.Types.Components.SceneComponents
 
         private float currentMouseWheelValue, previousMouseWheelValue;
         private Entity Entity;
-        Skin skin = Skin.CreateDefaultSkin();
+        public static Skin skin = Skin.CreateDefaultSkin();
         public InputComponent(Entity entity, Camera camera)
         {
             Entity = entity;
@@ -74,22 +74,17 @@ namespace GameClient.Types.Components.SceneComponents
             //Generated inventory
             if (newState.IsKeyDown(Keys.I) && OldKeyboardState.IsKeyUp(Keys.I))
             {
-                if (UIManager.FindElementByString("Inventory", Scene))
+                if (UIManager.FindElementByStringAndRemove("Inventory", Scene))
                 {
-                    Window table = UIManager.GenerateInventoryWindow(skin, (Scene as MainScene).UICanvas.Stage);
-
-                    table.SetPosition(Core.GraphicsDevice.Viewport.Width - table.GetWidth(), Core.GraphicsDevice.Viewport.Height - table.GetHeight());
-                    table.DebugAll();
-
-                    (Scene as MainScene).UICanvas.Stage.AddElement(table);
+                    UIManager.GenerateInventoryWindow(skin, Scene);
                 }
             }
 
             if (newState.IsKeyDown(Keys.C) && OldKeyboardState.IsKeyUp(Keys.C))
             {
-                if (UIManager.FindElementByString("Character Information", Scene))
+                if (UIManager.FindElementByStringAndRemove("Character Information", Scene))
                 {
-                    Window table = UIManager.GenerateCharacterWindow(skin, (Scene as MainScene).UICanvas.Stage);
+                    Window table = UIManager.GenerateCharacterWindow(skin, Scene);
 
                     table.SetPosition(Core.GraphicsDevice.Viewport.Width - table.GetWidth(), 50);
                     table.DebugAll();

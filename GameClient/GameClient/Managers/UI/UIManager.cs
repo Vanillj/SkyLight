@@ -15,8 +15,14 @@ namespace GameClient.Managers.UI
 {
     class UIManager
     {
-        public static Window GenerateInventoryWindow(Skin skin, Stage stage)
+        public static Window GenerateInventoryWindow(Skin skin, Scene scene)
         {
+            Stage stage = (scene as MainScene).UICanvas.Stage;
+
+            //removes window if it exists
+            FindElementByStringAndRemove("Inventory", scene);
+
+            //Creates new window after removing old one
             Window window = new Window("Inventory", skin).SetMovable(true).SetResizable(true);
             window.SetResizeBorderSize(20);
 
@@ -39,6 +45,7 @@ namespace GameClient.Managers.UI
                 {
                     ItemButton imButton = new ItemButton(textButtonStyle);
                     imButton.item = i;
+                    imButton.position = count;
                     imButton.Add(new Label(i.Name)).Fill().Expand().Left().SetAlign(Align.BottomLeft);
                     imButton.SetTouchable(Touchable.Enabled);
                     imButton.OnHovered += delegate { OnHovered(imButton, i, skin, stage); };
@@ -51,12 +58,19 @@ namespace GameClient.Managers.UI
             }
             window.Pack();
             window.DebugAll();
-
+            window.SetPosition(Core.GraphicsDevice.Viewport.Width - window.GetWidth(), Core.GraphicsDevice.Viewport.Height - window.GetHeight());
+            stage.AddElement(window);
             return window;
         }
 
-        public static Window GenerateCharacterWindow(Skin skin, Stage stage)
+        public static Window GenerateCharacterWindow(Skin skin, Scene scene)
         {
+            Stage stage = (scene as MainScene).UICanvas.Stage;
+
+            //removes window if it exists
+            FindElementByStringAndRemove("Character Information", scene);
+
+            //Creates new window after removing old one
             Window window = new Window("Character Information", skin).SetMovable(true).SetResizable(true);
             window.SetResizeBorderSize(20);
 
@@ -77,8 +91,7 @@ namespace GameClient.Managers.UI
 
                 if (i != null)
                 {
-                    ItemButton imButton = new ItemButton(textButtonStyle);
-                    imButton.item = i;
+                    ItemButton imButton = new ItemButton(textButtonStyle, count, i);
                     imButton.Add(new Label(i.Name)).Fill().Expand().Left().SetAlign(Align.BottomLeft);
                     imButton.SetTouchable(Touchable.Enabled);
                     imButton.OnHovered += delegate { OnHovered(imButton, i, skin, stage); };
@@ -144,26 +157,15 @@ namespace GameClient.Managers.UI
         {
             if (Input.LeftMouseButtonReleased)
             {
-                if (obj.GetParent() is Window)
+                if (obj.position != -1)
                 {
-                    //Window w = obj.GetParent() as Window;
-                    //int ind = w.GetChildren().FindIndex(i => i.Equals(obj));
-                    
+                    MessageTemplate template = new MessageTemplate(obj.position.ToString(), MessageType.EquipItem);
+                    MessageManager.AddToQueue(template);
+
                 }
 
-                int ind = -1;
-                for (int i = 0; i < LoginManagerClient.GetCharacter().GetEquipment().Length - 1; i++)
+                if (obj.GetParent() is Window)
                 {
-                    WeaponItem item = LoginManagerClient.GetCharacter().GetInventory()[i];
-                    if (obj.item != null && item != null && item.Name.Equals(obj.item.Name))
-                    {
-                        ind = i;
-                    }
-                }
-                if (ind != -1)
-                {
-                    MessageTemplate template = new MessageTemplate(ind.ToString(), MessageType.EquipItem);
-                    MessageManager.AddToQueue(template);
 
                 }
             }
@@ -177,7 +179,22 @@ namespace GameClient.Managers.UI
             return new Vector2(Input.ScaledMousePosition.X, Input.ScaledMousePosition.Y - 30 - window.GetHeight());
         }
 
-        public static bool FindElementByString(string str, Scene scene)
+        public static Element FindElementByString(string str, Scene scene)
+        {
+            Element element = null;
+            element = (scene as MainScene).UICanvas.Stage.GetElements().Find(i =>
+            {
+                if (i is Window)
+                {
+                    return (i as Window).GetTitleLabel().GetText().Equals(str);
+                }
+                return false;
+            });
+
+            return element;
+        }
+
+        public static bool FindElementByStringAndRemove(string str, Scene scene)
         {
             Element element = null;
             element = (scene as MainScene).UICanvas.Stage.GetElements().Find(i =>

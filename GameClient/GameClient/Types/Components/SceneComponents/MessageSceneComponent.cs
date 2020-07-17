@@ -1,10 +1,13 @@
 ﻿using Client.Managers;
 using GameClient.Managers;
+using GameClient.Managers.UI;
 using GameClient.Scenes;
+using GameClient.Types.Item;
 using GameServer.Types;
 using Lidgren.Network;
 using Microsoft.Xna.Framework;
 using Nez;
+using Nez.UI;
 using Server.Managers;
 using Server.Types;
 using Debug = System.Diagnostics.Debug;
@@ -19,7 +22,7 @@ namespace GameClient.Types.Components.SceneComponents
 
         public override void Update()
         {
-            
+
             timeSpan += Time.DeltaTime;
             CheckForMessage();
             if (timeSpan > 0.033)
@@ -90,9 +93,9 @@ namespace GameClient.Types.Components.SceneComponents
                     MainScene mainScene = new MainScene();
                     CharacterPlayer player = Newtonsoft.Json.JsonConvert.DeserializeObject<CharacterPlayer>(template.JsonMessage);
                     MessageManager.GetLoginManagerClient().SetCharacter(player);
-                    
+
                     mainScene.player = PlayerManager.CreatePlayer(player, mainScene);
-                    
+
                     FollowCamera fCamera = new FollowCamera(mainScene.player, FollowCamera.CameraStyle.CameraWindow) { FollowLerp = 0.3f };
                     mainScene.player.AddComponent(fCamera);
                     //mainScene.Camera.AddComponent(fCamera);
@@ -117,11 +120,43 @@ namespace GameClient.Types.Components.SceneComponents
         private void GameUpdateState(string jsonMessage)
         {
             DataTemplate dataTemplate = Newtonsoft.Json.JsonConvert.DeserializeObject<DataTemplate>(jsonMessage);
+            //Check for changes
+            bool updateInv = false;
+            if (Scene is MainScene && LoginManagerClient.GetCharacter() != null)
+            {
+                for (int i = 0; i < LoginManagerClient.GetCharacter().GetInventory().Length - 1; i++)
+                {
+                    //if one or the other is null and the other is not then false or if names don't match for every item
+                    WeaponItem existing = LoginManagerClient.GetCharacter().GetInventory()[i];
+                    WeaponItem newItem = dataTemplate.RecieverCharacter.GetInventory()[i];
+
+                    if ((existing != null && newItem == null) || (existing == null && newItem != null))
+                    {
+                        updateInv = true;
+                        break;
+                    }
+                    if (existing != null & newItem != null && !existing.Name.Equals(newItem.Name))
+                    {
+                        updateInv = true;
+                        break;
+                    }
+
+                }
+                
+            }
 
             //the recieved position
             LoginManagerClient.SetCharacterStatic(dataTemplate.RecieverCharacter);
             LoginManagerClient.SetRecievedPosition(dataTemplate.RecieverCharacter._pos);
             LoginManagerClient.GetCharacter().physicalPosition = dataTemplate.RecieverCharacter.physicalPosition;
+
+
+            //Change UI from new data
+            if (updateInv)
+            {
+                UIManager.GenerateInventoryWindow(InputComponent.skin, Scene);
+
+            }
 
             //removes the caracters that are not close to the player
             LoginManagerClient.OtherCharacters.RemoveAll(tempc => !dataTemplate.OthersCharacters.Contains(tempc));
@@ -140,7 +175,6 @@ namespace GameClient.Types.Components.SceneComponents
                     }
                     else
                     {
-                        //List<CharacterPlayer> playerList = LoginManagerClient.OtherCharacters.FindAll();
                         CharacterPlayer character = dataTemplate.OthersCharacters.Find(tempc => tempc._name.Equals(charac._name));
                         LoginManagerClient.OtherCharacters[i] = character;
                     }
