@@ -6,7 +6,7 @@ namespace GameClient.Managers.UI.Elements
     class ItemButton : ImageButton
     {
 
-        public Window HoverWindow;
+        public ItemHoverWindow HoverWindow;
         public WeaponItem item;
         public int position = -1;
         public ItemButton(ImageButtonStyle style) : base(style)
@@ -17,9 +17,13 @@ namespace GameClient.Managers.UI.Elements
             this.item = item;
             position = pos;
         }
-
         public ItemButton(IDrawable imageUp) : base(imageUp)
         {
+        }
+        public ItemButton(IDrawable imageUp, int pos, WeaponItem item) : base(imageUp)
+        {
+            this.item = item;
+            position = pos;
         }
 
         public ItemButton(Skin skin, string styleName = null) : base(skin, styleName)

@@ -111,13 +111,17 @@
     </Compile>
     <Compile Include="GameClient.cs" />
     <Compile Include="General\TextureContainer.cs" />
+    <Compile Include="Managers\Input\DirectionEnum.cs" />
     <Compile Include="Managers\LoadManager.cs" />
     <Compile Include="Managers\Networking\ClientNetworkManager.cs" />
     <Compile Include="Managers\Networking\LoginManagerClient.cs" />
     <Compile Include="Managers\Networking\LoginManagerHead.cs" />
     <Compile Include="Managers\Networking\MessageManager.cs" />
     <Compile Include="Managers\PlayerManager.cs" />
+    <Compile Include="Managers\UI\Elements\CharacterWindow.cs" />
+    <Compile Include="Managers\UI\Elements\InventoryWindow.cs" />
     <Compile Include="Managers\UI\Elements\ItemButton.cs" />
+    <Compile Include="Managers\UI\Elements\ItemHoverWindow.cs" />
     <Compile Include="Managers\UI\SceneManager.cs" />
     <Compile Include="Managers\UI\UIManager.cs" />
     <Compile Include="Program.cs" />
@@ -206,11 +210,15 @@
     </None>
     <None Include="app.config" />
     <None Include="app.manifest" />
+    <None Include="Assets\Items\Items.atlas">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Assets\UI\UI.atlas">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Managers\Input\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="..\..\GameServer\GameServer\Assets\Grasstiles.tsx">
       <Link>Assets\Grasstiles.tsx</Link>
@@ -309,6 +317,12 @@
     <Content Include="..\..\GameServer\GameServer\Assets\Tiles\Objects\Chests\red-open.png">
       <Link>Assets\Tiles\Objects\Chests\red-open.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Items\Items.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\UI\UI.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>

@@ -1,6 +1,7 @@
 ﻿using Client.Managers;
 using GameClient.Managers;
 using GameClient.Managers.UI;
+using GameClient.Managers.UI.Elements;
 using GameClient.Scenes;
 using GameClient.Types.Item;
 using GameServer.Types;
@@ -11,6 +12,7 @@ using Nez;
 using Nez.UI;
 using Server.Managers;
 using Server.Types;
+using System.Collections.Generic;
 using Debug = System.Diagnostics.Debug;
 
 namespace GameClient.Types.Components.SceneComponents
@@ -170,8 +172,29 @@ namespace GameClient.Types.Components.SceneComponents
             //Change UI from new data
             if (updateInv)
             {
-                UIManager.GenerateInventoryWindow(InputComponent.skin, Scene);
-                UIManager.GenerateCharacterWindow(InputComponent.skin, Scene);
+                Stage stage = (Scene as MainScene).UICanvas.Stage;
+                List<InventoryWindow> invlist = stage.FindAllElementsOfType<InventoryWindow>();
+                List<CharacterWindow> charlist = stage.FindAllElementsOfType<CharacterWindow>();
+                Vector2 invpos = new Vector2(-1, -1);
+                Vector2 charpos = new Vector2(-1, -1);
+                float invwidth , invheight, charw, charh;
+                invheight = invwidth = charw = charh = -1;
+
+                if (invlist.Count > 0)
+                {
+                    invpos = new Vector2(invlist[0].GetX(), invlist[0].GetY());
+                    invheight = invlist[0].GetHeight();
+                    invwidth = invlist[0].GetWidth();
+                }
+                if (charlist.Count > 0)
+                {
+                    charpos = new Vector2(charlist[0].GetX(), charlist[0].GetY());
+                    charw = charlist[0].GetWidth();
+                    charh = charlist[0].GetHeight();
+                }
+
+                UIManager.GenerateInventoryWindow(InputComponent.skin, Scene, invpos, invwidth, invheight);
+                UIManager.GenerateCharacterWindow(InputComponent.skin, Scene, charpos, charw, charh);
             }
 
             //removes the caracters that are not close to the player
@@ -180,7 +203,6 @@ namespace GameClient.Types.Components.SceneComponents
             //add other characters in the area to a list
             if (dataTemplate.OthersCharacters != null && dataTemplate.OthersCharacters.Count > 0)
             {
-
                 foreach (CharacterPlayer charac in dataTemplate.OthersCharacters)
                 {
                     int i = LoginManagerClient.OtherCharacters.FindIndex(tempc => tempc._name.Equals(charac._name));

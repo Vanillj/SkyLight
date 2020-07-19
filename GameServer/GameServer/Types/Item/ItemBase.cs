@@ -1,6 +1,7 @@
 ﻿using GameClient.Types.Item;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using Nez.Textures;
 
 namespace GameServer.Types.Item
 {
@@ -10,7 +11,8 @@ namespace GameServer.Types.Item
         public int ID { get; set; }
         public string Name { get; set; }
 
-        private Texture2DE Texture;
+        private Sprite Sprite;
+        public string TextureName { get; set; }
 
         [JsonProperty(ItemConverterType = typeof(StringEnumConverter))]
         public EqupmentType EquipmentType { get; set; }
@@ -21,27 +23,25 @@ namespace GameServer.Types.Item
         [JsonConverter(typeof(StringEnumConverter))]
         public ItemTypes ItemType { get; set; }
 
-        public ItemBase(int id, string name, EqupmentType Type, ItemRarity rarity, ItemTypes itemType)
+        public ItemBase(int id, string name, EqupmentType Type, ItemRarity rarity, string TextureName, ItemTypes itemType)
         {
             ID = id;
             Name = name;
-
             EquipmentType = Type;
-
             Rarity = rarity;
-
             ItemType = itemType;
+            this.TextureName = TextureName;
         }
 
-        public Texture2DE GetTexture()
+        public void SetSprite(Sprite sprite)
         {
-            return Texture;
+            Sprite = sprite;
         }
-        public ItemBase SetTexture(Texture2DE texture2DE)
+        public Sprite GetSprite()
         {
-            Texture = texture2DE;
-            return this;
+            return Sprite;
         }
+
         public ItemTypes GetItemType()
         {
             return ItemType;

@@ -11,8 +11,8 @@ namespace GameClient.Types.Item
         public WeaponTypes weaponType { get; set; }
 
         public int[] WeaponDamageRange { get; set; }
-        public WeaponItem(int id, string name, EqupmentType Type, WeaponTypes weaponType, int Intelligence, int Strength, int Dexterity, int Lower, int Upper, ItemRarity rarity, int intreq, int strreq, int dexreq, int LevelReq, ItemTypes itemType) 
-            : base(id, name, Type, Intelligence, Strength, Dexterity, rarity, intreq, strreq, dexreq, LevelReq, itemType)
+        public WeaponItem(int id, string name, EqupmentType Type, WeaponTypes weaponType, int Intelligence, int Strength, int Dexterity, int Lower, int Upper, ItemRarity rarity, string TextureName, int intreq, int strreq, int dexreq, int LevelReq, ItemTypes itemType) 
+            : base(id, name, Type, Intelligence, Strength, Dexterity, rarity, TextureName, intreq, strreq, dexreq, LevelReq, itemType)
         {
             this.weaponType = weaponType;
             WeaponDamageRange = new int[] { Lower, Upper };

@@ -14,7 +14,6 @@ namespace GameClient
         {
             Content.RootDirectory = "Content";
             policy = Scene.SceneResolutionPolicy.None;
-            Scene.SetDefaultDesignResolution(1920, 1080, policy);
             Window.AllowUserResizing = true;
         }
         protected override void Initialize()

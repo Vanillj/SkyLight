@@ -14,8 +14,8 @@ namespace GameServer.Types.Item
         public int DexterityReq { get; set; }
         public int LevelReq { get; set; }
 
-        public EqupmentBase(int id, string name, EqupmentType Type, int Intelligence, int Strength, int Dexterity, ItemRarity itemRarity, int intreq, int strreq, int dexreq, int levelReq, ItemTypes itemType) 
-            : base(id, name, Type, itemRarity, itemType)
+        public EqupmentBase(int id, string name, EqupmentType Type, int Intelligence, int Strength, int Dexterity, ItemRarity itemRarity, string TextureName, int intreq, int strreq, int dexreq, int levelReq, ItemTypes itemType) 
+            : base(id, name, Type, itemRarity, TextureName, itemType)
         {
             this.Intelligence = Intelligence;
             this.Strength = Strength;

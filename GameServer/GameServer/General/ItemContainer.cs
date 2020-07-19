@@ -32,20 +32,9 @@ namespace GameServer.General
                 }
             }
         }
-        public void GenerateItems(HashSet<Texture2DE> textures)
+        public void GenerateItems()
         {
             LoadFromFile();
-            int id = 2;
-            /*
-            itemBasesList.Add(new WeaponItem(id, "Sword", ItemType.Weapon, WeaponTypes.OneHand, 1, 10, 1, 1, 100, ItemRarity.Legendary, 0, 0, 0));
-            //Null if there is no need for textures
-            if (textures != null)
-            {
-                foreach (var item in itemBasesList)
-                {
-                    item.SetTexture(textures.ElementAt(id - 1));
-                }
-            }*/
         }
     }
 

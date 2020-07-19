@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Nez;
 using Nez.Sprites;
+using Nez.Textures;
 using Nez.Tweens;
 using Nez.UI;
 using Server.Scenes;
@@ -31,12 +32,10 @@ namespace GameClient.Scenes
         {
             base.Initialize();
 
-            //Load Assets, always load textures before generating items so they can match texture and ID
-            new TextureContainer().LoadTextures();
-            int TextureArrayLength = 2;
-
-            new ItemContainer().GenerateItems(TextureContainer.Texture2DEList);
             
+
+            new ItemContainer().GenerateItems();
+
         }
         public override void Update()
         {

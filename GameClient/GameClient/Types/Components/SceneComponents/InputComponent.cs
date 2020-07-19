@@ -74,21 +74,45 @@ namespace GameClient.Types.Components.SceneComponents
             //Generated inventory
             if (newState.IsKeyDown(Keys.I) && OldKeyboardState.IsKeyUp(Keys.I))
             {
-                if (UIManager.FindElementByStringAndRemove("Inventory", Scene))
+                List<Window> windows = (Scene as MainScene).UICanvas.Stage.FindAllElementsOfType<Window>();
+                bool exists = false;
+                windows.ForEach(i =>
                 {
-                    UIManager.GenerateInventoryWindow(skin, Scene);
+                    if (i.GetTitleLabel().GetText().Equals("Inventory"))
+                    {
+                        exists = true;
+                    } 
+                });
+                if (exists)
+                {
+                    UIManager.FindElementByStringAndRemove("Inventory", Scene);
+                }
+                else
+                {
+                    UIManager.GenerateInventoryWindow(skin, Scene, new Vector2(-1, -1), -1, -1);
                 }
             }
 
             if (newState.IsKeyDown(Keys.C) && OldKeyboardState.IsKeyUp(Keys.C))
             {
-                if (UIManager.FindElementByStringAndRemove("Character Information", Scene))
+                List<Window> windows = (Scene as MainScene).UICanvas.Stage.FindAllElementsOfType<Window>();
+                bool exists = false;
+                windows.ForEach(i =>
                 {
-                    Window table = UIManager.GenerateCharacterWindow(skin, Scene);
-                    table.DebugAll();
-                    List<Element> l = (Scene as MainScene).UICanvas.Stage.GetElements();
-                    (Scene as MainScene).UICanvas.Stage.AddElement(table);
+                    if (i.GetTitleLabel().GetText().Equals("Character Information"))
+                    {
+                        exists = true;
+                    }
+                });
+                if (exists)
+                {
+                    UIManager.FindElementByStringAndRemove("Character Information", Scene);
                 }
+                else
+                {
+                    UIManager.GenerateCharacterWindow(skin, Scene, new Vector2(-1, -1), -1, -1);
+                }
+
             }
 
             if (newState.IsKeyDown(Keys.S) && !OldKeyboardState.IsKeyDown(Keys.S))

@@ -21,6 +21,7 @@ namespace GameClient.Types.Item
         }
 
         public int ID { get; set; }
+        public string TextureName { get; set; }
         public Texture2DE SetID(int _ID)
         {
             ID = _ID;

@@ -109,11 +109,7 @@ namespace Nez.UI
 
 		void IInputListener.OnMouseExit()
 		{
-			if (_isDisabled)
-				return;
-			_mouseOver = _mouseDown = false;
-
-			OnExited?.Invoke(this);
+			OnExitEvent();
 		}
 
 
@@ -138,9 +134,13 @@ namespace Nez.UI
 				_mouseDown = _mouseOver = false;
 				GetStage().RemoveInputFocusListener(this);
 			}
-			
-		}
+			var p = parent.LocalToParentCoordinates(new Vector2(x, y));
+			if (!new RectangleF(p.X, p.Y, width, height).Contains(mousePos))
+			{
+				OnExitEvent();
+			}
 
+		}
 
 		void IInputListener.OnMouseUp(Vector2 mousePos)
 		{
@@ -156,6 +156,15 @@ namespace Nez.UI
 		bool IInputListener.OnMouseScrolled(int mouseWheelDelta)
 		{
 			return false;
+		}
+
+		private void OnExitEvent()
+		{
+			if (_isDisabled)
+				return;
+			_mouseOver = _mouseDown = false;
+
+			OnExited?.Invoke(this);
 		}
 
 		#endregion

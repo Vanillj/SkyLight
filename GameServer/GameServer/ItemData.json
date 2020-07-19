@@ -1,26 +1,74 @@
 [
-  { "id": 1, "name": "Cape", "Type": 4, "Rarity": 0 },
-  { "id": 2, "name": "Bone Helm", "Type": 0, "Rarity": 0 },
-  { "id": 3, "name": "Bone Chest", "Type": 1, "Rarity": 0 },
-  { "id": 4, "name": "Bone Legs", "Type": 2, "Rarity": 0 },
-  { "id": 5, "name": "Bone Cape", "Type": 4, "Rarity": 0 },
-  { "id": 6, "name": "Bone Sword", "Type": 3, "Rarity": 0 },
-  { "id": 7, "name": "Bone Cape", "Type": 4, "Rarity": 0 },
-  { "id": 8, "name": "Bone Glove", "Type": 5, "Rarity": 0 },
-  { "id": 9, "name": "Bone Ring", "Type": 6, "Rarity": 0 },
-  { "id": 10, "name": "Bone Boots", "Type": 7, "Rarity": 0 },
-  { "id": 11, "name": "Bone Quiver", "Type": 8, "Rarity": 0 },
   {
-    "Intelligence": 0,
-    "Strength": 0,
-    "Dexterity": 0,
-    "IntelligenceReq": 120,
-    "StrengthReq": 0,
-    "DexterityReq": 0,
-    "LevelReq": 70,
-    "id": 12,
+    "id": 2,
+    "name": "Bone Helm",
+    "Type": 0,
+    "Rarity": "Normal",
+    "TextureName": "hlm_b_05"
+  },
+  {
+    "id": 3,
+    "name": "Bone Chest",
+    "Type": 1,
+    "Rarity": "Normal",
+    "TextureName": "arm_b_05"
+  },
+  {
+    "id": 4,
+    "name": "Bone Legs",
+    "Type": 2,
+    "Rarity": "Normal",
+    "TextureName": "pn_b_05"
+  },
+  {
+    "id": 5,
+    "name": "Bone Cape",
+    "Type": 4,
+    "Rarity": "Normal",
+    "TextureName": "cl_b_07"
+  },
+  {
+    "id": 8,
+    "name": "Bone Glove",
+    "Type": 5,
+    "Rarity": "Normal",
+    "TextureName": "gl_b_04"
+  },
+  {
+    "id": 9,
+    "name": "Bone Ring",
+    "Type": 6,
+    "Rarity": "Normal",
+    "TextureName": "rn_b_02"
+  },
+  {
+    "id": 10,
+    "name": "Bone Boots",
+    "Type": 7,
+    "Rarity": "Normal",
+    "TextureName": "boot_b_05"
+  },
+  {
+    "id": 11,
     "name": "Bone Quiver",
     "Type": 8,
-    "Rarity": 0
+    "Rarity": "Normal",
+    "TextureName": "arr_b_02"
+  },
+  {
+    "weaponType": "TwoHand",
+    "WeaponDamageRange": [1, 1111],
+    "Intelligence": 0,
+    "Strength": 999,
+    "Dexterity": 0,
+    "IntelligenceReq": 0,
+    "StrengthReq": 0,
+    "DexterityReq": 0,
+    "LevelReq": 0,
+    "id": 13,
+    "name": "Stone Sword",
+    "Type": 3,
+    "Rarity": "Normal",
+    "TextureName": "sword_b_05"
   }
 ]

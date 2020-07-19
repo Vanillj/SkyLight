@@ -1,7 +1,9 @@
 ﻿using Client.Managers;
+using GameClient.General;
 using GameClient.Managers;
 using GameClient.Types.Components.SceneComponents;
 using Microsoft.Xna.Framework;
+using Nez.Textures;
 using Nez.UI;
 using Server.Managers;
 using Server.Scenes;
@@ -20,15 +22,22 @@ namespace GameClient.Scenes
         {
             base.Initialize();
             var skin = Skin.CreateDefaultSkin();
+            //Load Assets, always load textures before generating items so they can match texture and ID
+            new TextureContainer().LoadTextures();
+            Sprite textfieldTexture = TextureContainer.UIAtlas.GetSprite("Plank_03");
 
             TextFieldStyle textFields = TextFieldStyle.Create(Color.White, Color.White, Color.Black, Color.DarkGray);
+            NinePatchDrawable drawable = new NinePatchDrawable(textfieldTexture, 0, 0, 0, 0) { MinHeight = 20, MinWidth = 50 };
+            textFields.Background = drawable;
+
             Label label = new Label("Menu").SetFontScale(5).SetFontColor(Color.MediumVioletRed);
             Table.Add(label);
 
             Label user = new Label("Username").SetFontScale(2).SetFontColor(Color.MediumVioletRed);
             Table.Row().SetPadTop(10);
-            Table.Add(user);
-            textFieldu = new TextField("", skin);
+            Table.Add(user).Pad(20);
+            textFieldu = new TextField("", textFields);
+
             Table.Row().SetPadTop(10);
             Table.Add(textFieldu);
 
@@ -36,8 +45,9 @@ namespace GameClient.Scenes
             
             Table.Row().SetPadTop(10);
             Table.Add(pass);
-            textFieldp = new TextField("", skin);
+            textFieldp = new TextField("", textFields);
             Table.Row().SetPadTop(10);
+            textFieldp.SetPasswordMode(true);
             Table.Add(textFieldp);
 
             

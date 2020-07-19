@@ -15,7 +15,7 @@ namespace GameServer
             Window.AllowUserResizing = true;
             DebugRenderEnabled = true;
             PauseOnFocusLost = false;
-            new ItemContainer().GenerateItems(null);
+            new ItemContainer().GenerateItems();
 
             //setup constant values
             //Getting credentials from file
