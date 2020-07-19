@@ -1,7 +1,9 @@
-﻿
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 namespace GameServer.Types.Item
 {
-    enum EqupmentType
+    [JsonConverter(typeof(StringEnumConverter))]
+    public enum EqupmentType
     {
         Helm,
         Chest,
@@ -13,13 +15,17 @@ namespace GameServer.Types.Item
         Boot,
         Quiver
     }
-    enum ItemTypes
+
+    [JsonConverter(typeof(StringEnumConverter))]
+    public enum ItemTypes
     {
         Normal,
         Equipment,
         Quest
     }
-    enum ItemRarity
+
+    [JsonConverter(typeof(StringEnumConverter))]
+    public enum ItemRarity
     {
         Normal, //White
         Magical, //Blue

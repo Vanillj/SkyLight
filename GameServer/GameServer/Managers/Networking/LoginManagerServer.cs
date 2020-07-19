@@ -1,4 +1,5 @@
-﻿using Server.Managers;
+﻿using Newtonsoft.Json.Converters;
+using Server.Managers;
 using Server.Types;
 
 namespace Client.Managers
@@ -19,7 +20,7 @@ namespace Client.Managers
             bool testP = CryptoManager.CheckHash(password, hashed);
             if (testP)
             {
-                AccountCharacter = Newtonsoft.Json.JsonConvert.DeserializeObject<CharacterPlayer>(st[0]);
+                AccountCharacter = Newtonsoft.Json.JsonConvert.DeserializeObject<CharacterPlayer>(st[0], new StringEnumConverter());
                 return true;
             }
             return false;

@@ -85,8 +85,6 @@ namespace GameClient.Types.Components.SceneComponents
                 if (UIManager.FindElementByStringAndRemove("Character Information", Scene))
                 {
                     Window table = UIManager.GenerateCharacterWindow(skin, Scene);
-
-                    table.SetPosition(Core.GraphicsDevice.Viewport.Width - table.GetWidth(), 50);
                     table.DebugAll();
                     List<Element> l = (Scene as MainScene).UICanvas.Stage.GetElements();
                     (Scene as MainScene).UICanvas.Stage.AddElement(table);

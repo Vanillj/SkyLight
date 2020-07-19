@@ -18,6 +18,7 @@ namespace Server.Types
         LoginFailure,
         Register,
         GameUpdate,
-        EquipItem
+        EquipItem,
+        UnEquipItem
     };
 }

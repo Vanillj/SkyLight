@@ -1,5 +1,6 @@
-﻿
-using GameClient.Types.Item;
+﻿using GameClient.Types.Item;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace GameServer.Types.Item
 {
@@ -11,16 +12,24 @@ namespace GameServer.Types.Item
 
         private Texture2DE Texture;
 
-        public EqupmentType EquipmentType { get; }
+        [JsonProperty(ItemConverterType = typeof(StringEnumConverter))]
+        public EqupmentType EquipmentType { get; set; }
+
+        [JsonConverter(typeof(StringEnumConverter))]
         public ItemRarity Rarity { get; set; }
-        public ItemTypes ItemType { get; }
+
+        [JsonConverter(typeof(StringEnumConverter))]
+        public ItemTypes ItemType { get; set; }
 
         public ItemBase(int id, string name, EqupmentType Type, ItemRarity rarity, ItemTypes itemType)
         {
             ID = id;
             Name = name;
+
             EquipmentType = Type;
+
             Rarity = rarity;
+
             ItemType = itemType;
         }
 
@@ -32,6 +41,22 @@ namespace GameServer.Types.Item
         {
             Texture = texture2DE;
             return this;
+        }
+        public ItemTypes GetItemType()
+        {
+            return ItemType;
+        }
+        public EqupmentType GetEqupmentType()
+        {
+            return EquipmentType;
+        }
+        public ItemRarity GetRarity()
+        {
+            return Rarity;
+        }
+        public void SetRarity(ItemRarity rarity)
+        {
+            Rarity = rarity;
         }
     }
 }

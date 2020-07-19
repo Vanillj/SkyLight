@@ -51,13 +51,13 @@ namespace GameClient.Managers.UI
                     imButton.OnHovered += delegate { OnHovered(imButton, i, skin, stage); };
                     imButton.OnExited += delegate { OnExit(imButton); };
                     imButton.OnMoved += delegate { OnMovedAndHovered(imButton); };
-                    imButton.OnClicked += delegate { OnClicked(imButton, count); };
+                    imButton.OnClicked += delegate { OnClickedInventory(imButton); };
                     window.Add(imButton).Pad(4).Fill().Expand();
                 }
                 count++;
             }
             window.Pack();
-            window.DebugAll();
+            //window.DebugAll();
             window.SetPosition(Core.GraphicsDevice.Viewport.Width - window.GetWidth(), Core.GraphicsDevice.Viewport.Height - window.GetHeight());
             stage.AddElement(window);
             return window;
@@ -97,12 +97,15 @@ namespace GameClient.Managers.UI
                     imButton.OnHovered += delegate { OnHovered(imButton, i, skin, stage); };
                     imButton.OnExited += delegate { OnExit(imButton); };
                     imButton.OnMoved += delegate { OnMovedAndHovered(imButton); };
+                    imButton.OnClicked += delegate { OnClickedCharacter(imButton); };
                     window.Add(imButton).Pad(4).Fill().Expand();
                 }
                 count++;
             }
             window.Pack();
-            window.DebugAll();
+            //window.DebugAll();
+            window.SetPosition(Core.GraphicsDevice.Viewport.Width - window.GetWidth() - 30, - window.GetHeight() - 30);
+            stage.AddElement(window);
             return window;
         }
         #region Mouse hover item
@@ -153,13 +156,30 @@ namespace GameClient.Managers.UI
             obj.HoverWindow.SetIsVisible(true);
         }
 
-        private static void OnClicked(ItemButton obj, int index)
+        private static void OnClickedInventory(ItemButton obj)
         {
             if (Input.LeftMouseButtonReleased)
             {
                 if (obj.position != -1)
                 {
                     MessageTemplate template = new MessageTemplate(obj.position.ToString(), MessageType.EquipItem);
+                    MessageManager.AddToQueue(template);
+
+                }
+
+                if (obj.GetParent() is Window)
+                {
+
+                }
+            }
+        }
+        private static void OnClickedCharacter(ItemButton obj)
+        {
+            if (Input.LeftMouseButtonReleased)
+            {
+                if (obj.position != -1)
+                {
+                    MessageTemplate template = new MessageTemplate(obj.position.ToString(), MessageType.UnEquipItem);
                     MessageManager.AddToQueue(template);
 
                 }

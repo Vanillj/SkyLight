@@ -24,7 +24,7 @@ namespace GameServer.Managers
             //From basetype we get things such as ID, texture, name, possible roll values, etc
             int i = random.Next(ItemContainer.itemBaseNormal.Count);
             ItemBase baseitem = ItemContainer.itemBaseNormal.ElementAt(i);
-            while (baseitem.EquipmentType != itemTypeC)
+            while (baseitem.GetEqupmentType() != itemTypeC)
             {
                 i = random.Next(ItemContainer.itemBaseNormal.Count);
                 baseitem = ItemContainer.itemBaseNormal.ElementAt(i);
@@ -32,15 +32,15 @@ namespace GameServer.Managers
 
             //Set values depending on rarity
 
-            baseitem.Rarity = (ItemRarity)itemRarity;
+            baseitem.SetRarity((ItemRarity)itemRarity);
 
             if (EqupmentType.Weapon == itemTypeC)
             {
-                return ((WeaponItem)baseitem);
+                return (WeaponItem)baseitem;
             }
             else
             {
-                return ((WeaponItem)baseitem);
+                return (WeaponItem)baseitem;
             }
         }
     }

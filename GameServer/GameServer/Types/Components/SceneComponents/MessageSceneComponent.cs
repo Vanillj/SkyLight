@@ -5,6 +5,7 @@ using GameServer.Scenes;
 using GameServer.Types.Item;
 using Lidgren.Network;
 using Microsoft.Xna.Framework.Input;
+using Newtonsoft.Json.Converters;
 using Nez;
 using Server.Managers;
 using Server.Types;
@@ -66,14 +67,15 @@ namespace GameServer.Types.Components.SceneComponents
         private void CustomMessage(NetIncomingMessage message)
         {
             string s = message.ReadString();
-            List<MessageTemplate> QueueList = Newtonsoft.Json.JsonConvert.DeserializeObject<List<MessageTemplate>>(s);
+            List<MessageTemplate> QueueList = Newtonsoft.Json.JsonConvert.DeserializeObject<List<MessageTemplate>>(s, new StringEnumConverter());
 
             QueueList.ForEach(template =>
             {
+                int index = -1;
                 switch (template.MessageType)
                 {
                     case MessageType.Movement:
-                        Keys[] KeyState = Newtonsoft.Json.JsonConvert.DeserializeObject<Keys[]>(template.JsonMessage);
+                        Keys[] KeyState = Newtonsoft.Json.JsonConvert.DeserializeObject<Keys[]>(template.JsonMessage, new StringEnumConverter());
                         CharacterPlayer c = CharacterManager.GetLoginManagerFromUniqueID(message.SenderConnection.RemoteUniqueIdentifier).GetCharacter();
                         InputManager.CalculateMovement(c, KeyState);
                         break;
@@ -83,7 +85,7 @@ namespace GameServer.Types.Components.SceneComponents
                         break;
 
                     case MessageType.Register:
-                        LoginManagerServer login = Newtonsoft.Json.JsonConvert.DeserializeObject<LoginManagerServer>(template.JsonMessage);
+                        LoginManagerServer login = Newtonsoft.Json.JsonConvert.DeserializeObject<LoginManagerServer>(template.JsonMessage, new StringEnumConverter());
                         RegisterUser(login);
                         break;
 
@@ -92,7 +94,6 @@ namespace GameServer.Types.Components.SceneComponents
                         //OnDisconnected(message.SenderConnection);
                         break;
                     case MessageType.EquipItem:
-                        int index = -1;
                         try
                         {
                             int.TryParse(template.JsonMessage, out index);
@@ -103,19 +104,47 @@ namespace GameServer.Types.Components.SceneComponents
                         if (index != -1)
                         {
                             CharacterPlayer characterPlayer = CharacterManager.GetLoginManagerFromUniqueID(message.SenderConnection.RemoteUniqueIdentifier).GetCharacter();
-                            WeaponItem item = characterPlayer.Inventory.ElementAt(index);
-                            if (item != null)
+                            WeaponItem newItem = characterPlayer.GetInventory().ElementAt(index);
+                            if (newItem != null)
                             {
-                                int firstnull = Array.IndexOf(characterPlayer.Equipment, null);
-                                if (firstnull != -1)
-                                {
+                                int type = (int)newItem.GetEqupmentType();
+                                WeaponItem currentItem = characterPlayer.Equipment[type];
+
+                                if (currentItem == null)
                                     characterPlayer.Inventory[index] = null;
-                                    characterPlayer.Equipment[firstnull] = item;
-                                }
+                                else
+                                    characterPlayer.Inventory[index] = currentItem;
+
+                                characterPlayer.Equipment[type] = newItem;
                             }
                         }
                         break;
+                    case MessageType.UnEquipItem:
+                        CharacterPlayer character = CharacterManager.GetLoginManagerFromUniqueID(message.SenderConnection.RemoteUniqueIdentifier).GetCharacter();
+                        var inventory = character.GetInventory();
+                        var equpment = character.GetEquipment();
+                        int invIndex = -1;
+                        for (int i = inventory.Length - 1; i >= 0; i--)
+                        {
+                            if (inventory[i] == null)
+                            {
+                                invIndex = i;
+                            }
+                        }
+                        try
+                        {
+                            int.TryParse(template.JsonMessage, out index);
+                        }
+                        catch (Exception)
+                        {
 
+                        }
+                        if (invIndex != -1)
+                        {
+                            inventory[invIndex] = equpment[index];
+                            equpment[index] = null;
+                        }
+                        break;
                 }
             });
 
@@ -123,7 +152,7 @@ namespace GameServer.Types.Components.SceneComponents
 
         private void LoginAttempt(NetIncomingMessage message, MessageTemplate template)
         {
-            LoginManagerServer LoginManagerServerUser = Newtonsoft.Json.JsonConvert.DeserializeObject<LoginManagerServer>(template.JsonMessage);
+            LoginManagerServer LoginManagerServerUser = Newtonsoft.Json.JsonConvert.DeserializeObject<LoginManagerServer>(template.JsonMessage, new StringEnumConverter());
 
             LoginManagerServerUser.SetUniqueID(message.SenderConnection.RemoteUniqueIdentifier);
             Console.WriteLine("Login attempt by: " + LoginManagerServerUser.username);
@@ -137,11 +166,11 @@ namespace GameServer.Types.Components.SceneComponents
                 {
                     Console.WriteLine("Logged in with \"" + LoginManagerServerUser.username + "\" to Database");
 
-                    string characterString = Newtonsoft.Json.JsonConvert.SerializeObject(LoginManagerServerUser.GetCharacter());
+                    string characterString = Newtonsoft.Json.JsonConvert.SerializeObject(LoginManagerServerUser.GetCharacter(), new StringEnumConverter());
                     MessageTemplate TempMessageTemplate = new MessageTemplate(characterString, MessageType.LoginSuccess);
 
                     //Returns the character to the player
-                    NetOutgoingMessage mvmntMessage = ServerNetworkSceneComponent.GetNetServer().CreateMessage(Newtonsoft.Json.JsonConvert.SerializeObject(TempMessageTemplate));
+                    NetOutgoingMessage mvmntMessage = ServerNetworkSceneComponent.GetNetServer().CreateMessage(Newtonsoft.Json.JsonConvert.SerializeObject(TempMessageTemplate, new StringEnumConverter()));
                     sender.SendMessage(mvmntMessage, NetDeliveryMethod.ReliableOrdered, 0);
                     CharacterManager.AddLoginManagerServerToList(LoginManagerServerUser);
                     CharacterManager.AddCharacterToScene(Scene, LoginManagerServerUser);
@@ -149,7 +178,7 @@ namespace GameServer.Types.Components.SceneComponents
                 else
                 {
                     MessageTemplate temp = new MessageTemplate("Failure.", MessageType.LoginFailure);
-                    NetOutgoingMessage mvmntMessage = ServerNetworkSceneComponent.GetNetServer().CreateMessage(Newtonsoft.Json.JsonConvert.SerializeObject(temp));
+                    NetOutgoingMessage mvmntMessage = ServerNetworkSceneComponent.GetNetServer().CreateMessage(Newtonsoft.Json.JsonConvert.SerializeObject(temp, new StringEnumConverter()));
                     sender.SendMessage(mvmntMessage, NetDeliveryMethod.ReliableOrdered, 0);
                 }
 
@@ -157,7 +186,7 @@ namespace GameServer.Types.Components.SceneComponents
             else
             {
                 MessageTemplate temp = new MessageTemplate("Failure.", MessageType.LoginFailure);
-                NetOutgoingMessage mvmntMessage = ServerNetworkSceneComponent.GetNetServer().CreateMessage(Newtonsoft.Json.JsonConvert.SerializeObject(temp));
+                NetOutgoingMessage mvmntMessage = ServerNetworkSceneComponent.GetNetServer().CreateMessage(Newtonsoft.Json.JsonConvert.SerializeObject(temp, new StringEnumConverter()));
                 sender.SendMessage(mvmntMessage, NetDeliveryMethod.ReliableOrdered, 0);
             }
 
@@ -170,7 +199,7 @@ namespace GameServer.Types.Components.SceneComponents
             //TODO: add better character creation later
             //TODO: Change login.username to requrested character name
             login.SetCharacter(new CharacterPlayer(0, 0, login.username, new WeaponItem[ConstatValues.EquipmentLength], new WeaponItem[ConstatValues.BaseInventoryLength]));
-            string tempC = Newtonsoft.Json.JsonConvert.SerializeObject(login.GetCharacter());
+            string tempC = Newtonsoft.Json.JsonConvert.SerializeObject(login.GetCharacter(), new StringEnumConverter());
             SQLManager.AddToSQL(login.username, login.password, tempC);
         }
 
@@ -197,7 +226,7 @@ namespace GameServer.Types.Components.SceneComponents
                 CharacterPlayer characterPlayer = login.GetCharacter();
 
                 //Saves data to SQL database
-                string characterString = Newtonsoft.Json.JsonConvert.SerializeObject(characterPlayer);
+                string characterString = Newtonsoft.Json.JsonConvert.SerializeObject(characterPlayer, new StringEnumConverter());
                 SQLManager.UpdateToSQL(login.username, characterString);
 
                 //removes login manager

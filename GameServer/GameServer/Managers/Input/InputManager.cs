@@ -12,6 +12,7 @@ namespace Server.Managers
 {
     class InputManager
     {
+        public static bool IsShiftDown;
         public InputManager()
         {
         }
@@ -23,7 +24,7 @@ namespace Server.Managers
             float speed = 100;
             try
             {
-                
+                IsShiftDown = false;
                 var dir = Vector2.Zero;
                 foreach (var key in keys)
                 {
@@ -48,9 +49,12 @@ namespace Server.Managers
                             break;
                         case Keys.T:
                             Entity e = Core.Scene.FindEntity(character._name);
-                            e.Position = Vector2.Zero;
-                            e.Transform.Position = Vector2.Zero;
+                            e.Position = new Vector2(100, 100);
+                            e.Transform.Position = new Vector2(100, 100);
                             character.AddItemToInventory(ItemManager.GenerateItem());
+                            break;
+                        case Keys.LeftShift:
+                            IsShiftDown = true;
                             break;
 
                         default:

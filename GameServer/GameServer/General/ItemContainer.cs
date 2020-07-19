@@ -19,7 +19,7 @@ namespace GameServer.General
             itemBasesList = FileManager.GetItemInformation("ItemData.json");
             foreach (var item in itemBasesList)
             {
-                switch (item.Rarity)
+                switch (item.GetRarity())
                 {
                     case ItemRarity.Normal:
                         itemBaseNormal.Add(item);
