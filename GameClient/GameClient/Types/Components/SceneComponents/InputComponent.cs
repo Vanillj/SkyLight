@@ -11,6 +11,7 @@ using Server.Managers;
 using Server.Types;
 using System;
 using System.Collections.Generic;
+using Direction = Nez.Direction;
 
 namespace GameClient.Types.Components.SceneComponents
 {
@@ -21,6 +22,10 @@ namespace GameClient.Types.Components.SceneComponents
         private float currentMouseWheelValue, previousMouseWheelValue;
         private Entity Entity;
         public static Skin skin = Skin.CreateDefaultSkin();
+
+        public static Direction direction = Direction.Right;
+        public static bool IsMoving = false;
+
         public InputComponent(Entity entity, Camera camera)
         {
             Entity = entity;
@@ -45,7 +50,8 @@ namespace GameClient.Types.Components.SceneComponents
 
             if (Input.CurrentKeyboardState.GetPressedKeys().Length > 0)
                 SendKeyboardRequest(new KeyboardState(KeyboardChange()));
-
+            else
+                IsMoving = false;
             //Update mouse
             //if (Input.LeftMouseButtonPressed || Input.RightMouseButtonPressed ||Input.MousePositionDelta != Point.Zero)
             //MouseChange();
@@ -58,6 +64,7 @@ namespace GameClient.Types.Components.SceneComponents
         //TODO: Change to customizable keybindings later
         private Keys[] KeyboardChange()
         {
+
             KeyboardState newState = Input.CurrentKeyboardState;
             KeyboardState OldKeyboardState = Input.PreviousKeyboardState;
 
@@ -117,7 +124,9 @@ namespace GameClient.Types.Components.SceneComponents
 
             if (newState.IsKeyDown(Keys.S) && !OldKeyboardState.IsKeyDown(Keys.S))
             {
+                direction = Direction.Down;
 
+                IsMoving = true;
             }
             else if (newState.IsKeyDown(Keys.S) && OldKeyboardState.IsKeyDown(Keys.S))
             {
@@ -126,6 +135,8 @@ namespace GameClient.Types.Components.SceneComponents
                 //LoginManagerClient.GetCharacter()._pos.Y += 1f;
                 keys.Add(Keys.S);
                 dir.Y = 1f;
+
+                IsMoving = true;
             }
             else if (!newState.IsKeyDown(Keys.S) && OldKeyboardState.IsKeyDown(Keys.S))
             {
@@ -135,6 +146,9 @@ namespace GameClient.Types.Components.SceneComponents
 
             if (newState.IsKeyDown(Keys.W) && !OldKeyboardState.IsKeyDown(Keys.W))
             {
+                direction = Direction.Up;
+
+                IsMoving = true;
             }
             else if (newState.IsKeyDown(Keys.W) && OldKeyboardState.IsKeyDown(Keys.W))
             {
@@ -143,6 +157,8 @@ namespace GameClient.Types.Components.SceneComponents
                 //LoginManagerClient.GetCharacter()._pos.Y -= 1f;
                 dir.Y = -1f;
                 keys.Add(Keys.W);
+                IsMoving = true;
+
             }
             else if (!newState.IsKeyDown(Keys.W) && OldKeyboardState.IsKeyDown(Keys.W))
             {
@@ -152,7 +168,8 @@ namespace GameClient.Types.Components.SceneComponents
 
             if (newState.IsKeyDown(Keys.A) && !OldKeyboardState.IsKeyDown(Keys.A))
             {
-
+                direction = Direction.Left;
+                IsMoving = true;
             }
             else if (newState.IsKeyDown(Keys.A) && OldKeyboardState.IsKeyDown(Keys.A))
             {
@@ -161,6 +178,7 @@ namespace GameClient.Types.Components.SceneComponents
                 //LoginManagerClient.GetCharacter()._pos.X -= 1f;
                 keys.Add(Keys.A);
                 dir.X = -1f;
+                IsMoving = true;
             }
             else if (!newState.IsKeyDown(Keys.A) && OldKeyboardState.IsKeyDown(Keys.A))
             {
@@ -170,6 +188,8 @@ namespace GameClient.Types.Components.SceneComponents
 
             if (newState.IsKeyDown(Keys.D) && !OldKeyboardState.IsKeyDown(Keys.D))
             {
+                direction = Direction.Right;
+                IsMoving = true;
 
             }
             else if (newState.IsKeyDown(Keys.D) && OldKeyboardState.IsKeyDown(Keys.D))
@@ -179,6 +199,7 @@ namespace GameClient.Types.Components.SceneComponents
                 //LoginManagerClient.GetCharacter()._pos.X += 1f;
                 keys.Add(Keys.D);
                 dir.X = 1f;
+                IsMoving = true;
             }
             else if (!newState.IsKeyDown(Keys.D) && OldKeyboardState.IsKeyDown(Keys.D))
             {

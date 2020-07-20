@@ -20,13 +20,14 @@ namespace GameClient.Scenes
 {
     class MainScene : BaseScene
     {
-        Texture2D playerTexture = Core.Content.Load<Texture2D>("images/playerTexture");
+
+        SpriteAnimation Idle = TextureContainer.KnightAnimationAtlas.GetAnimation("Idle");
+        SpriteAnimation Movement = TextureContainer.KnightAnimationAtlas.GetAnimation("Movement");
         public override Table Table { get; set; }
 
         public Entity player;
 
-        public MainScene()
-        { }
+        public MainScene() : base() { }
 
         public override void Initialize()
         {
@@ -45,10 +46,17 @@ namespace GameClient.Scenes
                 {
                     Entity e = FindEntity(others._name);
                     
-                    float delta = Time.DeltaTime;
                     if (e == null)
                     {
-                        CreateEntity(others._name).SetPosition(others.physicalPosition).AddComponent(new SpriteRenderer(playerTexture)).AddComponent(new PlayerComponent(others)).AddComponent(new TextComponent(Graphics.Instance.BitmapFont, others._name, new Vector2(0, 0), Color.White).SetVerticalAlign(VerticalAlign.Top).SetHorizontalAlign(HorizontalAlign.Center)).SetRenderLayer(2);
+                        e = CreateEntity(others._name);
+                        e.SetPosition(others.physicalPosition)
+                            .AddComponent(new OtherPlayerComponent(others))
+                            .AddComponent(new TextComponent(Graphics.Instance.BitmapFont, others._name, new Vector2(0, 0), Color.White)
+                            .SetVerticalAlign(VerticalAlign.Top).SetHorizontalAlign(HorizontalAlign.Center))
+                            .SetRenderLayer(2);
+                        SpriteAnimator ani = e.AddComponent<SpriteAnimator>();
+                        ani.AddAnimation("Idle", Idle);
+                        ani.AddAnimation("Movement", Movement);
                     }
                 }
             }

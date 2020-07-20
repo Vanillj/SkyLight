@@ -111,7 +111,6 @@
     </Compile>
     <Compile Include="GameClient.cs" />
     <Compile Include="General\TextureContainer.cs" />
-    <Compile Include="Managers\Input\DirectionEnum.cs" />
     <Compile Include="Managers\LoadManager.cs" />
     <Compile Include="Managers\Networking\ClientNetworkManager.cs" />
     <Compile Include="Managers\Networking\LoginManagerClient.cs" />
@@ -129,6 +128,7 @@
     <Compile Include="Scenes\BaseScene.cs" />
     <Compile Include="Scenes\LoginScene.cs" />
     <Compile Include="Scenes\MainScene.cs" />
+    <Compile Include="Types\Components\Components\OtherPlayerComponent.cs" />
     <Compile Include="Types\Components\Components\PlayerComponent.cs" />
     <Compile Include="Types\Components\SceneComponents\InputComponent.cs" />
     <Compile Include="Types\Components\SceneComponents\MessageSceneComponent.cs" />
@@ -210,6 +210,9 @@
     </None>
     <None Include="app.config" />
     <None Include="app.manifest" />
+    <None Include="Assets\Animations\Knight.atlas">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Assets\Items\Items.atlas">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -218,7 +221,9 @@
     </None>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Managers\Input\" />
+  </ItemGroup>
   <ItemGroup>
     <None Include="..\..\GameServer\GameServer\Assets\Grasstiles.tsx">
       <Link>Assets\Grasstiles.tsx</Link>
@@ -318,11 +323,17 @@
       <Link>Assets\Tiles\Objects\Chests\red-open.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Assets\Animations\Knight.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Assets\Items\Items.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\UI\UI.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Wallpaper\game_background.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>

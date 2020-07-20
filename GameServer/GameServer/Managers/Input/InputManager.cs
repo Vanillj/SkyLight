@@ -21,7 +21,7 @@ namespace Server.Managers
         {
             if (character == null)
                 return;
-            float speed = 100;
+            float speed = 75;
             try
             {
                 IsShiftDown = false;
@@ -48,9 +48,6 @@ namespace Server.Managers
                             dir.X = 1f;
                             break;
                         case Keys.T:
-                            Entity e = Core.Scene.FindEntity(character._name);
-                            e.Position = new Vector2(100, 100);
-                            e.Transform.Position = new Vector2(100, 100);
                             character.AddItemToInventory(ItemManager.GenerateItem());
                             break;
                         case Keys.LeftShift:

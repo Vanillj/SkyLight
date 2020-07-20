@@ -1,43 +1,40 @@
-﻿using Client.Managers;
-using Microsoft.Xna.Framework;
+﻿using GameClient.Types.Components.SceneComponents;
 using Nez;
-using Server.Types;
+using Nez.Sprites;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace GameClient.Types.Components
+namespace GameClient.Types.Components.Components
 {
     class PlayerComponent : Component, IUpdatable
     {
-        private CharacterPlayer _character;
-
-        public PlayerComponent(CharacterPlayer character)
-        {
-            _character = character;
-        }
-
+        private Direction oldDir;
         public void Update()
         {
-            //gets character, if it exists move it
-            CharacterPlayer character = null;
-            foreach (CharacterPlayer characterPlayer in LoginManagerClient.OtherCharacters)
+            Direction dir = InputComponent.direction;
+            bool mov = InputComponent.IsMoving;
+            SpriteAnimator ani = Entity.GetComponent<SpriteAnimator>();
+            if (oldDir != dir)
             {
-                if (_character._name.Equals(characterPlayer._name))
+                if (InputComponent.direction == Direction.Left)
                 {
-                    character = characterPlayer;
+                    ani.FlipX = true;
                 }
-            }
-            if (character != null)
-                _character = character;
-            //Change to find later
-            //CharacterPlayer character = LoginManagerClient.Othercharacters.Find(item => item._name.Equals(_character._name));
-            if (LoginManagerClient.OtherCharacters != null && character == null)
-            {
-                Entity.Destroy();
-            }
-            else
-            {
-                Entity.Transform.Position = new Vector2(MathHelper.Lerp(Entity.Transform.Position.X, _character.physicalPosition.X, 0.02f), MathHelper.Lerp(Entity.Transform.Position.Y, _character.physicalPosition.Y, 0.02f));
+                else if (dir == Direction.Right)
+                {
+                    ani.FlipX = false;
+                }
+                oldDir = dir;
             }
 
+
+            if (mov)
+                ani.Play("Movement");
+            else
+                ani.Play("Idle");
         }
     }
 }

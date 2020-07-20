@@ -101,7 +101,6 @@ namespace GameClient.Types.Components.SceneComponents
 
                     FollowCamera fCamera = new FollowCamera(mainScene.player, FollowCamera.CameraStyle.CameraWindow) { FollowLerp = 0.3f };
                     mainScene.player.AddComponent(fCamera);
-                    //mainScene.Camera.AddComponent(fCamera);
 
                     Core.StartSceneTransition(new FadeTransition(() => mainScene));
                     break;

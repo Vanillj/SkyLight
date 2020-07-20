@@ -14,12 +14,13 @@ namespace GameClient
         {
             Content.RootDirectory = "Content";
             policy = Scene.SceneResolutionPolicy.None;
+            Scene.SetDefaultDesignResolution(1920, 1080, policy);
             Window.AllowUserResizing = true;
         }
         protected override void Initialize()
         {
             base.Initialize();
-            GraphicsDevice.SetRenderTarget(new RenderTarget2D(GraphicsDevice, 64, 48));
+            //GraphicsDevice.SetRenderTarget(new RenderTarget2D(GraphicsDevice, 64, 48));
             ClientNetworkManager.SetupClient();
             PauseOnFocusLost = false;
             IsFixedTimeStep = false;

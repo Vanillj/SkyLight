@@ -207,6 +207,9 @@
     <None Include="Assets\map.tmx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Assets\World.tmx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Credentials.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

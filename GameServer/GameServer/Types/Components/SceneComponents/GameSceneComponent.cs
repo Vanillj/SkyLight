@@ -20,12 +20,9 @@ namespace GameServer.Types
 
         }
 
-        Texture2D playerTexture;
-
         public override void OnEnabled()
         {
             base.OnEnabled();
-            playerTexture = Scene.Content.Load<Texture2D>("images/playerTexture");
 
         }
 
