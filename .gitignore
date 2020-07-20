@@ -9,6 +9,7 @@ GameClient/GameClient/.env
 
 #Assets
 GameServer/GameServer/Assets/
+GameClient/GameClient/Assets/
 
 #ItemGenerator
 ItemGenerator/
