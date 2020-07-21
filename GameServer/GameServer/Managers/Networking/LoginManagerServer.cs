@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Converters;
+using Nez;
 using Server.Managers;
 using Server.Types;
 
@@ -6,8 +7,8 @@ namespace Client.Managers
 {
     class LoginManagerServer : LoginManagerHead
     {
-
         private CharacterPlayer AccountCharacter;
+        private Entity CharacterEntity;
 
         public LoginManagerServer(string username, string password) : base(username, password)
         {}
@@ -39,6 +40,15 @@ namespace Client.Managers
         public override int GetHashCode()
         {
             return GetUniqueID().GetHashCode();
+        }
+
+        public void SetEntity(Entity entity)
+        {
+            CharacterEntity = entity;
+        }
+        public Entity GetEntity()
+        {
+            return CharacterEntity;
         }
     }
 }

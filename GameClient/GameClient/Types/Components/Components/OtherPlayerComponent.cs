@@ -24,6 +24,21 @@ namespace GameClient.Types.Components
                 if (_character._name.Equals(characterPlayer._name))
                 {
                     character = characterPlayer;
+                    SpriteAnimator ani = Entity.GetComponent<SpriteAnimator>();
+                    if (_character._pos != characterPlayer._pos)
+                    {
+                        if (ani.CurrentAnimationName != "Movement")
+                        {
+                            ani.Play("Movement");
+                        }
+                    }
+                    else
+                    {
+                        if (ani.CurrentAnimationName != "Idle")
+                        {
+                            ani.Play("Idle");
+                        }
+                    }
                 }
             }
             if (character != null)

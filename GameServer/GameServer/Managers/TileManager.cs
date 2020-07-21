@@ -2,12 +2,6 @@
 using Nez;
 using Nez.Farseer;
 using Nez.Tiled;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GameServer.Types.Components.SceneComponents
 {
@@ -63,10 +57,14 @@ namespace GameServer.Types.Components.SceneComponents
                             }
                         }
                     }
-                    //TODO: Add collision depending on the object type
                 }
             }
             tmr.SetLayersToRender(new string[] { });
+        }
+
+        private void Setup()
+        {
+
         }
     }
 }

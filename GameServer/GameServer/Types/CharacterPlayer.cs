@@ -12,7 +12,7 @@ namespace Server.Types
         public WeaponItem[] Equipment; //Added later from the ID
         public WeaponItem[] Inventory;
         public Vector2 physicalPosition = new Vector2(0, 0);
-
+        public string LastMultiLocation { get; set; } //Last location that is not solo or group locked
         public CharacterPlayer(float x, float y, string name, WeaponItem[] equipment, WeaponItem[] inventory) : base(x, y, name)
         {
             Equipment = equipment;
@@ -22,7 +22,6 @@ namespace Server.Types
         //help methods bellow to create character and such
         public void MoveToPos(Vector2 vector)
         {
-            //Change later with animations etc.
             _pos = vector;
         }
 

@@ -12,8 +12,6 @@ namespace GameClient.Managers
 {
     class PlayerManager
     {
-
-        
         public static Entity CreatePlayer(CharacterPlayer player, BaseScene scene)
         {
             SpriteAnimation Idle = TextureContainer.KnightAnimationAtlas.GetAnimation("Idle");

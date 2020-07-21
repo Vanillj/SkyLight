@@ -15,6 +15,7 @@ using Nez.UI;
 using Server.Scenes;
 using Server.Types;
 using System;
+using System.Collections.Generic;
 
 namespace GameClient.Scenes
 {
@@ -33,11 +34,9 @@ namespace GameClient.Scenes
         {
             base.Initialize();
 
-            
-
-            new ItemContainer().GenerateItems();
 
         }
+
         public override void Update()
         {
             if(LoginManagerClient.OtherCharacters != null)
@@ -57,6 +56,7 @@ namespace GameClient.Scenes
                         SpriteAnimator ani = e.AddComponent<SpriteAnimator>();
                         ani.AddAnimation("Idle", Idle);
                         ani.AddAnimation("Movement", Movement);
+                        ani.Play("Idle");
                     }
                 }
             }

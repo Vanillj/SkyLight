@@ -77,6 +77,7 @@ namespace GameServer.Types.Components.SceneComponents
                     case MessageType.Movement:
                         Keys[] KeyState = Newtonsoft.Json.JsonConvert.DeserializeObject<Keys[]>(template.JsonMessage, new StringEnumConverter());
                         CharacterPlayer c = CharacterManager.GetLoginManagerFromUniqueID(message.SenderConnection.RemoteUniqueIdentifier).GetCharacter();
+                        c = MapContainer.FindCharacterByID(message.SenderConnection.RemoteUniqueIdentifier);
                         InputManager.CalculateMovement(c, KeyState);
                         break;
 

@@ -67,14 +67,8 @@
     <Compile Include="..\..\GameServer\GameServer\General\ConstatValues.cs">
       <Link>General\ConstatValues.cs</Link>
     </Compile>
-    <Compile Include="..\..\GameServer\GameServer\General\ItemContainer.cs">
-      <Link>General\ItemContainer.cs</Link>
-    </Compile>
     <Compile Include="..\..\GameServer\GameServer\Managers\CryptoManager.cs">
       <Link>Managers\CryptoManager.cs</Link>
-    </Compile>
-    <Compile Include="..\..\GameServer\GameServer\Managers\FileManager.cs">
-      <Link>Types\FileManager.cs</Link>
     </Compile>
     <Compile Include="..\..\GameServer\GameServer\Types\CharacterHead.cs">
       <Link>Types\CharacterHead.cs</Link>
@@ -99,6 +93,9 @@
     </Compile>
     <Compile Include="..\..\GameServer\GameServer\Types\Item\WeaponTypes.cs">
       <Link>Types\Item\WeaponTypes.cs</Link>
+    </Compile>
+    <Compile Include="..\..\GameServer\GameServer\Types\Map\MapType.cs">
+      <Link>Types\Map\MapType.cs</Link>
     </Compile>
     <Compile Include="..\..\GameServer\GameServer\Types\Networking\DataTemplate.cs">
       <Link>Types\Networking\DataTemplate.cs</Link>
@@ -133,6 +130,7 @@
     <Compile Include="Types\Components\SceneComponents\InputComponent.cs" />
     <Compile Include="Types\Components\SceneComponents\MessageSceneComponent.cs" />
     <Compile Include="Types\Components\SceneComponents\TileSceneComponent.cs" />
+    <Compile Include="Types\Map\Map.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="BCrypt.Net, Version=0.1.4141.31969, Culture=neutral, PublicKeyToken=f3bc8f8c31beeb49, processorArchitecture=MSIL">
@@ -203,10 +201,6 @@
     <None Include="..\..\GameServer\GameServer\Assets\map.tmx">
       <Link>Assets\map.tmx</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\GameServer\GameServer\ItemData.json">
-      <Link>ItemData.json</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="app.config" />
     <None Include="app.manifest" />

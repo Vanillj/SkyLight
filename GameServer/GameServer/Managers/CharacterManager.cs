@@ -1,5 +1,7 @@
 ﻿using Client.Managers;
 using FarseerPhysics.Dynamics;
+using GameServer.General;
+using GameServer.Types;
 using GameServer.Types.Components;
 using Nez;
 using Nez.Farseer;
@@ -48,6 +50,9 @@ namespace Server.Managers
         {
             CharacterPlayer character = login.GetCharacter();
             //might not be needed
+            MapLayer layer = MapContainer.AssignPlayer(login);
+
+
             Entity e = Core.Scene.FindEntity(character._name);
             if (e == null)
             {
@@ -55,10 +60,10 @@ namespace Server.Managers
 
                 scene.CreateEntity(character._name).SetPosition(character.physicalPosition)
                     .AddComponent(fbody)
-                    .AddComponent(new FSCollisionCircle(10))
-                    .AddComponent(new PlayerComponent(login))
+                    .AddComponent(new FSCollisionCircle(25))
+                    .AddComponent(new PlayerComponent(login) { CurrentLayer = layer })
                     .AddComponent(new Mover())
-                    .AddComponent(new CircleCollider(10));
+                    .AddComponent(new CircleCollider(25));
                 fbody.Body.FixedRotation = true;
 
             }

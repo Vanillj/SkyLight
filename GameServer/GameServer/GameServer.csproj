@@ -43,8 +43,9 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="General\ItemContainer.cs" />
+    <Compile Include="Types\Item\ItemContainer.cs" />
     <Compile Include="General\ConstatValues.cs" />
+    <Compile Include="Types\Map\MapContainer.cs" />
     <Compile Include="Managers\FileManager.cs" />
     <Compile Include="Managers\ItemManager.cs" />
     <Compile Include="Managers\Networking\MessageManager.cs" />
@@ -69,6 +70,10 @@
     <Compile Include="Types\Item\EqupmentBase.cs" />
     <Compile Include="Types\Item\Texture2DE.cs" />
     <Compile Include="Types\Item\WeaponItem.cs" />
+    <Compile Include="Types\Components\Components\MapComponent.cs" />
+    <Compile Include="Types\Map\MapLayer.cs" />
+    <Compile Include="Types\Map\Map.cs" />
+    <Compile Include="Types\Map\MapType.cs" />
     <Compile Include="Types\Networking\DataTemplate.cs" />
     <Compile Include="Types\Item\ItemBase.cs" />
     <Compile Include="Types\Item\ItemEnums.cs" />
@@ -207,14 +212,17 @@
     <None Include="Assets\map.tmx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\World.tmx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    <None Include="Assets\Maps\map.tmx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Credentials.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="ItemData.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    <None Include="Data\ItemData.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\MapData.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
   </ItemGroup>
@@ -305,6 +313,14 @@
     <Content Include="Assets\Tiles\Objects\Chests\red-open.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Include="Assets\Maps\Grasstiles.tsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Assets\Maps\tiles.tsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </TypeScriptCompile>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />

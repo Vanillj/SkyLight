@@ -1,4 +1,5 @@
-﻿using GameServer.Types;
+﻿using GameServer.General;
+using GameServer.Types;
 using GameServer.Types.Components.SceneComponents;
 using Microsoft.Xna.Framework;
 using Nez.UI;
@@ -37,6 +38,7 @@ namespace GameServer.Scenes
 
         public override void OnStart()
         {
+            MapContainer.LoadMaps();
             tileManager.SetupTiles();
             base.OnStart();
         }

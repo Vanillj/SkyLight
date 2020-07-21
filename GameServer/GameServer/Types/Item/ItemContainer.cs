@@ -16,7 +16,7 @@ namespace GameServer.General
 
         public void LoadFromFile()
         {
-            itemBasesList = FileManager.GetItemInformation("ItemData.json");
+            itemBasesList = FileManager.GetItemInformation("Data/ItemData.json");
             foreach (var item in itemBasesList)
             {
                 switch (item.GetRarity())

@@ -5,7 +5,6 @@
 
 #Env
 GameServer/GameServer/Credentials.json
-GameClient/GameClient/.env
 
 #Assets
 GameServer/GameServer/Assets/

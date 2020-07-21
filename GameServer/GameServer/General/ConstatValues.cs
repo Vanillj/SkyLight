@@ -8,8 +8,10 @@ namespace GameServer.General
         //Constants
         public const int EquipmentLength = 10;
         public const int BaseInventoryLength = 10;
-        public const string ItemDataFileName = "ItemData.json";
+        public const int MaxConnectionsToLayer = 20;
 
+        public const string ItemDataFileName = "ItemData.json";
+        public const string DefaultMap = "map";
 
         //Variables that need to be set
         private static string _ConnectionID;

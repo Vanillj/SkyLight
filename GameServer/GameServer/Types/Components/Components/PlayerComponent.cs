@@ -1,6 +1,8 @@
 ﻿using Client.Managers;
+using GameServer.General;
 using GameServer.Managers.Networking;
 using Nez;
+using Nez.BitmapFonts;
 using Nez.Farseer;
 using Server.Managers;
 using Server.Types;
@@ -11,6 +13,7 @@ namespace GameServer.Types.Components
     class PlayerComponent : Component, IUpdatable
     {
         LoginManagerServer loginManager;
+        public MapLayer CurrentLayer;
 
         public PlayerComponent(LoginManagerServer loginManager)
         {
@@ -33,28 +36,51 @@ namespace GameServer.Types.Components
             //Updates every 1/20 second
             if (timeSpan > 0.05)
             {
-                HashSet<LoginManagerServer> characterlist = CharacterManager.GetLoginManagerServerList();
-
-                if (characterlist != null && characterlist.Count > 0 && loginManager != null)
+                loginManager.GetCharacter().LastMultiLocation = "map";
+                if (CurrentLayer != null)
                 {
-                    CharacterPlayer tempc = loginManager.GetCharacter();
+                    HashSet<LoginManagerServer> characterlist = null;
+                    var list = MapContainer.GetMapByName(loginManager.GetCharacter().LastMultiLocation).GetMapLayers();
+                    foreach (var item in list)
+                    {
+                        foreach (var logins in item.LayerLogins)
+                        {
+                            if (logins.GetCharacter()._name.Equals(loginManager.GetCharacter()._name))
+                            {
+                                characterlist = item.LayerLogins;
+                                break;
+                            }
+                        }
+                    }
 
-                    //sets the position of the entity's physical body as the physical position
-                    FSRigidBody v = Core.Scene.FindEntity(tempc._name).GetComponent<FSRigidBody>();
-                    
-                    tempc.physicalPosition = v.Transform.Position;
+                    if (characterlist != null && characterlist.Count > 0 && loginManager != null)
+                    {
+                        CharacterPlayer tempc = loginManager.GetCharacter();
 
-                    DataTemplate dataTemplate = new DataTemplate { 
-                        RecieverCharacter = tempc, 
-                        OthersCharacters = FillRecieverList(characterlist) 
-                    };
+                        //sets the position of the entity's physical body as the physical position
+                        FSRigidBody v = Core.Scene.FindEntity(tempc._name).GetComponent<FSRigidBody>();
 
-                    string posString = Newtonsoft.Json.JsonConvert.SerializeObject(dataTemplate);
-                    
-                    MessageManager.SendStringToUniqueID(posString, loginManager.GetUniqueID(), MessageType.GameUpdate);
+                        tempc.physicalPosition = v.Transform.Position;
+
+                        DataTemplate dataTemplate = new DataTemplate
+                        {
+                            RecieverCharacter = tempc,
+                            OthersCharacters = FillRecieverList(characterlist)
+                        };
+
+                        string posString = Newtonsoft.Json.JsonConvert.SerializeObject(dataTemplate);
+
+                        MessageManager.SendStringToUniqueID(posString, loginManager.GetUniqueID(), MessageType.GameUpdate);
+                    }
                 }
+
             }
 
+        }
+
+        public void SetMapLayer(MapLayer layer)
+        {
+            CurrentLayer = layer;
         }
 
         private List<CharacterPlayer> FillRecieverList(HashSet<LoginManagerServer> characterlist)
