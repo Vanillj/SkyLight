@@ -6,13 +6,7 @@ using Microsoft.Xna.Framework;
 using Nez;
 using Nez.Farseer;
 using Nez.Tiled;
-using Server.Managers;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GameServer.Types.Map
 {
@@ -49,16 +43,16 @@ namespace GameServer.Types.Map
 
         public void RemoveFromLayer(LoginManagerServer login)
         {
-            foreach (var item in MapLayers)
+            foreach (var layer in MapLayers)
             {
-                if (item.LayerLogins.Contains(login))
+                if (layer.LayerLogins.Contains(login))
                 {
-                    item.RemoveLoginFromLayer(login);
+                    layer.RemoveLoginFromLayer(login);
                 }
             }
         }
 
-        public void AssignToLayer(Scene scene, LoginManagerServer login)
+        public void AssignToLayer(Scene scene, LoginManagerServer login, PlayerComponent pc = null)
         {
             MapLayer assignedLayer = null;
 
@@ -68,7 +62,7 @@ namespace GameServer.Types.Map
                 assignedLayer = MapLayers.Find(l => 
                 { 
                     if (l != null) 
-                        return l.LayerLogins.Count < ConstatValues.MaxConnectionsToLayer; 
+                        return l.LayerLogins.Count < ConstantValues.MaxConnectionsToLayer; 
                     return false; 
                 });
                 //if none found then make new layer
@@ -88,14 +82,19 @@ namespace GameServer.Types.Map
             {
                 FSRigidBody fbody = new FSRigidBody().SetBodyType(BodyType.Dynamic).SetIgnoreGravity(true).SetLinearDamping(15f);
 
-                scene.CreateEntity(login.GetCharacter()._name).SetPosition(login.GetCharacter().physicalPosition)
-                    .AddComponent(fbody)
+                e = scene.CreateEntity(login.GetCharacter()._name).SetPosition(login.GetCharacter().physicalPosition);
+                    e.AddComponent(fbody)
                     .AddComponent(new FSCollisionCircle(25))
                     .AddComponent(new PlayerComponent(login) { CurrentLayer = assignedLayer })
                     .AddComponent(new Mover())
                     .AddComponent(new CircleCollider(25));
                 fbody.Body.FixedRotation = true;
+                login.SetEntity(e);
 
+            }
+            if (pc != null)
+            {
+                pc.CurrentLayer = assignedLayer;
             }
         }
 
@@ -110,9 +109,9 @@ namespace GameServer.Types.Map
         {
             MapLayer newLayer;
             if (ID != -1)
-                newLayer = new MapLayer(LayerID, ID);
+                newLayer = new MapLayer(MapName, LayerID, ID);
             else
-                newLayer = new MapLayer(LayerID);
+                newLayer = new MapLayer(MapName, LayerID);
 
             MapLayers.Add(newLayer);
             LayerID++;
@@ -141,7 +140,7 @@ namespace GameServer.Types.Map
                             if (type == TmxObjectType.Ellipse)
                             {
                                 //Draw Ellipse as collision
-                                Core.Scene.CreateEntity(obj.Name, new Vector2(Entity.Position.X + tile.Position.X * tile.Tileset.TileWidth + obj.Width / 2, Entity.Position.Y + tile.Position.Y * tile.Tileset.TileHeight + obj.Height / 2))
+                                Entity.Scene.CreateEntity(obj.Name, new Vector2(Entity.Position.X + tile.Position.X * tile.Tileset.TileWidth + obj.Width / 2, Entity.Position.Y + tile.Position.Y * tile.Tileset.TileHeight + obj.Height / 2))
                                     .AddComponent(new FSCollisionEllipse(obj.Width / 2, obj.Height / 2))
                                     .AddComponent(new CircleCollider((obj.Width + obj.Height) / 4)); // have to get an average of sides, hence / 4
                             }
@@ -149,14 +148,14 @@ namespace GameServer.Types.Map
                             {
                                 Vector2[] points = obj.Points;
 
-                                Core.Scene.CreateEntity(obj.Name, new Vector2(Entity.Position.X + tile.Tileset.TileWidth * tile.Position.X + obj.X, Entity.Position.Y + tile.Tileset.TileHeight * tile.Position.Y + obj.Y))
+                                Entity.Scene.CreateEntity(obj.Name, new Vector2(Entity.Position.X + tile.Tileset.TileWidth * tile.Position.X + obj.X, Entity.Position.Y + tile.Tileset.TileHeight * tile.Position.Y + obj.Y))
                                     .AddComponent(new FSCollisionPolygon(points))
                                     .AddComponent(new PolygonCollider(points));
                             }
                             //basic is rectangle
                             else if (type == TmxObjectType.Basic)
                             {
-                                Core.Scene.CreateEntity(obj.Name, new Vector2(Entity.Position.X + tile.Position.X * tile.Tileset.TileWidth + obj.Width / 2, Entity.Position.Y + tile.Position.Y * tile.Tileset.TileHeight + obj.Height / 2))
+                                Entity.Scene.CreateEntity(obj.Name, new Vector2(Entity.Position.X + tile.Position.X * tile.Tileset.TileWidth + obj.Width / 2, Entity.Position.Y + tile.Position.Y * tile.Tileset.TileHeight + obj.Height / 2))
                                     .AddComponent(new FSCollisionBox(obj.Width, obj.Height))
                                     .AddComponent(new BoxCollider(obj.Width, obj.Height));
                                 Entity.AddComponent(new FSCollisionBox(obj.Width, obj.Height)).AddComponent(new BoxCollider(obj.Width, obj.Height));

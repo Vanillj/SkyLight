@@ -1,4 +1,5 @@
-﻿using Server.Types;
+﻿using Newtonsoft.Json.Converters;
+using Server.Types;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,14 +19,24 @@ namespace Server.Managers
             this.MessageType = MessageType;
         }
 
-        public static string TemplateToJson(List<MessageTemplate> obj)
+        public string TemplateToJson()
         {
-            return Newtonsoft.Json.JsonConvert.SerializeObject(obj);
+            return MessageTemplate.TemplateToJson(this);
+        }
+
+        public static string TemplateToJson(MessageTemplate obj)
+        {
+            return Newtonsoft.Json.JsonConvert.SerializeObject(obj, new StringEnumConverter());
         }
 
         public static MessageTemplate JsonToTemplate(string str)
         {
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<MessageTemplate>(str);
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<MessageTemplate>(str, new StringEnumConverter());
+        }
+
+        internal static string TemplateToJsonList(List<MessageTemplate> queueList)
+        {
+            return Newtonsoft.Json.JsonConvert.SerializeObject(queueList);
         }
     }
 }

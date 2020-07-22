@@ -17,6 +17,7 @@ namespace Server.Types
         LoginSuccess,
         LoginFailure,
         Register,
+        MapChange,
         GameUpdate,
         EquipItem,
         UnEquipItem

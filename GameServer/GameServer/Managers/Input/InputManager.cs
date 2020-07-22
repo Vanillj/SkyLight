@@ -1,4 +1,6 @@
-﻿using FarseerPhysics.Dynamics;
+﻿using Client.Managers;
+using FarseerPhysics.Dynamics;
+using GameServer.General;
 using GameServer.Managers;
 using GameServer.Types.Item;
 using Microsoft.Xna.Framework;
@@ -17,7 +19,7 @@ namespace Server.Managers
         {
         }
 
-        public static void CalculateMovement(CharacterPlayer character, Keys[] keys)
+        public static void CalculateMovement(CharacterPlayer character, Keys[] keys, long ID)
         {
             if (character == null)
                 return;
@@ -49,6 +51,8 @@ namespace Server.Managers
                             break;
                         case Keys.T:
                             character.AddItemToInventory(ItemManager.GenerateItem());
+                            LoginManagerServer login = MapContainer.GetLoginByID(ID);
+                            MapContainer.MoveLoginToMap(login, MapContainer.GetMapByName("MapTwo"));
                             break;
                         case Keys.LeftShift:
                             IsShiftDown = true;

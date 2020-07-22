@@ -41,7 +41,7 @@ namespace GameClient.Managers
         {
             if (!QueueList.Any())
                 return;
-            NetOutgoingMessage message1 = ClientNetworkManager.client.CreateMessage(MessageTemplate.TemplateToJson(QueueList));
+            NetOutgoingMessage message1 = ClientNetworkManager.client.CreateMessage(MessageTemplate.TemplateToJsonList(QueueList));
             ClientNetworkManager.client.SendMessage(message1, NetDeliveryMethod.ReliableOrdered);
 
             //Always end with empty list

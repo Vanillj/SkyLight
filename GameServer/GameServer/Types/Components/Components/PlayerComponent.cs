@@ -54,7 +54,7 @@ namespace GameServer.Types.Components
                             RecieverCharacter = tempc,
                             OthersCharacters = FillRecieverList(characterlist)
                         };
-
+                        dataTemplate.RecieverCharacter.physicalPosition = dataTemplate.RecieverCharacter.physicalPosition - MapContainer.GetMapByName(CurrentLayer.MapName).Entity.Position;
                         string posString = Newtonsoft.Json.JsonConvert.SerializeObject(dataTemplate);
 
                         MessageManager.SendStringToUniqueID(posString, loginManager.GetUniqueID(), MessageType.GameUpdate);
@@ -82,6 +82,8 @@ namespace GameServer.Types.Components
                 //TODO: distance should depend on settings or screen resolution
                 if (!loginManager.GetUniqueID().Equals(l.GetUniqueID()) && distance < 2000)
                 {
+                    tempC.physicalPosition -= MapContainer.GetMapByName(CurrentLayer.MapName).Entity.Position;
+                    tempC._pos -= MapContainer.GetMapByName(CurrentLayer.MapName).Entity.Position;
                     temp.Add(tempC);
                 }
             }

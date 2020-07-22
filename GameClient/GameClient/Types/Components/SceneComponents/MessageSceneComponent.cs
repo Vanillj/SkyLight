@@ -13,6 +13,7 @@ using Nez.UI;
 using Server.Managers;
 using Server.Types;
 using System.Collections.Generic;
+using System.Linq;
 using Debug = System.Diagnostics.Debug;
 
 namespace GameClient.Types.Components.SceneComponents
@@ -86,37 +87,48 @@ namespace GameClient.Types.Components.SceneComponents
         //TODO: Put into their own functions
         private void CustomMessage(NetIncomingMessage message)
         {
-            var template = Newtonsoft.Json.JsonConvert.DeserializeObject<MessageTemplate>(message.ReadString());
-
-            switch (template.MessageType)
+            MessageTemplate template;
+            string ms = message.ReadString();
+            if (ms != null)
             {
-                //TODO: Put These into functions
-                case MessageType.LoginSuccess:
-                    Debug.WriteLine("Login and recieved sucessfully!");
-                    MainScene mainScene = new MainScene();
-                    CharacterPlayer player = Newtonsoft.Json.JsonConvert.DeserializeObject<CharacterPlayer>(template.JsonMessage);
-                    MessageManager.GetLoginManagerClient().SetCharacter(player);
+                template = Newtonsoft.Json.JsonConvert.DeserializeObject<MessageTemplate>(ms);
 
-                    mainScene.player = PlayerManager.CreatePlayer(player, mainScene);
+                switch (template.MessageType)
+                {
+                    //TODO: Put These into functions
+                    case MessageType.LoginSuccess:
+                        Debug.WriteLine("Login and recieved sucessfully!");
+                        MainScene mainScene = new MainScene();
+                        CharacterPlayer player = Newtonsoft.Json.JsonConvert.DeserializeObject<CharacterPlayer>(template.JsonMessage);
+                        MessageManager.GetLoginManagerClient().SetCharacter(player);
 
-                    FollowCamera fCamera = new FollowCamera(mainScene.player, FollowCamera.CameraStyle.CameraWindow) { FollowLerp = 0.3f };
-                    mainScene.player.AddComponent(fCamera);
+                        mainScene.player = PlayerManager.CreatePlayer(player, mainScene);
 
-                    Core.StartSceneTransition(new FadeTransition(() => mainScene));
-                    break;
+                        FollowCamera fCamera = new FollowCamera(mainScene.player, FollowCamera.CameraStyle.CameraWindow) { FollowLerp = 0.3f };
+                        mainScene.player.AddComponent(fCamera);
 
-                case MessageType.LoginFailure:
-                    Debug.WriteLine("Failed to login! Try again");
-                    break;
+                        Core.StartSceneTransition(new FadeTransition(() => mainScene));
+                        break;
 
-                case MessageType.Movement:
-                    Vector2 vector2 = Newtonsoft.Json.JsonConvert.DeserializeObject<Vector2>(template.JsonMessage);
-                    LoginManagerClient.GetCharacter().MoveToPos(vector2);
-                    break;
-                case MessageType.GameUpdate:
-                    GameUpdateState(template.JsonMessage);
-                    break;
+                    case MessageType.LoginFailure:
+                        Debug.WriteLine("Failed to login! Try again");
+                        break;
+
+                    case MessageType.Movement:
+                        Vector2 vector2 = Newtonsoft.Json.JsonConvert.DeserializeObject<Vector2>(template.JsonMessage);
+                        LoginManagerClient.GetCharacter().MoveToPos(vector2);
+                        break;
+                    case MessageType.GameUpdate:
+                        GameUpdateState(template.JsonMessage);
+                        break;
+                    case MessageType.MapChange:
+                        TileSceneComponent tsc = Scene.GetSceneComponent<TileSceneComponent>();
+                        Map.Map map = tsc.MapList.FirstOrDefault(m => m.MapName.Equals(template.JsonMessage));
+                        tsc.ChangeMap(map);
+                        break;
+                }
             }
+            
         }
         private bool CheckIfNeedToUpdate(CharacterPlayer current, CharacterPlayer recieved)
         {

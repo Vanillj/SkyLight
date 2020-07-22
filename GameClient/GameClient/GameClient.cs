@@ -9,12 +9,12 @@ namespace GameClient
 {
     public class GameClient : Core
     {
-        Scene.SceneResolutionPolicy policy;
+        //Scene.SceneResolutionPolicy policy;
         public GameClient() : base()
         {
             Content.RootDirectory = "Content";
-            policy = Scene.SceneResolutionPolicy.None;
-            Scene.SetDefaultDesignResolution(1920, 1080, policy);
+            //policy = Scene.SceneResolutionPolicy.None;
+            //Scene.SetDefaultDesignResolution(1920, 1080, policy);
             Window.AllowUserResizing = true;
         }
         protected override void Initialize()
@@ -23,7 +23,7 @@ namespace GameClient
             //GraphicsDevice.SetRenderTarget(new RenderTarget2D(GraphicsDevice, 64, 48));
             ClientNetworkManager.SetupClient();
             PauseOnFocusLost = false;
-            IsFixedTimeStep = false;
+            //IsFixedTimeStep = false;
 
             Scene = new LoginScene();
         }

@@ -64,8 +64,8 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="..\..\GameServer\GameServer\General\ConstatValues.cs">
-      <Link>General\ConstatValues.cs</Link>
+    <Compile Include="..\..\GameServer\GameServer\General\ConstantValues.cs">
+      <Link>General\ConstantValues.cs</Link>
     </Compile>
     <Compile Include="..\..\GameServer\GameServer\Managers\CryptoManager.cs">
       <Link>Managers\CryptoManager.cs</Link>
@@ -108,6 +108,7 @@
     </Compile>
     <Compile Include="GameClient.cs" />
     <Compile Include="General\TextureContainer.cs" />
+    <Compile Include="Managers\FileManager.cs" />
     <Compile Include="Managers\LoadManager.cs" />
     <Compile Include="Managers\Networking\ClientNetworkManager.cs" />
     <Compile Include="Managers\Networking\LoginManagerClient.cs" />
@@ -201,6 +202,14 @@
     <None Include="..\..\GameServer\GameServer\Assets\map.tmx">
       <Link>Assets\map.tmx</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\GameServer\GameServer\Assets\MapTwo.tmx">
+      <Link>Assets\MapTwo.tmx</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\GameServer\GameServer\Data\MapData.json">
+      <Link>Data\MapData.json</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="app.config" />
     <None Include="app.manifest" />

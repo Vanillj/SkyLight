@@ -2,5 +2,9 @@
   {
     "MapType": "1",
     "MapName": "map"
+  },
+  {
+    "MapType": "0",
+    "MapName": "MapTwo"
   }
 ]

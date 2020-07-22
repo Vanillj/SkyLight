@@ -19,13 +19,17 @@ namespace GameServer.Types
         float totalTime = 0;
         public bool ToDestroy = false;
 
-        public MapLayer(long LayerID, long CreatorID)
+        public string MapName { get; }
+
+        public MapLayer(string MapName, long LayerID, long CreatorID)
         {
+            this.MapName = MapName;
             this.LayerID = LayerID;
             this.CreatorID = CreatorID;
         }
-        public MapLayer(long LayerID)
+        public MapLayer(string MapName, long LayerID)
         {
+            this.MapName = MapName;
             this.LayerID = LayerID;
         }
 

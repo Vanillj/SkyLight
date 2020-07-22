@@ -16,7 +16,7 @@ namespace Server.Managers
 
         public static void SetUpSQL()
         {
-            connectionString = "Server=balarama.db.elephantsql.com; Port=5432;User Id=" + ConstatValues.ConnectionID + "; Password=" + ConstatValues.ConnectionCredential + "; Database=hxhyscft;";
+            connectionString = "Server=balarama.db.elephantsql.com; Port=5432;User Id=" + ConstantValues.ConnectionID + "; Password=" + ConstantValues.ConnectionCredential + "; Database=hxhyscft;";
             try
             {
                 cn = new NpgsqlConnection(connectionString);

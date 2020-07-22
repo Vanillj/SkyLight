@@ -12,6 +12,7 @@ using Server.Types;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using Debug = System.Diagnostics.Debug;
 
 namespace GameServer.Types.Components.SceneComponents
@@ -77,7 +78,7 @@ namespace GameServer.Types.Components.SceneComponents
                     case MessageType.Movement:
                         Keys[] KeyState = Newtonsoft.Json.JsonConvert.DeserializeObject<Keys[]>(template.JsonMessage, new StringEnumConverter());
                         CharacterPlayer c = MapContainer.FindCharacterByID(message.SenderConnection.RemoteUniqueIdentifier);
-                        InputManager.CalculateMovement(c, KeyState);
+                        InputManager.CalculateMovement(c, KeyState, message.SenderConnection.RemoteUniqueIdentifier);
                         break;
 
                     case MessageType.Login:
@@ -165,7 +166,6 @@ namespace GameServer.Types.Components.SceneComponents
                 if (success)
                 {
                     Console.WriteLine("Logged in with \"" + LoginManagerServerUser.username + "\" to Database");
-
                     string characterString = Newtonsoft.Json.JsonConvert.SerializeObject(LoginManagerServerUser.GetCharacter(), new StringEnumConverter());
                     MessageTemplate TempMessageTemplate = new MessageTemplate(characterString, MessageType.LoginSuccess);
 
@@ -197,7 +197,7 @@ namespace GameServer.Types.Components.SceneComponents
             //TODO: Move register to its own function
             //TODO: add better character creation later
             //TODO: Change login.username to requrested character name
-            login.SetCharacter(new CharacterPlayer(0, 0, login.username, new WeaponItem[ConstatValues.EquipmentLength], new WeaponItem[ConstatValues.BaseInventoryLength]) { LastMultiLocation = ConstatValues.DefaultMap });
+            login.SetCharacter(new CharacterPlayer(0, 0, login.username, new WeaponItem[ConstantValues.EquipmentLength], new WeaponItem[ConstantValues.BaseInventoryLength]) { LastMultiLocation = ConstantValues.DefaultMap });
             string tempC = Newtonsoft.Json.JsonConvert.SerializeObject(login.GetCharacter(), new StringEnumConverter());
             SQLManager.AddToSQL(login.username, login.password, tempC);
         }
