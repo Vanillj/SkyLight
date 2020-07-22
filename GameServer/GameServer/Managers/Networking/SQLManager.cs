@@ -2,6 +2,9 @@
 using System;
 using System.Diagnostics;
 using Npgsql;
+using GameServer;
+using Lidgren.Network;
+using Client.Managers;
 
 namespace Server.Managers
 {
@@ -28,9 +31,13 @@ namespace Server.Managers
 
         public static void SaveAllToSQL()
         {
-            foreach (var user in CharacterManager.GetLoginManagerServerList())
+            foreach (NetConnection Connection in ServerNetworkSceneComponent.GetNetServer().Connections)
             {
-                UpdateToSQL(user.username, user.GetCharacter().CreateJsonFromCharacter());
+                LoginManagerServer user = MapContainer.GetLoginByID(Connection.RemoteUniqueIdentifier);
+                if (user != null && user.GetCharacter() != null)
+                {
+                    UpdateToSQL(user.username, user.GetCharacter().CreateJsonFromCharacter());
+                }
             }
         }
 

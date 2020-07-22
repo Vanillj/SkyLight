@@ -1,5 +1,7 @@
 ﻿using Client.Managers;
+using FarseerPhysics.Dynamics;
 using GameServer.General;
+using GameServer.Types.Components;
 using Microsoft.Xna.Framework;
 using Nez;
 using Nez.Farseer;
@@ -20,7 +22,7 @@ namespace GameServer.Types.Map
         public string MapName { get; set; }
         private TmxMap TileMap;
         private List<MapLayer> MapLayers = new List<MapLayer>();
-        private int LayerID = 0;
+        private long LayerID = 0;
         private Vector2 SpawnPoint;
 
         public Map(string MapName, MapType MapType)
@@ -31,36 +33,70 @@ namespace GameServer.Types.Map
         }
         public void Update()
         {
+            List<MapLayer> layersToDestroy = new List<MapLayer>();
             foreach (var layer in MapLayers)
             {
                 layer.Update();
+                if (layer.ToDestroy)
+                    layersToDestroy.Add(layer);
+            }
+
+            if (layersToDestroy.Count > 0)
+                foreach (var layer in layersToDestroy)
+                    MapLayers.Remove(layer);
+
+        }
+
+        public void RemoveFromLayer(LoginManagerServer login)
+        {
+            foreach (var item in MapLayers)
+            {
+                if (item.LayerLogins.Contains(login))
+                {
+                    item.RemoveLoginFromLayer(login);
+                }
             }
         }
 
-        public MapLayer AssignToLayer(LoginManagerServer login)
+        public void AssignToLayer(Scene scene, LoginManagerServer login)
         {
             MapLayer assignedLayer = null;
 
             if (MapType == MapType.Multi)
             {
+                //find first that isn't full
                 assignedLayer = MapLayers.Find(l => 
                 { 
                     if (l != null) 
                         return l.LayerLogins.Count < ConstatValues.MaxConnectionsToLayer; 
                     return false; 
                 });
-
+                //if none found then make new layer
                 if (assignedLayer == null)
-                    assignedLayer = CreateNewLayer();
+                    assignedLayer = CreateNewLayer(-1);
                 login.GetCharacter().LastMultiLocation = MapName;
             }
             else if (MapType == MapType.Single)
             {
-                assignedLayer = CreateNewLayer();
+                assignedLayer = CreateNewLayer(login.GetUniqueID());
             }
 
             assignedLayer.AddLoginToLayer(login);
-            return assignedLayer;
+
+            Entity e = Core.Scene.FindEntity(login.GetCharacter()._name);
+            if (e == null)
+            {
+                FSRigidBody fbody = new FSRigidBody().SetBodyType(BodyType.Dynamic).SetIgnoreGravity(true).SetLinearDamping(15f);
+
+                scene.CreateEntity(login.GetCharacter()._name).SetPosition(login.GetCharacter().physicalPosition)
+                    .AddComponent(fbody)
+                    .AddComponent(new FSCollisionCircle(25))
+                    .AddComponent(new PlayerComponent(login) { CurrentLayer = assignedLayer })
+                    .AddComponent(new Mover())
+                    .AddComponent(new CircleCollider(25));
+                fbody.Body.FixedRotation = true;
+
+            }
         }
 
         public override void OnEnabled()
@@ -70,9 +106,14 @@ namespace GameServer.Types.Map
             SetupCustomCollision();
         }
 
-        private MapLayer CreateNewLayer()
+        private MapLayer CreateNewLayer(long ID)
         {
-            MapLayer newLayer = new MapLayer(LayerID);
+            MapLayer newLayer;
+            if (ID != -1)
+                newLayer = new MapLayer(LayerID, ID);
+            else
+                newLayer = new MapLayer(LayerID);
+
             MapLayers.Add(newLayer);
             LayerID++;
             return newLayer;
@@ -147,6 +188,11 @@ namespace GameServer.Types.Map
         public List<MapLayer> GetMapLayers()
         {
             return MapLayers;
+        }
+
+        public TmxMap GetTmxMap()
+        {
+            return TileMap;
         }
 
     }

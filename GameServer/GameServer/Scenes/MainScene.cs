@@ -27,6 +27,8 @@ namespace GameServer.Scenes
             AddSceneComponent<MessageSceneComponent>();
             //Load tiles and environment
             tileManager = new TileManager();
+
+            //probably dont need this one
             //Game update scene
             AddSceneComponent<GameSceneComponent>();
         }
@@ -38,8 +40,8 @@ namespace GameServer.Scenes
 
         public override void OnStart()
         {
-            MapContainer.LoadMaps();
-            tileManager.SetupTiles();
+            MapContainer.LoadMaps(this);
+            //tileManager.SetupTiles();
             base.OnStart();
         }
     }

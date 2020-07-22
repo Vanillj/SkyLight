@@ -76,8 +76,7 @@ namespace GameServer.Types.Components.SceneComponents
                 {
                     case MessageType.Movement:
                         Keys[] KeyState = Newtonsoft.Json.JsonConvert.DeserializeObject<Keys[]>(template.JsonMessage, new StringEnumConverter());
-                        CharacterPlayer c = CharacterManager.GetLoginManagerFromUniqueID(message.SenderConnection.RemoteUniqueIdentifier).GetCharacter();
-                        c = MapContainer.FindCharacterByID(message.SenderConnection.RemoteUniqueIdentifier);
+                        CharacterPlayer c = MapContainer.FindCharacterByID(message.SenderConnection.RemoteUniqueIdentifier);
                         InputManager.CalculateMovement(c, KeyState);
                         break;
 
@@ -104,7 +103,7 @@ namespace GameServer.Types.Components.SceneComponents
 
                         if (index != -1)
                         {
-                            CharacterPlayer characterPlayer = CharacterManager.GetLoginManagerFromUniqueID(message.SenderConnection.RemoteUniqueIdentifier).GetCharacter();
+                            CharacterPlayer characterPlayer = MapContainer.FindCharacterByID(message.SenderConnection.RemoteUniqueIdentifier);
                             WeaponItem newItem = characterPlayer.GetInventory().ElementAt(index);
                             if (newItem != null)
                             {
@@ -121,7 +120,7 @@ namespace GameServer.Types.Components.SceneComponents
                         }
                         break;
                     case MessageType.UnEquipItem:
-                        CharacterPlayer character = CharacterManager.GetLoginManagerFromUniqueID(message.SenderConnection.RemoteUniqueIdentifier).GetCharacter();
+                        CharacterPlayer character = MapContainer.FindCharacterByID(message.SenderConnection.RemoteUniqueIdentifier);
                         var inventory = character.GetInventory();
                         var equpment = character.GetEquipment();
                         int invIndex = -1;
@@ -173,8 +172,7 @@ namespace GameServer.Types.Components.SceneComponents
                     //Returns the character to the player
                     NetOutgoingMessage mvmntMessage = ServerNetworkSceneComponent.GetNetServer().CreateMessage(Newtonsoft.Json.JsonConvert.SerializeObject(TempMessageTemplate, new StringEnumConverter()));
                     sender.SendMessage(mvmntMessage, NetDeliveryMethod.ReliableOrdered, 0);
-                    CharacterManager.AddLoginManagerServerToList(LoginManagerServerUser);
-                    CharacterManager.AddCharacterToScene(Scene, LoginManagerServerUser);
+                    MapContainer.AssignLogin(Scene, LoginManagerServerUser);
                 }
                 else
                 {
@@ -199,7 +197,7 @@ namespace GameServer.Types.Components.SceneComponents
             //TODO: Move register to its own function
             //TODO: add better character creation later
             //TODO: Change login.username to requrested character name
-            login.SetCharacter(new CharacterPlayer(0, 0, login.username, new WeaponItem[ConstatValues.EquipmentLength], new WeaponItem[ConstatValues.BaseInventoryLength]));
+            login.SetCharacter(new CharacterPlayer(0, 0, login.username, new WeaponItem[ConstatValues.EquipmentLength], new WeaponItem[ConstatValues.BaseInventoryLength]) { LastMultiLocation = ConstatValues.DefaultMap });
             string tempC = Newtonsoft.Json.JsonConvert.SerializeObject(login.GetCharacter(), new StringEnumConverter());
             SQLManager.AddToSQL(login.username, login.password, tempC);
         }
@@ -221,7 +219,7 @@ namespace GameServer.Types.Components.SceneComponents
         {
             NetServer server = ServerNetworkSceneComponent.GetNetServer();
 
-            LoginManagerServer login = CharacterManager.GetLoginManagerFromUniqueID(sender.RemoteUniqueIdentifier);
+            LoginManagerServer login = MapContainer.GetLoginByID(sender.RemoteUniqueIdentifier);
             if (login != null)
             {
                 CharacterPlayer characterPlayer = login.GetCharacter();
@@ -231,7 +229,8 @@ namespace GameServer.Types.Components.SceneComponents
                 SQLManager.UpdateToSQL(login.username, characterString);
 
                 //removes login manager
-                CharacterManager.RemoveLoginManagerServerFromListLoginManager(login);
+                MapContainer.RemoveLoginByID(login.GetUniqueID());
+
                 if (characterPlayer != null)
                 {
                     //removes entity

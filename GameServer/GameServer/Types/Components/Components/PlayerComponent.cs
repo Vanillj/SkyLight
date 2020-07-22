@@ -36,22 +36,9 @@ namespace GameServer.Types.Components
             //Updates every 1/20 second
             if (timeSpan > 0.05)
             {
-                loginManager.GetCharacter().LastMultiLocation = "map";
                 if (CurrentLayer != null)
                 {
-                    HashSet<LoginManagerServer> characterlist = null;
-                    var list = MapContainer.GetMapByName(loginManager.GetCharacter().LastMultiLocation).GetMapLayers();
-                    foreach (var item in list)
-                    {
-                        foreach (var logins in item.LayerLogins)
-                        {
-                            if (logins.GetCharacter()._name.Equals(loginManager.GetCharacter()._name))
-                            {
-                                characterlist = item.LayerLogins;
-                                break;
-                            }
-                        }
-                    }
+                    HashSet<LoginManagerServer> characterlist = CurrentLayer.LayerLogins;
 
                     if (characterlist != null && characterlist.Count > 0 && loginManager != null)
                     {
