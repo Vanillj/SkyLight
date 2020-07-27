@@ -14,7 +14,8 @@ namespace GameServer.Types.Components
     {
         LoginManagerServer loginManager;
         public MapLayer CurrentLayer;
-
+        public bool isChanneling = false;
+        public Entity Target;
         public PlayerComponent(LoginManagerServer loginManager)
         {
             this.loginManager = loginManager;
@@ -52,12 +53,13 @@ namespace GameServer.Types.Components
                         DataTemplate dataTemplate = new DataTemplate
                         {
                             RecieverCharacter = tempc,
-                            OthersCharacters = FillRecieverList(characterlist)
+                            OthersCharacters = FillRecieverList(characterlist, tempc)
                         };
+                        //makes the position relative to client's side of the map position
                         dataTemplate.RecieverCharacter.physicalPosition = dataTemplate.RecieverCharacter.physicalPosition - MapContainer.GetMapByName(CurrentLayer.MapName).Entity.Position;
                         string posString = Newtonsoft.Json.JsonConvert.SerializeObject(dataTemplate);
 
-                        MessageManager.SendStringToUniqueID(posString, loginManager.GetUniqueID(), MessageType.GameUpdate);
+                        MessageManager.SendStringToUniqueID(Entity.Scene, posString, loginManager.GetUniqueID(), MessageType.GameUpdate);
                     }
                 }
 
@@ -70,24 +72,24 @@ namespace GameServer.Types.Components
             CurrentLayer = layer;
         }
 
-        private List<CharacterPlayer> FillRecieverList(HashSet<LoginManagerServer> characterlist)
+        private List<CharacterPlayer> FillRecieverList(HashSet<LoginManagerServer> characterlist, CharacterPlayer reciever)
         {
-            List<CharacterPlayer> temp = new List<CharacterPlayer>();
+            List<CharacterPlayer> others = new List<CharacterPlayer>();
             foreach (LoginManagerServer l in characterlist)
             {
                 CharacterPlayer tempC = l.GetCharacter();
 
-                double distance = tempC._pos.Length();
+                double deltaDistance = reciever._pos.Length() - tempC._pos.Length();
 
                 //TODO: distance should depend on settings or screen resolution
-                if (!loginManager.GetUniqueID().Equals(l.GetUniqueID()) && distance < 2000)
+                if (!loginManager.GetUniqueID().Equals(l.GetUniqueID()) && deltaDistance < 2000)
                 {
                     tempC.physicalPosition -= MapContainer.GetMapByName(CurrentLayer.MapName).Entity.Position;
                     tempC._pos -= MapContainer.GetMapByName(CurrentLayer.MapName).Entity.Position;
-                    temp.Add(tempC);
+                    others.Add(tempC);
                 }
             }
-            return temp;
+            return others;
         }
 
         private void CheckIfConnected()

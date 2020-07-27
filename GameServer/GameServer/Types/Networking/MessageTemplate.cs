@@ -21,7 +21,7 @@ namespace Server.Managers
 
         public string TemplateToJson()
         {
-            return MessageTemplate.TemplateToJson(this);
+            return TemplateToJson(this);
         }
 
         public static string TemplateToJson(MessageTemplate obj)

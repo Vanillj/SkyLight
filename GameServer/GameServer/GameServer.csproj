@@ -43,6 +43,12 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Types\Abilities\Ability.cs" />
+    <Compile Include="Types\Abilities\AbilityContainer.cs" />
+    <Compile Include="Types\Abilities\ConeAbility.cs" />
+    <Compile Include="Types\Abilities\DoTAbility.cs" />
+    <Compile Include="Types\Abilities\TravelAbility.cs" />
+    <Compile Include="Types\Components\Components\ChannelingComponent.cs" />
     <Compile Include="Types\Item\ItemContainer.cs" />
     <Compile Include="General\ConstantValues.cs" />
     <Compile Include="Types\Map\MapContainer.cs" />
@@ -74,6 +80,7 @@
     <Compile Include="Types\Map\MapLayer.cs" />
     <Compile Include="Types\Map\Map.cs" />
     <Compile Include="Types\Map\MapType.cs" />
+    <Compile Include="Types\Networking\ChannelTemplate.cs" />
     <Compile Include="Types\Networking\DataTemplate.cs" />
     <Compile Include="Types\Item\ItemBase.cs" />
     <Compile Include="Types\Item\ItemEnums.cs" />

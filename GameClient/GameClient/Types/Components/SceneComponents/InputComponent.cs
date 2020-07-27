@@ -2,21 +2,27 @@
 using GameClient.Managers;
 using GameClient.Managers.UI;
 using GameClient.Scenes;
+using GameClient.Types.Components.Components;
+using GameServer.General;
 using Lidgren.Network;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Nez;
+using Nez.Sprites;
+using Nez.Textures;
 using Nez.UI;
 using Server.Managers;
 using Server.Types;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Direction = Nez.Direction;
 
 namespace GameClient.Types.Components.SceneComponents
 {
     class InputComponent : SceneComponent
     {
+        float timer = 0;
         public Camera Camera { get; set; }
 
         private float currentMouseWheelValue, previousMouseWheelValue;
@@ -36,9 +42,16 @@ namespace GameClient.Types.Components.SceneComponents
         {
             base.OnEnabled();
         }
+
         public override void Update()
         {
-            CheckForInput();
+            timer += Time.DeltaTime;
+
+            if (timer >= ConstantValues.UpdateFrequency)
+            {
+                timer = 0;
+                CheckForInput();
+            }
             base.Update();
         }
         public void CheckForInput()
@@ -53,8 +66,8 @@ namespace GameClient.Types.Components.SceneComponents
             else
                 IsMoving = false;
             //Update mouse
-            //if (Input.LeftMouseButtonPressed || Input.RightMouseButtonPressed ||Input.MousePositionDelta != Point.Zero)
-            //MouseChange();
+            if (Input.LeftMouseButtonPressed || Input.RightMouseButtonPressed || Input.MousePositionDelta != Point.Zero)
+                MouseChange();
 
             previousMouseWheelValue = currentMouseWheelValue;
             currentMouseWheelValue = Mouse.GetState().ScrollWheelValue;
@@ -64,12 +77,11 @@ namespace GameClient.Types.Components.SceneComponents
         //TODO: Change to customizable keybindings later
         private Keys[] KeyboardChange()
         {
-
             KeyboardState newState = Input.CurrentKeyboardState;
             KeyboardState OldKeyboardState = Input.PreviousKeyboardState;
 
             List<Keys> keys = new List<Keys>();
-            float speed = 100;
+            float speed = 500;
             var dir = Vector2.Zero;
 
             //might be usable later for abilities and more.
@@ -88,7 +100,7 @@ namespace GameClient.Types.Components.SceneComponents
                     if (i.GetTitleLabel().GetText().Equals("Inventory"))
                     {
                         exists = true;
-                    } 
+                    }
                 });
                 if (exists)
                 {
@@ -206,7 +218,7 @@ namespace GameClient.Types.Components.SceneComponents
                 // the player was holding the key down, but has just let it go
 
             }
-            var movement = dir * speed * Time.DeltaTime * 4;
+            var movement = dir * speed * Time.DeltaTime;
             if (movement != Vector2.Zero)
                 LoginManagerClient.GetCharacter()._pos += movement;
             return keys.ToArray();
@@ -214,86 +226,28 @@ namespace GameClient.Types.Components.SceneComponents
 
         private void MouseChange()
         {
-            Vector2 mousePosition = Input.MousePosition;
-            //Console.WriteLine(mousePosition);
-            if (Scene is MainScene)
+
+            Vector2 pos = Entity.Scene.Camera.MouseToWorldPoint();
+            List<Entity> entities = Scene.FindEntitiesWithTag(7);
+            foreach (var entity in entities)
             {
-                MainScene scene = Scene as MainScene;
+                SpriteAnimator sp = entity.GetComponent<SpriteAnimator>();
 
-                if (scene.UICanvas.Stage != null)
+                Rectangle rect = sp.CurrentAnimation.Sprites.ElementAt(0).SourceRect;
+                Rectangle rectangle = new Rectangle(entity.Position.ToPoint(), new Point((int)(rect.Width * entity.Scale.X), (int)(rect.Height * entity.Scale.Y)));
+                if (rectangle.Contains(pos))
                 {
-                    foreach (var item in scene.UICanvas.Stage.GetElements())
+                    
+                    if (Input.LeftMouseButtonPressed)
                     {
+                        MessageTemplate template = new MessageTemplate(Entity.Name, MessageType.Target);
+                        MessageManager.AddToQueue(template);
 
-                        if (item is Table)
+                        if (Scene is MainScene)
                         {
-                            foreach (var child in (item as Table).GetChildren())
-                            {
-                                if (child is Table)
-                                {
-                                    Table tab = child as Table;
-
-                                    foreach (var chilli in tab.GetChildren())
-                                    {
-
-                                    }
-
-                                }
-                            }
-                            int countX = 0;
-                            int countY = 0;
-                            Table t = item as Table;
-                            Element e = t.Hit(Input.MousePosition);
-
-                            if (e is Label)
-                            {
-                                (e as Label).SetFontColor(Color.Red);
-                            }
-                            Rectangle rt = new Rectangle((int)t.GetX(), (int)t.GetY(), (int)t.GetWidth(), (int)t.GetHeight());
-                            if (rt.Contains(mousePosition))
-                            {
-                                string s = "";
-                                foreach (var child in t.GetChildren())
-                                {
-                                    if (child is Label)
-                                    {
-                                        (child as Label).SetFontColor(Color.Red);
-                                    }
-                                }
-                            }
-                            if (e != null)
-                            {
-                                string s = "";
-                            }
-                            foreach (var child in t.GetChildren())
-                            {
-                                if (countX % 4 == 0)
-                                {
-                                    countX = 0;
-                                    countY++;
-                                }
-                                if (child is Label)
-                                {
-                                    Label l = child as Label;
-
-
-                                    float f = l.GetX();
-                                    float relativeX = t.GetX() + l.GetX() + countX * l.GetWidth();
-                                    float relativeY = t.GetY() + l.GetY() + countY * l.GetWidth();
-                                    Rectangle r = new Rectangle((int)relativeX, (int)relativeY, (int)l.GetWidth(), (int)l.GetHeight());
-
-                                    if (r.Contains(mousePosition))
-                                    {
-                                        Console.WriteLine("Inside");
-                                        l.SetFontColor(Color.Red);
-                                    }
-                                    else
-                                    {
-                                        l.SetFontColor(Color.White);
-                                    }
-                                }
-                                countX++;
-                            }
+                            MainScene scene = Scene as MainScene;
+                            Label component = new Label("Target: " + entity.Name).SetFontScale(5).SetFontColor(Color.Red);
+                            scene.Table.Add(component).SetRow();
                         }
                     }
                 }

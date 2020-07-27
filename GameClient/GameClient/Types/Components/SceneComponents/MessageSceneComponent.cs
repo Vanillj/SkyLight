@@ -4,6 +4,7 @@ using GameClient.Managers.UI;
 using GameClient.Managers.UI.Elements;
 using GameClient.Scenes;
 using GameClient.Types.Item;
+using GameServer.General;
 using GameServer.Types;
 using GameServer.Types.Item;
 using Lidgren.Network;
@@ -26,10 +27,9 @@ namespace GameClient.Types.Components.SceneComponents
 
         public override void Update()
         {
-
-            timeSpan += Time.DeltaTime;
             CheckForMessage();
-            if (timeSpan > 0.033)
+            timeSpan += Time.DeltaTime;
+            if (timeSpan > ConstantValues.UpdateFrequency)
             {
                 MessageManager.SendQueue();
                 timeSpan = 0;
@@ -41,7 +41,7 @@ namespace GameClient.Types.Components.SceneComponents
         {
             CheckConnection();
             NetIncomingMessage message;
-            if ((message = ClientNetworkManager.client.ReadMessage()) != null)
+            while ((message = ClientNetworkManager.client.ReadMessage()) != null)
             {
                 switch (message.MessageType)
                 {
@@ -89,6 +89,7 @@ namespace GameClient.Types.Components.SceneComponents
         {
             MessageTemplate template;
             string ms = message.ReadString();
+
             if (ms != null)
             {
                 template = Newtonsoft.Json.JsonConvert.DeserializeObject<MessageTemplate>(ms);

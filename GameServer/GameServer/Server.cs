@@ -17,6 +17,9 @@ namespace GameServer
             DebugRenderEnabled = true;
             PauseOnFocusLost = false;
 
+            IsFixedTimeStep = true;
+            TargetElapsedTime = TimeSpan.FromSeconds(1f / 144f);
+
             new ItemContainer().GenerateItems();
 
             //setup constant values

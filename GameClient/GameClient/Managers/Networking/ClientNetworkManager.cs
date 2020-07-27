@@ -20,7 +20,8 @@ namespace Client.Managers
                 return true;
 
             //TODO: ADD LATER
-            connection = client.Connect(host: "127.0.0.1", port: 100);
+            connection = client.Connect(host: "", port: 9000);
+            bool t = client.DiscoverKnownPeer("", 9000);
             if (connection != null && connection.Status == NetConnectionStatus.Connected)
             {
                 return true;

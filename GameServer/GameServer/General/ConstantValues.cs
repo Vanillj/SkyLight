@@ -10,7 +10,11 @@ namespace GameServer.General
         public const int BaseInventoryLength = 30;
         public const int MaxConnectionsToLayer = 20;
 
+        public const float UpdateFrequency = 1f/30;
+
         public const string ItemDataFileName = "ItemData.json";
+        public const string MapDataFileName = "";
+        public const string ClassDataFileName = "";
         public const string DefaultMap = "map";
 
         //Variables that need to be set

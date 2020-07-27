@@ -15,9 +15,11 @@ namespace Server.Managers
         public override void OnEnabled()
         {
             NetPeerConfiguration Configuration = new NetPeerConfiguration(ConstantValues.ServerString) { Port = (int)ConstantValues.Port };
+            Configuration.EnableMessageType(NetIncomingMessageType.ConnectionApproval);
+            Configuration.EnableMessageType(NetIncomingMessageType.StatusChanged);
             server = new NetServer(Configuration);
             server.Start();
-
+            
             base.OnEnabled();
         }
         public override void OnDisabled()

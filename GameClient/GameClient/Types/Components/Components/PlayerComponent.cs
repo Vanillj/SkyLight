@@ -1,4 +1,5 @@
 ﻿using GameClient.Types.Components.SceneComponents;
+using GameServer.General;
 using Nez;
 using Nez.Sprites;
 using System;
@@ -12,8 +13,10 @@ namespace GameClient.Types.Components.Components
     class PlayerComponent : Component, IUpdatable
     {
         private Direction oldDir;
+
         public void Update()
         {
+
             Direction dir = InputComponent.direction;
             bool mov = InputComponent.IsMoving;
             SpriteAnimator ani = Entity.GetComponent<SpriteAnimator>();
@@ -29,7 +32,6 @@ namespace GameClient.Types.Components.Components
                 }
                 oldDir = dir;
             }
-
 
             if (mov)
                 ani.Play("Movement");

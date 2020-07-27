@@ -20,6 +20,8 @@ namespace Server.Types
         MapChange,
         GameUpdate,
         EquipItem,
-        UnEquipItem
+        UnEquipItem,
+        StartChanneling,
+        Target
     };
 }

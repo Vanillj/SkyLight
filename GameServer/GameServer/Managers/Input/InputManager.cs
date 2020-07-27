@@ -19,11 +19,11 @@ namespace Server.Managers
         {
         }
 
-        public static void CalculateMovement(CharacterPlayer character, Keys[] keys, long ID)
+        public static bool CalculateMovement(CharacterPlayer character, Keys[] keys, long ID)
         {
             if (character == null)
-                return;
-            float speed = 75;
+                return false;
+            float speed = 350;
             try
             {
                 IsShiftDown = false;
@@ -75,14 +75,15 @@ namespace Server.Managers
                     {
                         //Debug.DrawLine(e.Position, e.Position + collisionResult.Normal * 100, Color.Black, 1f);
                     }
-
+                    return true;
                 }
+                
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
             }
-            
+            return false;
             
         }
 

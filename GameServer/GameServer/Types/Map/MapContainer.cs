@@ -72,7 +72,7 @@ namespace GameServer.General
             login.GetEntity().SetPosition(newMap.GetSpawnpoint() + newMap.Entity.Position);
             //MessageTemplate temp = new MessageTemplate(, MessageType.MapChange);
 
-            MessageManager.SendStringToUniqueID(newMap.MapName, login.GetUniqueID(), MessageType.MapChange);
+            MessageManager.SendStringToUniqueID(Scene, newMap.MapName, login.GetUniqueID(), MessageType.MapChange);
         }
 
         public static CharacterPlayer FindCharacterByID(long uniqueID)

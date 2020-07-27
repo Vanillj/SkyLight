@@ -1,7 +1,9 @@
 ﻿using Client.Managers;
 using GameClient.Types.Item;
 using GameServer.General;
+using GameServer.Managers.Networking;
 using GameServer.Scenes;
+using GameServer.Types.Components.Components;
 using GameServer.Types.Item;
 using Lidgren.Network;
 using Microsoft.Xna.Framework.Input;
@@ -32,6 +34,10 @@ namespace GameServer.Types.Components.SceneComponents
             NetServer server = ServerNetworkSceneComponent.GetNetServer();
             if ((message = server.ReadMessage()) != null)
             {
+                if (message.MessageType == NetIncomingMessageType.ConnectionApproval)
+                {
+                    message.SenderConnection.Approve();
+                }
                 CheckForMessage(message);
             }
 
@@ -73,12 +79,24 @@ namespace GameServer.Types.Components.SceneComponents
             QueueList.ForEach(template =>
             {
                 int index = -1;
+                CharacterPlayer character = null;
+                Entity e = null;
                 switch (template.MessageType)
                 {
                     case MessageType.Movement:
                         Keys[] KeyState = Newtonsoft.Json.JsonConvert.DeserializeObject<Keys[]>(template.JsonMessage, new StringEnumConverter());
-                        CharacterPlayer c = MapContainer.FindCharacterByID(message.SenderConnection.RemoteUniqueIdentifier);
-                        InputManager.CalculateMovement(c, KeyState, message.SenderConnection.RemoteUniqueIdentifier);
+                        character = MapContainer.FindCharacterByID(message.SenderConnection.RemoteUniqueIdentifier);
+                        bool moved = InputManager.CalculateMovement(character, KeyState, message.SenderConnection.RemoteUniqueIdentifier);
+                        if (moved)
+                        {
+                            e = Scene.FindEntity(character._name);
+                            if (e != null)
+                            {
+                                PlayerComponent playerComponent = e.GetComponent<PlayerComponent>();
+                                if (playerComponent != null)
+                                    playerComponent.isChanneling = false;
+                            }
+                        }
                         break;
 
                     case MessageType.Login:
@@ -104,24 +122,24 @@ namespace GameServer.Types.Components.SceneComponents
 
                         if (index != -1)
                         {
-                            CharacterPlayer characterPlayer = MapContainer.FindCharacterByID(message.SenderConnection.RemoteUniqueIdentifier);
-                            WeaponItem newItem = characterPlayer.GetInventory().ElementAt(index);
+                            character = MapContainer.FindCharacterByID(message.SenderConnection.RemoteUniqueIdentifier);
+                            WeaponItem newItem = character.GetInventory().ElementAt(index);
                             if (newItem != null)
                             {
                                 int type = (int)newItem.GetEqupmentType();
-                                WeaponItem currentItem = characterPlayer.Equipment[type];
+                                WeaponItem currentItem = character.Equipment[type];
 
                                 if (currentItem == null)
-                                    characterPlayer.Inventory[index] = null;
+                                    character.Inventory[index] = null;
                                 else
-                                    characterPlayer.Inventory[index] = currentItem;
+                                    character.Inventory[index] = currentItem;
 
-                                characterPlayer.Equipment[type] = newItem;
+                                character.Equipment[type] = newItem;
                             }
                         }
                         break;
                     case MessageType.UnEquipItem:
-                        CharacterPlayer character = MapContainer.FindCharacterByID(message.SenderConnection.RemoteUniqueIdentifier);
+                        character = MapContainer.FindCharacterByID(message.SenderConnection.RemoteUniqueIdentifier);
                         var inventory = character.GetInventory();
                         var equpment = character.GetEquipment();
                         int invIndex = -1;
@@ -146,6 +164,23 @@ namespace GameServer.Types.Components.SceneComponents
                             equpment[index] = null;
                         }
                         break;
+                    case MessageType.StartChanneling:
+                        character = MapContainer.FindCharacterByID(message.SenderConnection.RemoteUniqueIdentifier);
+                        e = Scene.FindEntity(character._name);
+                        PlayerComponent pc = e.GetComponent<PlayerComponent>();
+                        if (pc != null)
+                        {
+                            e.AddComponent(new ChannelingComponent(pc, 10));
+                        }
+                        break;
+                    case MessageType.Target:
+                        character = MapContainer.FindCharacterByID(message.SenderConnection.RemoteUniqueIdentifier);
+                        e = Scene.FindEntity(character._name);
+                        var et = Scene.FindEntity(template.JsonMessage);
+                        PlayerComponent p = e.GetComponent<PlayerComponent>();
+                        p.Target = et;
+                        break;
+
                 }
             });
 
@@ -217,32 +252,7 @@ namespace GameServer.Types.Components.SceneComponents
 
         private void OnDisconnected(NetConnection sender)
         {
-            NetServer server = ServerNetworkSceneComponent.GetNetServer();
-
-            LoginManagerServer login = MapContainer.GetLoginByID(sender.RemoteUniqueIdentifier);
-            if (login != null)
-            {
-                CharacterPlayer characterPlayer = login.GetCharacter();
-
-                //Saves data to SQL database
-                string characterString = Newtonsoft.Json.JsonConvert.SerializeObject(characterPlayer, new StringEnumConverter());
-                SQLManager.UpdateToSQL(login.username, characterString);
-
-                //removes login manager
-                MapContainer.RemoveLoginByID(login.GetUniqueID());
-
-                if (characterPlayer != null)
-                {
-                    //removes entity
-                    CharacterManager.RemoveCharacterFromScene(Scene, characterPlayer._name);
-                }
-            }
-
-            //removes the connection
-            server.Connections.Remove(sender);
-
-            Debug.WriteLine("Disconnected! Connected: " + ServerNetworkSceneComponent.GetNetServer().ConnectionsCount);
-            MainScene.ConnectedCount.SetText("Current connections: " + server.ConnectionsCount);
+            MessageManager.DisconnectConnection(sender, Scene);
         }
 
     }
