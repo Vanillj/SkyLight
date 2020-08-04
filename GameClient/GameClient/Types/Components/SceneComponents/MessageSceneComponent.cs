@@ -31,10 +31,15 @@ namespace GameClient.Types.Components.SceneComponents
             timeSpan += Time.DeltaTime;
             if (timeSpan > ConstantValues.UpdateFrequency)
             {
-                MessageManager.SendQueue();
-                timeSpan = 0;
+                FixedUpdate();
+                timeSpan -= ConstantValues.UpdateFrequency;
             }
             base.Update();
+        }
+
+        private void FixedUpdate()
+        {
+            MessageManager.SendQueue();
         }
 
         public void CheckForMessage()

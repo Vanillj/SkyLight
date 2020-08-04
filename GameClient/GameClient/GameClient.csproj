@@ -132,6 +132,8 @@
     <Compile Include="Types\Components\SceneComponents\MessageSceneComponent.cs" />
     <Compile Include="Types\Components\SceneComponents\TileSceneComponent.cs" />
     <Compile Include="Types\Map\Map.cs" />
+    <Compile Include="Types\Player\OtherPlayerEntity.cs" />
+    <Compile Include="Types\Player\PlayerEntity.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="BCrypt.Net, Version=0.1.4141.31969, Culture=neutral, PublicKeyToken=f3bc8f8c31beeb49, processorArchitecture=MSIL">
@@ -333,7 +335,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\UI\UI.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Wallpaper\game_background.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

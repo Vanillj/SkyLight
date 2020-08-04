@@ -1,5 +1,6 @@
 ﻿using Client.Managers;
 using GameClient.Managers;
+using Microsoft.Xna.Framework.Graphics;
 using Nez;
 using Nez.BitmapFonts;
 using Nez.Tiled;
@@ -35,6 +36,7 @@ namespace GameClient.Types.Components.SceneComponents
             {
                 entity = Scene.CreateEntity(map.MapName);
                 TiledMapRenderer tmr = entity.AddComponent(new TiledMapRenderer(map.TmxMap));
+                tmr.Material = new Material(BlendState.NonPremultiplied);
                 tmr.SetRenderLayer(1);
                 tmr.SetLayersToRender(new string[] { "Tile", "Collision", "Decoration", "CustomCollision" });
             }
@@ -44,6 +46,7 @@ namespace GameClient.Types.Components.SceneComponents
         {
             entity.RemoveComponent<TiledMapRenderer>();
             TiledMapRenderer tmr = entity.AddComponent(new TiledMapRenderer(newMap.TmxMap));
+            tmr.Material = new Material(BlendState.NonPremultiplied);
             tmr.SetRenderLayer(1);
             tmr.SetLayersToRender(new string[] { "Tile", "Collision", "Decoration", "CustomCollision" });
 

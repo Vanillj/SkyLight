@@ -49,33 +49,41 @@ namespace GameClient.Types.Components.SceneComponents
 
             if (timer >= ConstantValues.UpdateFrequency)
             {
-                timer = 0;
-                CheckForInput();
+                FixedUpdate();
+                timer -= ConstantValues.UpdateFrequency;
             }
+            
+            CheckForInput();
             base.Update();
         }
-        public void CheckForInput()
+
+        private void FixedUpdate()
+        {
+            CheckFixed();
+        }
+
+        #region Fixed Update
+        private void CheckFixed()
         {
             if (ClientNetworkManager.client.ConnectionStatus != NetConnectionStatus.Connected || Core.Scene is LoginScene)
                 return;
 
-            //Update Keyboard
-
             if (Input.CurrentKeyboardState.GetPressedKeys().Length > 0)
-                SendKeyboardRequest(new KeyboardState(KeyboardChange()));
-            else
-                IsMoving = false;
-            //Update mouse
-            if (Input.LeftMouseButtonPressed || Input.RightMouseButtonPressed || Input.MousePositionDelta != Point.Zero)
-                MouseChange();
+                SendKeyboardRequest(new KeyboardState(KeyboardFixed()));
+            
 
-            previousMouseWheelValue = currentMouseWheelValue;
-            currentMouseWheelValue = Mouse.GetState().ScrollWheelValue;
-            ScrollChange();
+            if (Input.LeftMouseButtonPressed || Input.RightMouseButtonPressed || Input.MousePositionDelta != Point.Zero)
+                FixedMouseChange();
+
         }
 
-        //TODO: Change to customizable keybindings later
-        private Keys[] KeyboardChange()
+        private void FixedMouseChange()
+        {
+
+            
+        }
+
+        private Keys[] KeyboardFixed()
         {
             KeyboardState newState = Input.CurrentKeyboardState;
             KeyboardState OldKeyboardState = Input.PreviousKeyboardState;
@@ -89,6 +97,161 @@ namespace GameClient.Types.Components.SceneComponents
             {
                 keys.Add(Keys.T);
             }
+            
+            //Generated inventory
+            if (newState.IsKeyDown(Keys.I) && OldKeyboardState.IsKeyUp(Keys.I))
+            {
+                keys.Add(Keys.I);
+            }
+
+            if (newState.IsKeyDown(Keys.C) && OldKeyboardState.IsKeyUp(Keys.C))
+            {
+                keys.Add(Keys.C);
+            }
+
+            if (newState.IsKeyDown(Keys.S) && !OldKeyboardState.IsKeyDown(Keys.S))
+            {
+                IsMoving = true;
+            }
+            else if (newState.IsKeyDown(Keys.S) && OldKeyboardState.IsKeyDown(Keys.S))
+            {
+                // the player is holding the key down
+                //LoginManagerClient.GetCharacter()._pos.Y += 3*60f * Time.DeltaTime;
+                //LoginManagerClient.GetCharacter()._pos.Y += 1f;
+                keys.Add(Keys.S);
+                dir.Y = 1f;
+
+                IsMoving = true;
+            }
+            else if (!newState.IsKeyDown(Keys.S) && OldKeyboardState.IsKeyDown(Keys.S))
+            {
+                // the player was holding the key down, but has just let it go
+
+            }
+
+            if (newState.IsKeyDown(Keys.W) && !OldKeyboardState.IsKeyDown(Keys.W))
+            {
+
+                IsMoving = true;
+            }
+            else if (newState.IsKeyDown(Keys.W) && OldKeyboardState.IsKeyDown(Keys.W))
+            {
+                // the player is holding the key down
+                //LoginManagerClient.GetCharacter()._pos.Y -= 3*60f * Time.DeltaTime;
+                //LoginManagerClient.GetCharacter()._pos.Y -= 1f;
+                dir.Y = -1f;
+                keys.Add(Keys.W);
+                IsMoving = true;
+
+            }
+            else if (!newState.IsKeyDown(Keys.W) && OldKeyboardState.IsKeyDown(Keys.W))
+            {
+                // the player was holding the key down, but has just let it go
+
+            }
+
+            if (newState.IsKeyDown(Keys.A) && !OldKeyboardState.IsKeyDown(Keys.A))
+            {
+                IsMoving = true;
+            }
+            else if (newState.IsKeyDown(Keys.A) && OldKeyboardState.IsKeyDown(Keys.A))
+            {
+                // the player is holding the key down
+                //LoginManagerClient.GetCharacter()._pos.X -= 3*60f * Time.DeltaTime;
+                //LoginManagerClient.GetCharacter()._pos.X -= 1f;
+                keys.Add(Keys.A);
+                dir.X = -1f;
+                IsMoving = true;
+            }
+            else if (!newState.IsKeyDown(Keys.A) && OldKeyboardState.IsKeyDown(Keys.A))
+            {
+                // the player was holding the key down, but has just let it go
+
+            }
+
+            if (newState.IsKeyDown(Keys.D) && !OldKeyboardState.IsKeyDown(Keys.D))
+            {
+                IsMoving = true;
+
+            }
+            else if (newState.IsKeyDown(Keys.D) && OldKeyboardState.IsKeyDown(Keys.D))
+            {
+                // the player is holding the key down
+                //LoginManagerClient.GetCharacter()._pos.X += 3*60f * Time.DeltaTime;
+                //LoginManagerClient.GetCharacter()._pos.X += 1f;
+                keys.Add(Keys.D);
+                dir.X = 1f;
+                IsMoving = true;
+            }
+            else if (!newState.IsKeyDown(Keys.D) && OldKeyboardState.IsKeyDown(Keys.D))
+            {
+                // the player was holding the key down, but has just let it go
+
+            }
+            var movement = dir * speed * Time.DeltaTime;
+            if (movement != Vector2.Zero)
+                LoginManagerClient.GetCharacter()._pos += movement;
+            return keys.ToArray();
+        }
+
+        public void ScrollChange()
+        {
+            if (currentMouseWheelValue > previousMouseWheelValue)
+            {
+                Camera.ZoomIn(.05f);
+            }
+
+            if (currentMouseWheelValue < previousMouseWheelValue)
+            {
+                Camera.ZoomOut(.05f);
+            }
+
+            if (Entity != null)
+            {
+                FollowCamera fc = Entity.GetComponent<FollowCamera>();
+                if (fc != null && fc.Camera != null)
+                {
+                    //So the camera is centered after zooming in our out
+                    fc.Follow(Entity, FollowCamera.CameraStyle.LockOn);
+
+                }
+            }
+
+        }
+        #endregion
+
+        #region Free Update
+        public void CheckForInput()
+        {
+            if (ClientNetworkManager.client.ConnectionStatus != NetConnectionStatus.Connected || Core.Scene is LoginScene)
+                return;
+
+            //Update Keyboard
+
+            if (Input.CurrentKeyboardState.GetPressedKeys().Length > 0)
+                SendKeyboardRequest(new KeyboardState(KeyboardChange()));
+            else
+                IsMoving = false;
+
+            //Update mouse
+            if (Input.LeftMouseButtonPressed || Input.RightMouseButtonPressed || Input.MousePositionDelta != Point.Zero)
+            {
+                FreeMouseChange();
+            }
+
+            previousMouseWheelValue = currentMouseWheelValue;
+            currentMouseWheelValue = Mouse.GetState().ScrollWheelValue;
+            ScrollChange();
+        }
+
+        //TODO: Change to customizable keybindings later
+        private Keys[] KeyboardChange()
+        {
+
+            KeyboardState newState = Input.CurrentKeyboardState;
+            KeyboardState OldKeyboardState = Input.PreviousKeyboardState;
+
+            List<Keys> keys = new List<Keys>();
 
             //Generated inventory
             if (newState.IsKeyDown(Keys.I) && OldKeyboardState.IsKeyUp(Keys.I))
@@ -140,93 +303,33 @@ namespace GameClient.Types.Components.SceneComponents
 
                 IsMoving = true;
             }
-            else if (newState.IsKeyDown(Keys.S) && OldKeyboardState.IsKeyDown(Keys.S))
-            {
-                // the player is holding the key down
-                //LoginManagerClient.GetCharacter()._pos.Y += 3*60f * Time.DeltaTime;
-                //LoginManagerClient.GetCharacter()._pos.Y += 1f;
-                keys.Add(Keys.S);
-                dir.Y = 1f;
-
-                IsMoving = true;
-            }
-            else if (!newState.IsKeyDown(Keys.S) && OldKeyboardState.IsKeyDown(Keys.S))
-            {
-                // the player was holding the key down, but has just let it go
-
-            }
-
             if (newState.IsKeyDown(Keys.W) && !OldKeyboardState.IsKeyDown(Keys.W))
             {
                 direction = Direction.Up;
 
                 IsMoving = true;
             }
-            else if (newState.IsKeyDown(Keys.W) && OldKeyboardState.IsKeyDown(Keys.W))
-            {
-                // the player is holding the key down
-                //LoginManagerClient.GetCharacter()._pos.Y -= 3*60f * Time.DeltaTime;
-                //LoginManagerClient.GetCharacter()._pos.Y -= 1f;
-                dir.Y = -1f;
-                keys.Add(Keys.W);
-                IsMoving = true;
-
-            }
-            else if (!newState.IsKeyDown(Keys.W) && OldKeyboardState.IsKeyDown(Keys.W))
-            {
-                // the player was holding the key down, but has just let it go
-
-            }
-
             if (newState.IsKeyDown(Keys.A) && !OldKeyboardState.IsKeyDown(Keys.A))
             {
                 direction = Direction.Left;
                 IsMoving = true;
             }
-            else if (newState.IsKeyDown(Keys.A) && OldKeyboardState.IsKeyDown(Keys.A))
-            {
-                // the player is holding the key down
-                //LoginManagerClient.GetCharacter()._pos.X -= 3*60f * Time.DeltaTime;
-                //LoginManagerClient.GetCharacter()._pos.X -= 1f;
-                keys.Add(Keys.A);
-                dir.X = -1f;
-                IsMoving = true;
-            }
-            else if (!newState.IsKeyDown(Keys.A) && OldKeyboardState.IsKeyDown(Keys.A))
-            {
-                // the player was holding the key down, but has just let it go
-
-            }
-
             if (newState.IsKeyDown(Keys.D) && !OldKeyboardState.IsKeyDown(Keys.D))
             {
                 direction = Direction.Right;
                 IsMoving = true;
 
             }
-            else if (newState.IsKeyDown(Keys.D) && OldKeyboardState.IsKeyDown(Keys.D))
+            if (newState.IsKeyDown(Keys.T) && !OldKeyboardState.IsKeyDown(Keys.T))
             {
-                // the player is holding the key down
-                //LoginManagerClient.GetCharacter()._pos.X += 3*60f * Time.DeltaTime;
-                //LoginManagerClient.GetCharacter()._pos.X += 1f;
-                keys.Add(Keys.D);
-                dir.X = 1f;
-                IsMoving = true;
+                keys.Add(Keys.T);
             }
-            else if (!newState.IsKeyDown(Keys.D) && OldKeyboardState.IsKeyDown(Keys.D))
-            {
-                // the player was holding the key down, but has just let it go
 
-            }
-            var movement = dir * speed * Time.DeltaTime;
-            if (movement != Vector2.Zero)
-                LoginManagerClient.GetCharacter()._pos += movement;
             return keys.ToArray();
         }
 
-        private void MouseChange()
+        private void FreeMouseChange()
         {
-
             Vector2 pos = Entity.Scene.Camera.MouseToWorldPoint();
             List<Entity> entities = Scene.FindEntitiesWithTag(7);
             foreach (var entity in entities)
@@ -237,7 +340,6 @@ namespace GameClient.Types.Components.SceneComponents
                 Rectangle rectangle = new Rectangle(entity.Position.ToPoint(), new Point((int)(rect.Width * entity.Scale.X), (int)(rect.Height * entity.Scale.Y)));
                 if (rectangle.Contains(pos))
                 {
-                    
                     if (Input.LeftMouseButtonPressed)
                     {
                         MessageTemplate template = new MessageTemplate(Entity.Name, MessageType.Target);
@@ -254,35 +356,11 @@ namespace GameClient.Types.Components.SceneComponents
             }
         }
 
-        public void ScrollChange()
-        {
-            if (currentMouseWheelValue > previousMouseWheelValue)
-            {
-                Camera.ZoomIn(.05f);
-            }
-
-            if (currentMouseWheelValue < previousMouseWheelValue)
-            {
-                Camera.ZoomOut(.05f);
-            }
-
-            if (Entity != null)
-            {
-                FollowCamera fc = Entity.GetComponent<FollowCamera>();
-                if (fc != null && fc.Camera != null)
-                {
-                    //So the camera is centered after zooming in our out
-                    fc.Follow(Entity, FollowCamera.CameraStyle.LockOn);
-
-                }
-            }
-
-        }
         private void SendKeyboardRequest(KeyboardState keyboardState)
         {
             string messageS = Newtonsoft.Json.JsonConvert.SerializeObject(keyboardState.GetPressedKeys());
             MessageManager.AddToQueue(new MessageTemplate(messageS, MessageType.Movement));
         }
-
+        #endregion
     }
 }
