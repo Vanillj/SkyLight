@@ -6,10 +6,12 @@ using System.Threading.Tasks;
 
 namespace GameServer.Types.Abilities
 {
-    class ConeAbility : Ability
+    class Debuff : Ability
     {
-        public ConeAbility()
+        public Debuff()
         {
+
         }
+
     }
 }

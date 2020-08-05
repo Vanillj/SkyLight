@@ -2,6 +2,7 @@
 using FarseerPhysics.Dynamics;
 using GameServer.General;
 using GameServer.Types.Components;
+using GameServer.Types.Components.Components;
 using Microsoft.Xna.Framework;
 using Nez;
 using Nez.Farseer;
@@ -83,11 +84,13 @@ namespace GameServer.Types.Map
                 FSRigidBody fbody = new FSRigidBody().SetBodyType(BodyType.Dynamic).SetIgnoreGravity(true).SetLinearDamping(15f);
 
                 e = scene.CreateEntity(login.GetCharacter()._name).SetPosition(login.GetCharacter().physicalPosition);
-                    e.AddComponent(fbody)
-                    .AddComponent(new FSCollisionCircle(25))
-                    .AddComponent(new PlayerComponent(login) { CurrentLayer = assignedLayer })
-                    .AddComponent(new Mover())
-                    .AddComponent(new CircleCollider(25));
+                e.AddComponent(fbody)
+                .AddComponent(new FSCollisionCircle(25))
+                .AddComponent(new PlayerComponent(login) { CurrentLayer = assignedLayer })
+                .AddComponent(new Mover())
+                .AddComponent(new CircleCollider(25))
+                .AddComponent(new StatsComponent())
+                .AddComponent(new DamageComponent());
                 fbody.Body.FixedRotation = true;
                 login.SetEntity(e);
 

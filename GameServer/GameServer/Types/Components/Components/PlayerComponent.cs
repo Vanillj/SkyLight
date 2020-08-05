@@ -12,7 +12,7 @@ namespace GameServer.Types.Components
 {
     class PlayerComponent : Component, IUpdatable
     {
-        LoginManagerServer loginManager;
+        public LoginManagerServer loginManager;
         public MapLayer CurrentLayer;
         public bool isChanneling = false;
         public Entity Target;

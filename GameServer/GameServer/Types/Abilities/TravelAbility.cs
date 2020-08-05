@@ -22,7 +22,7 @@ namespace GameServer.Types.Abilities
         {
             
         }
-        public TravelAbility(Entity SourcePlayer, Entity Target)
+        public TravelAbility(Entity SourcePlayer, Entity Target) : base()
         {
             this.Target = Target;
         }

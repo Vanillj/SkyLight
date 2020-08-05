@@ -142,14 +142,8 @@ namespace GameServer.Types.Components.SceneComponents
                         character = MapContainer.FindCharacterByID(message.SenderConnection.RemoteUniqueIdentifier);
                         var inventory = character.GetInventory();
                         var equpment = character.GetEquipment();
-                        int invIndex = -1;
-                        for (int i = inventory.Length - 1; i >= 0; i--)
-                        {
-                            if (inventory[i] == null)
-                            {
-                                invIndex = i;
-                            }
-                        }
+                        int invIndex = Array.FindIndex(inventory, i => i == null);
+
                         try
                         {
                             int.TryParse(template.JsonMessage, out index);
@@ -168,9 +162,9 @@ namespace GameServer.Types.Components.SceneComponents
                         character = MapContainer.FindCharacterByID(message.SenderConnection.RemoteUniqueIdentifier);
                         e = Scene.FindEntity(character._name);
                         PlayerComponent pc = e.GetComponent<PlayerComponent>();
-                        if (pc != null)
+                        if (pc != null && pc.Target != null)
                         {
-                            e.AddComponent(new ChannelingComponent(pc, 10));
+                            e.AddComponent(new ChannelingComponent(pc, 4));
                         }
                         break;
                     case MessageType.Target:
@@ -178,7 +172,14 @@ namespace GameServer.Types.Components.SceneComponents
                         e = Scene.FindEntity(character._name);
                         var et = Scene.FindEntity(template.JsonMessage);
                         PlayerComponent p = e.GetComponent<PlayerComponent>();
-                        p.Target = et;
+                        if (template.JsonMessage != "")
+                        {
+                            p.Target = et;
+                        }
+                        else
+                        {
+                            p.Target = null;
+                        }
                         break;
 
                 }

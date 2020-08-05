@@ -46,9 +46,12 @@
     <Compile Include="Types\Abilities\Ability.cs" />
     <Compile Include="Types\Abilities\AbilityContainer.cs" />
     <Compile Include="Types\Abilities\ConeAbility.cs" />
+    <Compile Include="Types\Abilities\Debuff.cs" />
     <Compile Include="Types\Abilities\DoTAbility.cs" />
     <Compile Include="Types\Abilities\TravelAbility.cs" />
     <Compile Include="Types\Components\Components\ChannelingComponent.cs" />
+    <Compile Include="Types\Components\Components\DamageComponent.cs" />
+    <Compile Include="Types\Components\Components\StatsComponent.cs" />
     <Compile Include="Types\Item\ItemContainer.cs" />
     <Compile Include="General\ConstantValues.cs" />
     <Compile Include="Types\Map\MapContainer.cs" />
@@ -331,6 +334,9 @@
     <TypeScriptCompile Include="Assets\Maps\tiles.tsx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </TypeScriptCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Data\Abilities\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />

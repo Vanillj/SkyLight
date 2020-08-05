@@ -67,22 +67,6 @@ namespace GameClient.Scenes
                     {
                         OtherPlayerEntity oPE = new OtherPlayerEntity(others);
                         AddEntity(oPE);
-
-                        //TextComponent textComponent = new TextComponent(Graphics.Instance.BitmapFont, others._name, Vector2.Zero, Color.White);
-                        //OtherEntity = CreateEntity(others._name);
-                        //OtherEntity.SetPosition(others.physicalPosition)
-                        //    .AddComponent(new OtherPlayerComponent(others))
-                        //    .AddComponent(new TextComponent(Graphics.Instance.BitmapFont, others._name, new Vector2(0, 0), Color.White)
-                        //    .SetVerticalAlign(VerticalAlign.Top).SetHorizontalAlign(HorizontalAlign.Center))
-                        //    .SetRenderLayer(2);
-                        //OtherEntity.AddComponent(textComponent);
-                        //OtherEntity.SetTag(7);
-                        //OtherEntity.SetScale(3.5f);
-
-                        //SpriteAnimator animator = OtherEntity.AddComponent<SpriteAnimator>();
-                        //animator.AddAnimation("Idle", Idle);
-                        //animator.AddAnimation("Movement", Movement);
-                        //animator.Play("Idle");
                     }
                 }
             }

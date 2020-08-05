@@ -9,8 +9,16 @@ namespace GameServer.Types.Abilities
 {
     class DoTAbility : Ability
     {
-        public DoTAbility(MainScene scene)
+        public float DamageDuration = 2;
+        public float DamageTimerDelta = 0;
+
+        public float totalDuration = 20;
+        public float durationDelta = 0;
+
+        public DoTAbility()
         {
+            BaseDamage = 5;
         }
+
     }
 }

@@ -13,12 +13,13 @@ namespace GameServer.Types.Abilities
         private MapLayer AbilityLayer;
         private MainScene Scene;
 
-        public Class ClassAbility { get; set; }
-        public AbilityType AbilityType { get; set; }
-        public int ID { get; set; }
         public string AbilityName { get; set; }
+        public int ID { get; set; }
         public int BaseDamage { get; set; }
         public int LevelRequirement { get; set; }
+        public int ChannelTime { get; set; }
+        public Class ClassAbility { get; set; }
+        public AbilityType AbilityType { get; set; }
 
         public Ability()
         {

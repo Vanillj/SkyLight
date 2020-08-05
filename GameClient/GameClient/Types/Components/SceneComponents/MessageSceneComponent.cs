@@ -13,6 +13,7 @@ using Nez;
 using Nez.UI;
 using Server.Managers;
 using Server.Types;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Debug = System.Diagnostics.Debug;
@@ -232,6 +233,7 @@ namespace GameClient.Types.Components.SceneComponents
                     {
                         CharacterPlayer character = dataTemplate.OthersCharacters.Find(tempc => tempc._name.Equals(charac._name));
                         LoginManagerClient.OtherCharacters[i] = character;
+                        Console.WriteLine(LoginManagerClient.OtherCharacters[i].CurrentHealth.ToString());
                     }
                 }
             }

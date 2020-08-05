@@ -22,6 +22,7 @@ namespace Server.Types
         EquipItem,
         UnEquipItem,
         StartChanneling,
-        Target
+        Target,
+        DamageTarget
     };
 }

@@ -1,4 +1,5 @@
-﻿using GameClient.General;
+﻿using Client.Managers;
+using GameClient.General;
 using GameClient.Types.Components;
 using Microsoft.Xna.Framework;
 using Nez;
@@ -14,6 +15,10 @@ namespace GameClient.Types.Player
 {
     class OtherPlayerEntity : Entity
     {
+
+        TextComponent HealthtextComponent;
+        CharacterPlayer other;
+
         public OtherPlayerEntity()
         {
         }
@@ -22,14 +27,28 @@ namespace GameClient.Types.Player
         {
         }
 
+        public override void Update()
+        {
+            if (other != null)
+            {
+                other = LoginManagerClient.OtherCharacters.Find(c => c._name.Equals(other._name));
+
+                HealthtextComponent.SetText(other.CurrentHealth.ToString());
+            }
+            HealthtextComponent.SetText(other.CurrentHealth.ToString());
+            base.Update();
+        }
+
         public OtherPlayerEntity(CharacterPlayer others) : base(others._name)
         {
+            other = others;
             TextComponent textComponent = new TextComponent(Graphics.Instance.BitmapFont, others._name, Vector2.Zero, Color.White);
+            HealthtextComponent = new TextComponent(Graphics.Instance.BitmapFont, others.CurrentHealth.ToString(), Vector2.Zero, Color.White);
+
             this.SetPosition(others.physicalPosition);
             AddComponent(new OtherPlayerComponent(others));
-            AddComponent(new TextComponent(Graphics.Instance.BitmapFont, others._name, new Vector2(0, 0), Color.White)
-                .SetVerticalAlign(VerticalAlign.Top).SetHorizontalAlign(HorizontalAlign.Center)).SetRenderLayer(2);
             AddComponent(textComponent);
+            AddComponent(HealthtextComponent).SetHorizontalAlign(HorizontalAlign.Left).SetVerticalAlign(VerticalAlign.Bottom).SetRenderLayer(-2);
             SetTag(7);
             this.SetScale(3.5f);
 

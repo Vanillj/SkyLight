@@ -1,4 +1,5 @@
-﻿using Nez;
+﻿using GameServer.Types.Abilities;
+using Nez;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,24 +13,33 @@ namespace GameServer.Types.Components.Components
         private float ChannelTime = 0; //In seconds
         private float TotalTime = 0;
         private PlayerComponent playerComponent;
+        private Entity target;
 
         public ChannelingComponent(PlayerComponent pc, float ChannelTime)
         {
             this.ChannelTime = ChannelTime;
             playerComponent = pc;
+            target = playerComponent.Target;
             playerComponent.isChanneling = true;
         }
 
         public void Update()
         {
             TotalTime += Time.DeltaTime;
-            if (TotalTime * 1000 >= ChannelTime)
+            if (TotalTime * 100 >= ChannelTime)
             {
                 //execute something on Entity such as ability
-
-                
+                if (target != null)
+                {
+                    target.GetComponent<DamageComponent>().AddDoTAbility(new DoTAbility());
+                }
                 this.RemoveComponent();
             }
+        }
+        public override void OnAddedToEntity()
+        {
+
+            base.OnAddedToEntity();
         }
         public override void OnRemovedFromEntity()
         {

@@ -13,6 +13,7 @@ namespace Server.Types
         public WeaponItem[] Inventory;
         public Vector2 physicalPosition = new Vector2(0, 0);
         public string LastMultiLocation { get; set; } //Last location that is not solo or group locked
+        public int CurrentHealth { get; set; }
         public CharacterPlayer(float x, float y, string name, WeaponItem[] equipment, WeaponItem[] inventory) : base(x, y, name)
         {
             Equipment = equipment;
@@ -65,6 +66,19 @@ namespace Server.Types
         public WeaponItem[] GetInventory()
         {
             return Inventory;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is CharacterPlayer)
+            {
+                CharacterPlayer p = obj as CharacterPlayer;
+                if (p._name.Equals(this._name))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 

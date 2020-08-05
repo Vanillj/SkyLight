@@ -119,6 +119,7 @@
     <Compile Include="Managers\UI\Elements\InventoryWindow.cs" />
     <Compile Include="Managers\UI\Elements\ItemButton.cs" />
     <Compile Include="Managers\UI\Elements\ItemHoverWindow.cs" />
+    <Compile Include="Managers\UI\Elements\TargetWindow.cs" />
     <Compile Include="Managers\UI\SceneManager.cs" />
     <Compile Include="Managers\UI\UIManager.cs" />
     <Compile Include="Program.cs" />
@@ -228,6 +229,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Managers\Input\" />
+    <Folder Include="Managers\UI\Component\" />
+    <Folder Include="Types\Abilities\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\GameServer\GameServer\Assets\Grasstiles.tsx">

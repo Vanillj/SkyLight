@@ -1,4 +1,5 @@
-﻿using GameClient.General;
+﻿using Client.Managers;
+using GameClient.General;
 using GameClient.Types.Components.Components;
 using Microsoft.Xna.Framework;
 using Nez;
@@ -14,6 +15,9 @@ namespace GameClient.Types.Player
 {
     class PlayerEntity : Entity
     {
+        CharacterPlayer player;
+        private TextComponent HealthtextComponent;
+
         public PlayerEntity()
         {
 
@@ -24,13 +28,28 @@ namespace GameClient.Types.Player
 
         }
 
+        public override void Update()
+        {
+            if (player != null)
+            {
+                player = LoginManagerClient.GetCharacter();
+
+                HealthtextComponent.SetText(player.CurrentHealth.ToString());
+            }
+            base.Update();
+        }
+
+
         public PlayerEntity(CharacterPlayer player)
         {
+            this.player = player;
             TextComponent textComponent = new TextComponent(Graphics.Instance.BitmapFont, player._name, Vector2.Zero, Color.White);
+            HealthtextComponent = new TextComponent(Graphics.Instance.BitmapFont, player.CurrentHealth.ToString(), Vector2.Zero, Color.White);
 
             this.SetPosition(player.physicalPosition);
             AddComponent(textComponent).SetHorizontalAlign(HorizontalAlign.Center).SetVerticalAlign(VerticalAlign.Top).SetRenderLayer(-200);
             AddComponent(new PlayerComponent());
+            AddComponent(HealthtextComponent).SetHorizontalAlign(HorizontalAlign.Right).SetVerticalAlign(VerticalAlign.Bottom).SetRenderLayer(-200);
 
             SpriteAnimation Idle = TextureContainer.KnightAnimationAtlas.GetAnimation("Idle");
             SpriteAnimation Movement = TextureContainer.KnightAnimationAtlas.GetAnimation("Movement");

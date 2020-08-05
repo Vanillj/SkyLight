@@ -1,6 +1,7 @@
 ﻿using Client.Managers;
 using GameClient.Managers;
 using GameClient.Managers.UI;
+using GameClient.Managers.UI.Elements;
 using GameClient.Scenes;
 using GameClient.Types.Components.Components;
 using GameServer.General;
@@ -52,7 +53,7 @@ namespace GameClient.Types.Components.SceneComponents
                 FixedUpdate();
                 timer -= ConstantValues.UpdateFrequency;
             }
-            
+
             CheckForInput();
             base.Update();
         }
@@ -70,7 +71,7 @@ namespace GameClient.Types.Components.SceneComponents
 
             if (Input.CurrentKeyboardState.GetPressedKeys().Length > 0)
                 SendKeyboardRequest(new KeyboardState(KeyboardFixed()));
-            
+
 
             if (Input.LeftMouseButtonPressed || Input.RightMouseButtonPressed || Input.MousePositionDelta != Point.Zero)
                 FixedMouseChange();
@@ -80,7 +81,7 @@ namespace GameClient.Types.Components.SceneComponents
         private void FixedMouseChange()
         {
 
-            
+
         }
 
         private Keys[] KeyboardFixed()
@@ -97,7 +98,7 @@ namespace GameClient.Types.Components.SceneComponents
             {
                 keys.Add(Keys.T);
             }
-            
+
             //Generated inventory
             if (newState.IsKeyDown(Keys.I) && OldKeyboardState.IsKeyUp(Keys.I))
             {
@@ -247,7 +248,6 @@ namespace GameClient.Types.Components.SceneComponents
         //TODO: Change to customizable keybindings later
         private Keys[] KeyboardChange()
         {
-
             KeyboardState newState = Input.CurrentKeyboardState;
             KeyboardState OldKeyboardState = Input.PreviousKeyboardState;
 
@@ -256,47 +256,27 @@ namespace GameClient.Types.Components.SceneComponents
             //Generated inventory
             if (newState.IsKeyDown(Keys.I) && OldKeyboardState.IsKeyUp(Keys.I))
             {
-                List<Window> windows = (Scene as MainScene).UICanvas.Stage.FindAllElementsOfType<Window>();
-                bool exists = false;
-                windows.ForEach(i =>
-                {
-                    if (i.GetTitleLabel().GetText().Equals("Inventory"))
-                    {
-                        exists = true;
-                    }
-                });
-                if (exists)
-                {
-                    UIManager.FindElementByStringAndRemove("Inventory", Scene);
-                }
-                else
+                if (!InventoryWindow.RemoveInventory(Scene))
                 {
                     UIManager.GenerateInventoryWindow(skin, Scene, new Vector2(-1, -1), -1, -1);
                 }
+
             }
 
             if (newState.IsKeyDown(Keys.C) && OldKeyboardState.IsKeyUp(Keys.C))
             {
-                List<Window> windows = (Scene as MainScene).UICanvas.Stage.FindAllElementsOfType<Window>();
-                bool exists = false;
-                windows.ForEach(i =>
-                {
-                    if (i.GetTitleLabel().GetText().Equals("Character Information"))
-                    {
-                        exists = true;
-                    }
-                });
-                if (exists)
-                {
-                    UIManager.FindElementByStringAndRemove("Character Information", Scene);
-                }
-                else
+                if (!CharacterWindow.RemoveCharacterWindow(Scene))
                 {
                     UIManager.GenerateCharacterWindow(skin, Scene, new Vector2(-1, -1), -1, -1);
                 }
 
             }
 
+            if (newState.IsKeyDown(Keys.D1) && !OldKeyboardState.IsKeyDown(Keys.D1))
+            {
+                MessageTemplate template = new MessageTemplate("Burn", MessageType.StartChanneling);
+                MessageManager.AddToQueue(template);
+            }
             if (newState.IsKeyDown(Keys.S) && !OldKeyboardState.IsKeyDown(Keys.S))
             {
                 direction = Direction.Down;
@@ -323,35 +303,49 @@ namespace GameClient.Types.Components.SceneComponents
             if (newState.IsKeyDown(Keys.T) && !OldKeyboardState.IsKeyDown(Keys.T))
             {
                 keys.Add(Keys.T);
+                
             }
 
             return keys.ToArray();
         }
 
+        private bool targeting = false;
         private void FreeMouseChange()
         {
             Vector2 pos = Entity.Scene.Camera.MouseToWorldPoint();
             List<Entity> entities = Scene.FindEntitiesWithTag(7);
+
+            if (Input.LeftMouseButtonPressed && Scene is MainScene)
+            {
+                if ((Scene as MainScene).UICanvas.Stage.Hit(Input.MousePosition) == null && targeting)
+                {
+                    TargetWindow.RemoveTargetWindow(Scene);
+                    MessageTemplate template = new MessageTemplate("", MessageType.Target);
+                    MessageManager.AddToQueue(template);
+                    targeting = false;
+                }
+                    
+            }
+
             foreach (var entity in entities)
             {
                 SpriteAnimator sp = entity.GetComponent<SpriteAnimator>();
 
+
                 Rectangle rect = sp.CurrentAnimation.Sprites.ElementAt(0).SourceRect;
                 Rectangle rectangle = new Rectangle(entity.Position.ToPoint(), new Point((int)(rect.Width * entity.Scale.X), (int)(rect.Height * entity.Scale.Y)));
-                if (rectangle.Contains(pos))
+                if (rectangle.Contains(pos) && Input.LeftMouseButtonPressed)
                 {
-                    if (Input.LeftMouseButtonPressed)
+                    MessageTemplate template = new MessageTemplate(entity.Name, MessageType.Target);
+                    MessageManager.AddToQueue(template);
+                    targeting = true;
+                    if (Scene is MainScene)
                     {
-                        MessageTemplate template = new MessageTemplate(Entity.Name, MessageType.Target);
-                        MessageManager.AddToQueue(template);
-
-                        if (Scene is MainScene)
-                        {
-                            MainScene scene = Scene as MainScene;
-                            Label component = new Label("Target: " + entity.Name).SetFontScale(5).SetFontColor(Color.Red);
-                            scene.Table.Add(component).SetRow();
-                        }
+                        MainScene scene = Scene as MainScene;
+                        TargetWindow window = new TargetWindow(entity, new Vector2(Screen.Width / 2, 30), skin);
+                        scene.UICanvas.Stage.AddElement(window);
                     }
+
                 }
             }
         }
