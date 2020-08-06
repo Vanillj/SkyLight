@@ -1,7 +1,9 @@
 ﻿using Client.Managers;
 using GameClient.General;
 using GameClient.Managers;
+using GameClient.Types.Abilities;
 using GameClient.Types.Components.SceneComponents;
+using GameServer.Types.Abilities;
 using Microsoft.Xna.Framework;
 using Nez;
 using Nez.Sprites;
@@ -25,7 +27,11 @@ namespace GameClient.Scenes
             base.Initialize();
             
             //Load Assets, always load textures before generating items so they can match texture and ID
-            new TextureContainer().LoadTextures();
+            TextureContainer.LoadTextures();
+            AbilityContainerClient.LoadAbilities();
+            KeyBindContainer.SetKeyBinds();
+
+
             Entity e = CreateEntity("Wallpaper");
             e.AddComponent(new SpriteRenderer(TextureContainer.LoginWallpaper)).SetOrigin(new Vector2(0, 0));
             float h = (float)Screen.Height / (float)TextureContainer.LoginWallpaper.Height;

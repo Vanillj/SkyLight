@@ -70,6 +70,12 @@
     <Compile Include="..\..\GameServer\GameServer\Managers\CryptoManager.cs">
       <Link>Managers\CryptoManager.cs</Link>
     </Compile>
+    <Compile Include="..\..\GameServer\GameServer\Managers\FileManagerHead.cs">
+      <Link>Managers\FileManagerHead.cs</Link>
+    </Compile>
+    <Compile Include="..\..\GameServer\GameServer\Types\Abilities\SharedAbilities\AbilityHead.cs">
+      <Link>Types\Abilities\AbilityHead.cs</Link>
+    </Compile>
     <Compile Include="..\..\GameServer\GameServer\Types\CharacterHead.cs">
       <Link>Types\CharacterHead.cs</Link>
     </Compile>
@@ -107,6 +113,7 @@
       <Link>Types\Networking\MessageType.cs</Link>
     </Compile>
     <Compile Include="GameClient.cs" />
+    <Compile Include="General\KeyBindContainer.cs" />
     <Compile Include="General\TextureContainer.cs" />
     <Compile Include="Managers\FileManager.cs" />
     <Compile Include="Managers\LoadManager.cs" />
@@ -115,13 +122,16 @@
     <Compile Include="Managers\Networking\LoginManagerHead.cs" />
     <Compile Include="Managers\Networking\MessageManager.cs" />
     <Compile Include="Managers\PlayerManager.cs" />
-    <Compile Include="Managers\UI\Elements\CharacterWindow.cs" />
-    <Compile Include="Managers\UI\Elements\InventoryWindow.cs" />
-    <Compile Include="Managers\UI\Elements\ItemButton.cs" />
-    <Compile Include="Managers\UI\Elements\ItemHoverWindow.cs" />
-    <Compile Include="Managers\UI\Elements\TargetWindow.cs" />
-    <Compile Include="Managers\UI\SceneManager.cs" />
-    <Compile Include="Managers\UI\UIManager.cs" />
+    <Compile Include="Types\Abilities\AbilityContainerClient.cs" />
+    <Compile Include="Types\Abilities\AbilityformaterClient.cs" />
+    <Compile Include="UI\Elements\AbilityBarWindow.cs" />
+    <Compile Include="UI\Elements\CharacterWindow.cs" />
+    <Compile Include="UI\Elements\InventoryWindow.cs" />
+    <Compile Include="UI\Elements\ItemButton.cs" />
+    <Compile Include="UI\Elements\ItemHoverWindow.cs" />
+    <Compile Include="UI\Elements\TargetWindow.cs" />
+    <Compile Include="UI\SceneManager.cs" />
+    <Compile Include="UI\UIManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scenes\BaseScene.cs" />
@@ -132,6 +142,7 @@
     <Compile Include="Types\Components\SceneComponents\InputComponent.cs" />
     <Compile Include="Types\Components\SceneComponents\MessageSceneComponent.cs" />
     <Compile Include="Types\Components\SceneComponents\TileSceneComponent.cs" />
+    <Compile Include="Types\KeyBinding\KeyBind.cs" />
     <Compile Include="Types\Map\Map.cs" />
     <Compile Include="Types\Player\OtherPlayerEntity.cs" />
     <Compile Include="Types\Player\PlayerEntity.cs" />
@@ -210,6 +221,10 @@
       <Link>Assets\MapTwo.tmx</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\..\GameServer\GameServer\Data\AbilityData.json">
+      <Link>Data\AbilityData.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="..\..\GameServer\GameServer\Data\MapData.json">
       <Link>Data\MapData.json</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -225,12 +240,14 @@
     <None Include="Assets\UI\UI.atlas">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Data\KeyBindData.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Managers\Input\" />
-    <Folder Include="Managers\UI\Component\" />
-    <Folder Include="Types\Abilities\" />
+    <Folder Include="UI\Component\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\GameServer\GameServer\Assets\Grasstiles.tsx">

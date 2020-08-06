@@ -21,12 +21,12 @@ namespace GameClient.Managers
 
             //TODO: Get Textures from ID later
 
-            PlayerEntity pE = new PlayerEntity(player);
+            PlayerEntity pEntity = new PlayerEntity(player);
 
-            scene.AddEntity(pE);
-            scene.playerComponent = pE.GetComponent<PlayerComponent>();
+            scene.AddEntity(pEntity);
+            scene.playerComponent = pEntity.GetComponent<PlayerComponent>();
 
-            return pE;
+            return pEntity;
         }
     }
 }

@@ -16,7 +16,7 @@ namespace GameClient.General
         public static SpriteAtlas KnightAnimationAtlas;
 
         public static Texture2D LoginWallpaper;
-        public void LoadTextures()
+        public static void LoadTextures()
         {
             ItemAtlas = Core.Content.LoadSpriteAtlas("Assets/Items/Items.atlas");
             UIAtlas = Core.Content.LoadSpriteAtlas("Assets/UI/UI.atlas");

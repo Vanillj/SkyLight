@@ -1,0 +1,43 @@
+{
+  "TravelAbility": [
+    {
+      "AbilityName": "Smash",
+      "ID": 0,
+      "BaseDamage": 20,
+      "LevelRequirement": 0,
+      "ChannelTime": 0,
+      "TravelTime": 0,
+      "TravelSpeed": 0,
+      "ClassAbility": 0,
+      "AbilityType": 0
+    }
+  ],
+  "ConeAbility": [
+    {
+      "AbilityName": "Fire Cone",
+      "ID": 1,
+      "BaseDamage": 50,
+      "LevelRequirement": 0,
+      "ChannelTime": 0,
+      "TravelTime": 0,
+      "TravelSpeed": 0,
+      "ClassAbility": 1,
+      "AbilityType": 1
+    }
+  ],
+  "DoTAbility": [
+    {
+      "AbilityName": "Ignite",
+      "ID": 2,
+      "BaseDamage": 5,
+      "LevelRequirement": 0,
+      "ChannelTime": 2,
+      "TravelTime": 0,
+      "TravelSpeed": 0,
+      "DamageDuration": 3,
+      "TotalDuration": 15,
+      "ClassAbility": 1,
+      "AbilityType": 2
+    }
+  ]
+}

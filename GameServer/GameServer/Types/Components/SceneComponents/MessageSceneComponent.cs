@@ -3,6 +3,8 @@ using GameClient.Types.Item;
 using GameServer.General;
 using GameServer.Managers.Networking;
 using GameServer.Scenes;
+using GameServer.Types.Abilities;
+using GameServer.Types.Abilities.SharedAbilities;
 using GameServer.Types.Components.Components;
 using GameServer.Types.Item;
 using Lidgren.Network;
@@ -160,11 +162,19 @@ namespace GameServer.Types.Components.SceneComponents
                         break;
                     case MessageType.StartChanneling:
                         character = MapContainer.FindCharacterByID(message.SenderConnection.RemoteUniqueIdentifier);
+                        AbilityHead ability = AbilityContainer.GetAbilityByName(template.JsonMessage);
                         e = Scene.FindEntity(character._name);
                         PlayerComponent pc = e.GetComponent<PlayerComponent>();
-                        if (pc != null && pc.Target != null)
+                        if (pc != null && !pc.isChanneling)
                         {
-                            e.AddComponent(new ChannelingComponent(pc, 4));
+                            if (ability != null)
+                            {
+                                e.AddComponent(new DamageChannelingComponent(pc, 4, ability));
+                            }
+                            else
+                            {
+                                e.AddComponent(new ChannelingComponent(pc, 4));
+                            }
                         }
                         break;
                     case MessageType.Target:
@@ -179,6 +189,16 @@ namespace GameServer.Types.Components.SceneComponents
                         else
                         {
                             p.Target = null;
+                        }
+                        break;
+                    case MessageType.DamageTarget:
+                        character = MapContainer.FindCharacterByID(message.SenderConnection.RemoteUniqueIdentifier);
+                        AbilityHead abi = AbilityContainer.GetAbilityByName(template.JsonMessage);
+                        e = Scene.FindEntity(character._name);
+                        PlayerComponent pcomp = e.GetComponent<PlayerComponent>();
+                        if (pcomp != null && abi != null && pcomp.Target != null)
+                        {
+                            pcomp.Target.GetComponent<DamageComponent>().DealDamageToEntity(abi.BaseDamage);
                         }
                         break;
 

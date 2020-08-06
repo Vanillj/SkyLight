@@ -14,7 +14,7 @@ namespace GameServer.General
         public static HashSet<WeaponItem> itemBaseLegendary = new HashSet<WeaponItem>();
         public static HashSet<WeaponItem> itemBaseNormal = new HashSet<WeaponItem>();
 
-        public void LoadFromFile()
+        public static void LoadFromFile()
         {
             itemBasesList = FileManager.GetItemInformation("Data/ItemData.json");
             foreach (var item in itemBasesList)
@@ -32,7 +32,7 @@ namespace GameServer.General
                 }
             }
         }
-        public void GenerateItems()
+        public static void GenerateItems()
         {
             LoadFromFile();
         }

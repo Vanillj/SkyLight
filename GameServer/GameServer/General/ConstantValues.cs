@@ -13,9 +13,12 @@ namespace GameServer.General
         public const float UpdateFrequency = 1f/30;
 
         public const string ItemDataFileName = "ItemData.json";
-        public const string MapDataFileName = "";
+        public const string MapDataFileName = "MapData.json";
         public const string ClassDataFileName = "";
+        public const string AbilityDataFileName = "AbilityData.json";
         public const string DefaultMap = "map";
+
+        public const string KeyBindName = "KeyBindData.json";
 
         //Variables that need to be set
         private static string _ConnectionID;

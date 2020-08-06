@@ -9,15 +9,32 @@ namespace GameServer.Types.Abilities
 {
     class DoTAbility : Ability
     {
-        public float DamageDuration = 2;
-        public float DamageTimerDelta = 0;
+        public float DamageDuration { get; set; }
+        private float DamageTimerDelta { get; set; }
 
-        public float totalDuration = 20;
-        public float durationDelta = 0;
+        public float TotalDuration { get; set; }
+        private float durationDelta { get; set; }
 
         public DoTAbility()
         {
-            BaseDamage = 5;
+
+        }
+
+        public void AddToDurationDelta(float durationDelta)
+        {
+            this.durationDelta += durationDelta;
+        }
+        public float getDurationDelta()
+        {
+            return durationDelta;
+        }
+        public void AddToDamageTimerDelta(float DamageTimerDelta)
+        {
+            this.DamageTimerDelta += DamageTimerDelta;
+        }
+        public float getDamageTimerDelta()
+        {
+            return DamageTimerDelta;
         }
 
     }

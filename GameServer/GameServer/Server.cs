@@ -1,6 +1,7 @@
 ﻿using GameServer.General;
 using GameServer.Managers;
 using GameServer.Scenes;
+using GameServer.Types.Abilities;
 using Microsoft.Xna.Framework;
 using Nez;
 using Server.Managers;
@@ -20,7 +21,8 @@ namespace GameServer
             IsFixedTimeStep = true;
             TargetElapsedTime = TimeSpan.FromSeconds(1f / 144f);
 
-            new ItemContainer().GenerateItems();
+            ItemContainer.GenerateItems();
+            AbilityContainer.LoadAbilities();
 
             //setup constant values
             //Getting credentials from file

@@ -1,5 +1,6 @@
 ﻿using Client.Managers;
 using GameClient.Managers;
+using GameServer.General;
 using Microsoft.Xna.Framework.Graphics;
 using Nez;
 using Nez.BitmapFonts;
@@ -22,7 +23,7 @@ namespace GameClient.Types.Components.SceneComponents
         {
             if (Core.Scene == null)
                 return;
-            MapList = FileManager.GetMapInformation("Data/MapData.json");
+            MapList = FileManager.GetMapInformation("Data/" + ConstantValues.MapDataFileName);
             Map.Map map = null;
             CharacterPlayer c = LoginManagerClient.GetCharacter();
             foreach (var maps in MapList)

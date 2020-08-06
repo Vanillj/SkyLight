@@ -1,10 +1,12 @@
 ﻿using Client.Managers;
+using GameClient.General;
 using GameClient.Managers;
 using GameClient.Managers.UI;
 using GameClient.Managers.UI.Elements;
 using GameClient.Scenes;
 using GameClient.Types.Components.Components;
 using GameServer.General;
+using GameServer.Types.Abilities.SharedAbilities;
 using Lidgren.Network;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
@@ -23,7 +25,8 @@ namespace GameClient.Types.Components.SceneComponents
 {
     class InputComponent : SceneComponent
     {
-        float timer = 0;
+        private float timer = 0;
+        private float cooldown = 0;
         public Camera Camera { get; set; }
 
         private float currentMouseWheelValue, previousMouseWheelValue;
@@ -47,6 +50,7 @@ namespace GameClient.Types.Components.SceneComponents
         public override void Update()
         {
             timer += Time.DeltaTime;
+            cooldown += Time.DeltaTime;
 
             if (timer >= ConstantValues.UpdateFrequency)
             {
@@ -55,6 +59,10 @@ namespace GameClient.Types.Components.SceneComponents
             }
 
             CheckForInput();
+            if (cooldown > 1)
+            {
+                cooldown -= 1;
+            }
             base.Update();
         }
 
@@ -252,7 +260,23 @@ namespace GameClient.Types.Components.SceneComponents
             KeyboardState OldKeyboardState = Input.PreviousKeyboardState;
 
             List<Keys> keys = new List<Keys>();
-
+            if (cooldown > 1)
+            {
+                foreach (var KeyBind in KeyBindContainer.KeyBinds)
+                {
+                    if (newState.IsKeyDown(KeyBind.BindedKey) && OldKeyboardState.IsKeyUp(KeyBind.BindedKey))
+                    {
+                        AbilityHead ability = KeyBind.GetAbility();
+                        MessageTemplate template;
+                        if (ability.ChannelTime > 0)
+                            template = new MessageTemplate(KeyBind.GetAbility().AbilityName, MessageType.StartChanneling);
+                        else
+                            template = new MessageTemplate(KeyBind.GetAbility().AbilityName, MessageType.DamageTarget);
+                        MessageManager.AddToQueue(template);
+                    }
+                }
+            }
+            
             //Generated inventory
             if (newState.IsKeyDown(Keys.I) && OldKeyboardState.IsKeyUp(Keys.I))
             {
@@ -274,8 +298,7 @@ namespace GameClient.Types.Components.SceneComponents
 
             if (newState.IsKeyDown(Keys.D1) && !OldKeyboardState.IsKeyDown(Keys.D1))
             {
-                MessageTemplate template = new MessageTemplate("Burn", MessageType.StartChanneling);
-                MessageManager.AddToQueue(template);
+                
             }
             if (newState.IsKeyDown(Keys.S) && !OldKeyboardState.IsKeyDown(Keys.S))
             {

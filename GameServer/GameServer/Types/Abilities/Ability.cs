@@ -1,4 +1,5 @@
 ﻿using GameServer.Scenes;
+using GameServer.Types.Abilities.SharedAbilities;
 using Nez;
 using System;
 using System.Collections.Generic;
@@ -8,18 +9,10 @@ using System.Threading.Tasks;
 
 namespace GameServer.Types.Abilities
 {
-    class Ability
+    class Ability : AbilityHead
     {
         private MapLayer AbilityLayer;
         private MainScene Scene;
-
-        public string AbilityName { get; set; }
-        public int ID { get; set; }
-        public int BaseDamage { get; set; }
-        public int LevelRequirement { get; set; }
-        public int ChannelTime { get; set; }
-        public Class ClassAbility { get; set; }
-        public AbilityType AbilityType { get; set; }
 
         public Ability()
         {
@@ -39,19 +32,5 @@ namespace GameServer.Types.Abilities
             }
             return null;
         }
-    }
-
-    public enum AbilityType
-    {
-        TravelAbility,
-        ConeAbility,
-        DoTAbility
-    }
-
-    public enum Class
-    {
-        Warrior,
-        Mage,
-        Archer
     }
 }

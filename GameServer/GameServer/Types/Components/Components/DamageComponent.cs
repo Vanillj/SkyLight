@@ -24,24 +24,29 @@ namespace GameServer.Types.Components.Components
             List<DoTAbility> TempDots = new List<DoTAbility>();
             foreach (var dot in DoTs)
             {
-                dot.durationDelta += Time.DeltaTime;
-                dot.DamageTimerDelta += Time.DeltaTime;
+                dot.AddToDurationDelta(Time.DeltaTime);
+                dot.AddToDamageTimerDelta(Time.DeltaTime);
 
-                if (dot.durationDelta > dot.totalDuration)
+                if (dot.getDurationDelta() > dot.TotalDuration)
                 {
                     TempDots.Add(dot);
                 }
                 else
                 {
-                    if (dot.DamageTimerDelta > dot.DamageDuration)
+                    if (dot.getDamageTimerDelta() > dot.DamageDuration)
                     {
                         //TODO: damage calculations later
-                        Entity.GetComponent<StatsComponent>().DamageHealth(dot.BaseDamage);
-                        dot.DamageTimerDelta -= dot.DamageDuration;
+                        DealDamageToEntity(dot.BaseDamage);
+                        dot.AddToDamageTimerDelta(-dot.DamageDuration);
                     }
                 }
             }
             DoTs.RemoveAll(d => TempDots.Contains(d));
+        }
+
+        public void DealDamageToEntity(int damage)
+        {
+            Entity.GetComponent<StatsComponent>().DamageHealth(damage);
         }
 
         #endregion

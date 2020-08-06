@@ -1,4 +1,5 @@
 ﻿using GameServer.Types.Abilities;
+using GameServer.Types.Abilities.SharedAbilities;
 using Nez;
 using System;
 using System.Collections.Generic;
@@ -13,13 +14,11 @@ namespace GameServer.Types.Components.Components
         private float ChannelTime = 0; //In seconds
         private float TotalTime = 0;
         private PlayerComponent playerComponent;
-        private Entity target;
 
         public ChannelingComponent(PlayerComponent pc, float ChannelTime)
         {
             this.ChannelTime = ChannelTime;
             playerComponent = pc;
-            target = playerComponent.Target;
             playerComponent.isChanneling = true;
         }
 
@@ -28,13 +27,14 @@ namespace GameServer.Types.Components.Components
             TotalTime += Time.DeltaTime;
             if (TotalTime * 100 >= ChannelTime)
             {
-                //execute something on Entity such as ability
-                if (target != null)
-                {
-                    target.GetComponent<DamageComponent>().AddDoTAbility(new DoTAbility());
-                }
+                ChannelExecute();
                 this.RemoveComponent();
             }
+        }
+
+        public virtual void ChannelExecute()
+        {
+
         }
         public override void OnAddedToEntity()
         {

@@ -43,13 +43,17 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Managers\FileManagerHead.cs" />
     <Compile Include="Types\Abilities\Ability.cs" />
     <Compile Include="Types\Abilities\AbilityContainer.cs" />
+    <Compile Include="Types\Abilities\AbilityFormater.cs" />
     <Compile Include="Types\Abilities\ConeAbility.cs" />
     <Compile Include="Types\Abilities\Debuff.cs" />
     <Compile Include="Types\Abilities\DoTAbility.cs" />
+    <Compile Include="Types\Abilities\SharedAbilities\AbilityHead.cs" />
     <Compile Include="Types\Abilities\TravelAbility.cs" />
     <Compile Include="Types\Components\Components\ChannelingComponent.cs" />
+    <Compile Include="Types\Components\Components\DamageChannelingComponent.cs" />
     <Compile Include="Types\Components\Components\DamageComponent.cs" />
     <Compile Include="Types\Components\Components\StatsComponent.cs" />
     <Compile Include="Types\Item\ItemContainer.cs" />
@@ -230,6 +234,9 @@
     </None>
     <None Include="Credentials.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\AbilityData.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Data\ItemData.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

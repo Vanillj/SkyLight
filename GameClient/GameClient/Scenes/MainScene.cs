@@ -1,11 +1,13 @@
 ﻿using Client.Managers;
 using GameClient.General;
 using GameClient.Managers;
+using GameClient.Types.Abilities;
 using GameClient.Types.Components;
 using GameClient.Types.Components.Components;
 using GameClient.Types.Components.SceneComponents;
 using GameClient.Types.Item;
 using GameClient.Types.Player;
+using GameClient.UI.Elements;
 using GameServer.General;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -80,6 +82,7 @@ namespace GameClient.Scenes
             AddSceneComponent<MessageSceneComponent>();
             AddSceneComponent<TileSceneComponent>();
             AddSceneComponent(new InputComponent(player, Core.Scene.Camera));
+            UICanvas.Stage.AddElement(new AbilityBarWindow("", InputComponent.skin));
             base.OnStart();
         }
 
