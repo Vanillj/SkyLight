@@ -15,6 +15,7 @@ namespace GameServer.Types.Abilities.SharedAbilities
         public int ChannelTime { get; set; }
         public int TravelTime { get; set; }
         public int TravelSpeed { get; set; }
+        public int MaxDistance { get; set; }
         public Class ClassAbility { get; set; }
         public AbilityType AbilityType { get; set; }
     }

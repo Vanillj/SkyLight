@@ -5,8 +5,10 @@ using GameClient.Managers.UI;
 using GameClient.Managers.UI.Elements;
 using GameClient.Scenes;
 using GameClient.Types.Components.Components;
+using GameClient.UI.Component;
 using GameServer.General;
 using GameServer.Types.Abilities.SharedAbilities;
+using GameServer.Types.Networking;
 using Lidgren.Network;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
@@ -26,7 +28,7 @@ namespace GameClient.Types.Components.SceneComponents
     class InputComponent : SceneComponent
     {
         private float timer = 0;
-        private float cooldown = 0;
+        private float AbiliyCoolDown = 0;
         public Camera Camera { get; set; }
 
         private float currentMouseWheelValue, previousMouseWheelValue;
@@ -50,19 +52,15 @@ namespace GameClient.Types.Components.SceneComponents
         public override void Update()
         {
             timer += Time.DeltaTime;
-            cooldown += Time.DeltaTime;
+            AbiliyCoolDown += Time.DeltaTime;
 
             if (timer >= ConstantValues.UpdateFrequency)
             {
                 FixedUpdate();
                 timer -= ConstantValues.UpdateFrequency;
             }
-
             CheckForInput();
-            if (cooldown > 1)
-            {
-                cooldown -= 1;
-            }
+
             base.Update();
         }
 
@@ -236,7 +234,6 @@ namespace GameClient.Types.Components.SceneComponents
                 return;
 
             //Update Keyboard
-
             if (Input.CurrentKeyboardState.GetPressedKeys().Length > 0)
                 SendKeyboardRequest(new KeyboardState(KeyboardChange()));
             else
@@ -258,21 +255,35 @@ namespace GameClient.Types.Components.SceneComponents
         {
             KeyboardState newState = Input.CurrentKeyboardState;
             KeyboardState OldKeyboardState = Input.PreviousKeyboardState;
-
             List<Keys> keys = new List<Keys>();
-            if (cooldown > 1)
+            if (AbiliyCoolDown > 1)
             {
                 foreach (var KeyBind in KeyBindContainer.KeyBinds)
                 {
-                    if (newState.IsKeyDown(KeyBind.BindedKey) && OldKeyboardState.IsKeyUp(KeyBind.BindedKey))
+                    if (newState.IsKeyDown(KeyBind.BindedKey) && OldKeyboardState.IsKeyUp(KeyBind.BindedKey) && KeyBind.BindedAbilitityID != -1 && Entity.GetComponent<ChannelBarComponent>() == null)
                     {
                         AbilityHead ability = KeyBind.GetAbility();
                         MessageTemplate template;
-                        if (ability.ChannelTime > 0)
-                            template = new MessageTemplate(KeyBind.GetAbility().AbilityName, MessageType.StartChanneling);
-                        else
-                            template = new MessageTemplate(KeyBind.GetAbility().AbilityName, MessageType.DamageTarget);
-                        MessageManager.AddToQueue(template);
+                        ChannelTemplate ct = new ChannelTemplate(KeyBind.GetAbility().AbilityName, ChannelType.Ability);
+                        if ((Scene as MainScene).UICanvas.Stage.FindAllElementsOfType<TargetWindow>() != null)
+                        {
+                            if (ability.ChannelTime > 0)
+                            {
+                                template = new MessageTemplate(ct.ToJson(), MessageType.StartChanneling);
+                                //ProgressBar bar = new ProgressBar(0, 1, 0.1f, false, ProgressBarStyle.Create(Color.LawnGreen, Color.White));
+                                //Window window = new Window("", skin);
+                                //window.AddElement(bar);
+                                ChannelBarComponent label = new ChannelBarComponent(ability.ChannelTime);
+                                Label l = new Label("");
+                                Entity.AddComponent(label);
+                                //(Scene as MainScene).UICanvas.AddComponent(label);
+                            }
+                            else
+                                template = new MessageTemplate(ct.ToJson(), MessageType.DamageTarget);
+                            MessageManager.AddToQueue(template);
+                            AbiliyCoolDown = 0;
+                        }
+                        
                     }
                 }
             }
@@ -298,7 +309,7 @@ namespace GameClient.Types.Components.SceneComponents
 
             if (newState.IsKeyDown(Keys.D1) && !OldKeyboardState.IsKeyDown(Keys.D1))
             {
-                
+
             }
             if (newState.IsKeyDown(Keys.S) && !OldKeyboardState.IsKeyDown(Keys.S))
             {
@@ -326,7 +337,11 @@ namespace GameClient.Types.Components.SceneComponents
             if (newState.IsKeyDown(Keys.T) && !OldKeyboardState.IsKeyDown(Keys.T))
             {
                 keys.Add(Keys.T);
-                
+
+            }
+            if (IsMoving)
+            {
+                Entity.RemoveComponent<ChannelBarComponent>();
             }
 
             return keys.ToArray();
@@ -347,7 +362,7 @@ namespace GameClient.Types.Components.SceneComponents
                     MessageManager.AddToQueue(template);
                     targeting = false;
                 }
-                    
+
             }
 
             foreach (var entity in entities)

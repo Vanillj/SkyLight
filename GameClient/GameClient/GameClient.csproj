@@ -103,6 +103,9 @@
     <Compile Include="..\..\GameServer\GameServer\Types\Map\MapType.cs">
       <Link>Types\Map\MapType.cs</Link>
     </Compile>
+    <Compile Include="..\..\GameServer\GameServer\Types\Networking\ChannelTemplate.cs">
+      <Link>Types\Networking\ChannelTemplate.cs</Link>
+    </Compile>
     <Compile Include="..\..\GameServer\GameServer\Types\Networking\DataTemplate.cs">
       <Link>Types\Networking\DataTemplate.cs</Link>
     </Compile>
@@ -124,6 +127,7 @@
     <Compile Include="Managers\PlayerManager.cs" />
     <Compile Include="Types\Abilities\AbilityContainerClient.cs" />
     <Compile Include="Types\Abilities\AbilityformaterClient.cs" />
+    <Compile Include="UI\Component\ChannelBarComponent.cs" />
     <Compile Include="UI\Elements\AbilityBarWindow.cs" />
     <Compile Include="UI\Elements\CharacterWindow.cs" />
     <Compile Include="UI\Elements\InventoryWindow.cs" />
@@ -247,7 +251,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Managers\Input\" />
-    <Folder Include="UI\Component\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\GameServer\GameServer\Assets\Grasstiles.tsx">

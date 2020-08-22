@@ -9,26 +9,40 @@
       "TravelTime": 0,
       "TravelSpeed": 0,
       "ClassAbility": 0,
-      "AbilityType": 0
+      "AbilityType": 0,
+      "MaxDistance": 100
+    },
+    {
+      "AbilityName": "Fire Ball",
+      "ID": 1,
+      "BaseDamage": 31,
+      "LevelRequirement": 0,
+      "ChannelTime": 3,
+      "TravelTime": 2,
+      "TravelSpeed": 10,
+      "ClassAbility": 1,
+      "AbilityType": 0,
+      "MaxDistance": 1000
     }
   ],
   "ConeAbility": [
     {
       "AbilityName": "Fire Cone",
-      "ID": 1,
+      "ID": 2,
       "BaseDamage": 50,
       "LevelRequirement": 0,
       "ChannelTime": 0,
       "TravelTime": 0,
       "TravelSpeed": 0,
       "ClassAbility": 1,
-      "AbilityType": 1
+      "AbilityType": 1,
+      "MaxDistance": 100
     }
   ],
   "DoTAbility": [
     {
       "AbilityName": "Ignite",
-      "ID": 2,
+      "ID": 3,
       "BaseDamage": 5,
       "LevelRequirement": 0,
       "ChannelTime": 2,
@@ -37,7 +51,8 @@
       "DamageDuration": 3,
       "TotalDuration": 15,
       "ClassAbility": 1,
-      "AbilityType": 2
+      "AbilityType": 2,
+      "MaxDistance": 1000
     }
   ]
 }

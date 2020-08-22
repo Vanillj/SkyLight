@@ -7,10 +7,12 @@ using GameServer.Types.Abilities;
 using GameServer.Types.Abilities.SharedAbilities;
 using GameServer.Types.Components.Components;
 using GameServer.Types.Item;
+using GameServer.Types.Networking;
 using Lidgren.Network;
 using Microsoft.Xna.Framework.Input;
 using Newtonsoft.Json.Converters;
 using Nez;
+using Nez.BitmapFonts;
 using Server.Managers;
 using Server.Types;
 using System;
@@ -86,120 +88,33 @@ namespace GameServer.Types.Components.SceneComponents
                 switch (template.MessageType)
                 {
                     case MessageType.Movement:
-                        Keys[] KeyState = Newtonsoft.Json.JsonConvert.DeserializeObject<Keys[]>(template.JsonMessage, new StringEnumConverter());
-                        character = MapContainer.FindCharacterByID(message.SenderConnection.RemoteUniqueIdentifier);
-                        bool moved = InputManager.CalculateMovement(character, KeyState, message.SenderConnection.RemoteUniqueIdentifier);
-                        if (moved)
-                        {
-                            e = Scene.FindEntity(character._name);
-                            if (e != null)
-                            {
-                                PlayerComponent playerComponent = e.GetComponent<PlayerComponent>();
-                                if (playerComponent != null)
-                                    playerComponent.isChanneling = false;
-                            }
-                        }
+                        Movement(template, message);
                         break;
-
                     case MessageType.Login:
                         LoginAttempt(message, template);
                         break;
-
                     case MessageType.Register:
                         LoginManagerServer login = Newtonsoft.Json.JsonConvert.DeserializeObject<LoginManagerServer>(template.JsonMessage, new StringEnumConverter());
                         RegisterUser(login);
                         break;
-
-                    //send by selfmade function, not Lidgren
+                    //send by self made function, not Lidgren
                     case MessageType.Disconnected:
                         //OnDisconnected(message.SenderConnection);
                         break;
                     case MessageType.EquipItem:
-                        try
-                        {
-                            int.TryParse(template.JsonMessage, out index);
-                        }
-                        catch
-                        { }
-
-                        if (index != -1)
-                        {
-                            character = MapContainer.FindCharacterByID(message.SenderConnection.RemoteUniqueIdentifier);
-                            WeaponItem newItem = character.GetInventory().ElementAt(index);
-                            if (newItem != null)
-                            {
-                                int type = (int)newItem.GetEqupmentType();
-                                WeaponItem currentItem = character.Equipment[type];
-
-                                if (currentItem == null)
-                                    character.Inventory[index] = null;
-                                else
-                                    character.Inventory[index] = currentItem;
-
-                                character.Equipment[type] = newItem;
-                            }
-                        }
+                        UnEquipItem(template, message);
                         break;
                     case MessageType.UnEquipItem:
-                        character = MapContainer.FindCharacterByID(message.SenderConnection.RemoteUniqueIdentifier);
-                        var inventory = character.GetInventory();
-                        var equpment = character.GetEquipment();
-                        int invIndex = Array.FindIndex(inventory, i => i == null);
-
-                        try
-                        {
-                            int.TryParse(template.JsonMessage, out index);
-                        }
-                        catch (Exception)
-                        {
-
-                        }
-                        if (invIndex != -1)
-                        {
-                            inventory[invIndex] = equpment[index];
-                            equpment[index] = null;
-                        }
+                        UnEquipItem(character, message, template);
                         break;
                     case MessageType.StartChanneling:
-                        character = MapContainer.FindCharacterByID(message.SenderConnection.RemoteUniqueIdentifier);
-                        AbilityHead ability = AbilityContainer.GetAbilityByName(template.JsonMessage);
-                        e = Scene.FindEntity(character._name);
-                        PlayerComponent pc = e.GetComponent<PlayerComponent>();
-                        if (pc != null && !pc.isChanneling)
-                        {
-                            if (ability != null)
-                            {
-                                e.AddComponent(new DamageChannelingComponent(pc, 4, ability));
-                            }
-                            else
-                            {
-                                e.AddComponent(new ChannelingComponent(pc, 4));
-                            }
-                        }
+                        StartChanneling(template, message);
                         break;
                     case MessageType.Target:
-                        character = MapContainer.FindCharacterByID(message.SenderConnection.RemoteUniqueIdentifier);
-                        e = Scene.FindEntity(character._name);
-                        var et = Scene.FindEntity(template.JsonMessage);
-                        PlayerComponent p = e.GetComponent<PlayerComponent>();
-                        if (template.JsonMessage != "")
-                        {
-                            p.Target = et;
-                        }
-                        else
-                        {
-                            p.Target = null;
-                        }
+                        TargetPlayer(message, template);
                         break;
                     case MessageType.DamageTarget:
-                        character = MapContainer.FindCharacterByID(message.SenderConnection.RemoteUniqueIdentifier);
-                        AbilityHead abi = AbilityContainer.GetAbilityByName(template.JsonMessage);
-                        e = Scene.FindEntity(character._name);
-                        PlayerComponent pcomp = e.GetComponent<PlayerComponent>();
-                        if (pcomp != null && abi != null && pcomp.Target != null)
-                        {
-                            pcomp.Target.GetComponent<DamageComponent>().DealDamageToEntity(abi.BaseDamage);
-                        }
+                        DamageTarget(message, template);
                         break;
 
                 }
@@ -219,7 +134,8 @@ namespace GameServer.Types.Components.SceneComponents
             {
                 //true if logged in
                 bool success = LoginManagerServerUser.SetupLogin();
-                if (success)
+                Entity e = Scene.FindEntity(LoginManagerServerUser.GetCharacter()._name);
+                if (success && e == null)
                 {
                     Console.WriteLine("Logged in with \"" + LoginManagerServerUser.username + "\" to Database");
                     string characterString = Newtonsoft.Json.JsonConvert.SerializeObject(LoginManagerServerUser.GetCharacter(), new StringEnumConverter());
@@ -274,6 +190,118 @@ namespace GameServer.Types.Components.SceneComponents
         private void OnDisconnected(NetConnection sender)
         {
             MessageManager.DisconnectConnection(sender, Scene);
+        }
+
+        private void UnEquipItem(CharacterPlayer character, NetIncomingMessage message, MessageTemplate template)
+        {
+            character = MapContainer.FindCharacterByID(message.SenderConnection.RemoteUniqueIdentifier);
+            var inventory = character.GetInventory();
+            var equpment = character.GetEquipment();
+            int invIndex = Array.FindIndex(inventory, i => i == null);
+            int index = -1;
+            try
+            {
+                int.TryParse(template.JsonMessage, out index);
+            }
+            catch (Exception)
+            {
+
+            }
+            if (invIndex != -1)
+            {
+                inventory[invIndex] = equpment[index];
+                equpment[index] = null;
+            }
+        }
+
+        private void UnEquipItem(MessageTemplate template, NetIncomingMessage message)
+        {
+            int index = -1;
+            try
+            {
+                int.TryParse(template.JsonMessage, out index);
+            }
+            catch
+            { }
+
+            if (index != -1)
+            {
+                CharacterPlayer character = MapContainer.FindCharacterByID(message.SenderConnection.RemoteUniqueIdentifier);
+                WeaponItem newItem = character.GetInventory().ElementAt(index);
+                if (newItem != null)
+                {
+                    int type = (int)newItem.GetEqupmentType();
+                    WeaponItem currentItem = character.Equipment[type];
+
+                    if (currentItem == null)
+                        character.Inventory[index] = null;
+                    else
+                        character.Inventory[index] = currentItem;
+
+                    character.Equipment[type] = newItem;
+                }
+            }
+        }
+
+        private void Movement(MessageTemplate template, NetIncomingMessage message)
+        {
+            Keys[] KeyState = Newtonsoft.Json.JsonConvert.DeserializeObject<Keys[]>(template.JsonMessage, new StringEnumConverter());
+            CharacterPlayer character = MapContainer.FindCharacterByID(message.SenderConnection.RemoteUniqueIdentifier);
+            bool moved = InputManager.CalculateMovement(character, KeyState, message.SenderConnection.RemoteUniqueIdentifier);
+            if (moved)
+            {
+                Entity entity = Scene.FindEntity(character._name);
+                if (entity != null)
+                {
+                    PlayerComponent playerComponent = entity.GetComponent<PlayerComponent>();
+                    if (playerComponent != null)
+                        playerComponent.isChanneling = false;
+                }
+            }
+        }
+
+        private void StartChanneling(MessageTemplate template, NetIncomingMessage message)
+        {
+            ChannelTemplate ct = Newtonsoft.Json.JsonConvert.DeserializeObject<ChannelTemplate>(template.JsonMessage);
+            if (ct.ChannelType.Equals(ChannelType.Ability))
+            {
+                AbilityHead ability = AbilityContainer.GetAbilityByName(ct.ChannelName);
+                CharacterPlayer character = MapContainer.FindCharacterByID(message.SenderConnection.RemoteUniqueIdentifier);
+                Entity entity = Scene.FindEntity(character._name);
+                PlayerComponent pc = entity.GetComponent<PlayerComponent>();
+                if (pc != null && !pc.isChanneling)
+                {
+                    if (ability != null)
+                        entity.AddComponent(new DamageChannelingComponent(pc, ability.ChannelTime, ability));
+                    else
+                        entity.AddComponent(new ChannelingComponent(pc, 4));
+                }
+
+            }
+        }
+
+        private void TargetPlayer(NetIncomingMessage message, MessageTemplate template)
+        {
+            CharacterPlayer character = MapContainer.FindCharacterByID(message.SenderConnection.RemoteUniqueIdentifier);
+            Entity entity = Scene.FindEntity(character._name);
+            var et = Scene.FindEntity(template.JsonMessage);
+            PlayerComponent p = entity.GetComponent<PlayerComponent>();
+            if (template.JsonMessage != "")
+                p.Target = et;
+            else
+                p.Target = null;
+        }
+
+        private void DamageTarget(NetIncomingMessage message, MessageTemplate template)
+        {
+            CharacterPlayer character = MapContainer.FindCharacterByID(message.SenderConnection.RemoteUniqueIdentifier);
+            AbilityHead abi = AbilityContainer.GetAbilityByName(template.JsonMessage);
+            Entity entity = Scene.FindEntity(character._name);
+            PlayerComponent pcomp = entity.GetComponent<PlayerComponent>();
+            if (pcomp != null && abi != null && pcomp.Target != null)
+            {
+                pcomp.Target.GetComponent<DamageComponent>().DealDamageToEntity(abi.BaseDamage);
+            }
         }
 
     }

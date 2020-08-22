@@ -1,10 +1,6 @@
 ﻿using GameServer.Types.Abilities;
 using Nez;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GameServer.Types.Components.Components
 {
@@ -24,22 +20,26 @@ namespace GameServer.Types.Components.Components
             List<DoTAbility> TempDots = new List<DoTAbility>();
             foreach (var dot in DoTs)
             {
-                dot.AddToDurationDelta(Time.DeltaTime);
-                dot.AddToDamageTimerDelta(Time.DeltaTime);
+                if (dot != null)
+                {
+                    dot.AddToDurationDelta(Time.DeltaTime);
+                    dot.AddToDamageTimerDelta(Time.DeltaTime);
 
-                if (dot.getDurationDelta() > dot.TotalDuration)
-                {
-                    TempDots.Add(dot);
-                }
-                else
-                {
-                    if (dot.getDamageTimerDelta() > dot.DamageDuration)
+                    if (dot.getDurationDelta() > dot.TotalDuration)
                     {
-                        //TODO: damage calculations later
-                        DealDamageToEntity(dot.BaseDamage);
-                        dot.AddToDamageTimerDelta(-dot.DamageDuration);
+                        TempDots.Add(dot);
+                    }
+                    else
+                    {
+                        if (dot.getDamageTimerDelta() > dot.DamageDuration)
+                        {
+                            //TODO: damage calculations later
+                            DealDamageToEntity(dot.BaseDamage);
+                            dot.AddToDamageTimerDelta(-dot.DamageDuration);
+                        }
                     }
                 }
+
             }
             DoTs.RemoveAll(d => TempDots.Contains(d));
         }

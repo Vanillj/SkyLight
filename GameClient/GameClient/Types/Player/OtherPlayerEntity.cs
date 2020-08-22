@@ -15,7 +15,6 @@ namespace GameClient.Types.Player
 {
     class OtherPlayerEntity : Entity
     {
-
         TextComponent HealthtextComponent;
         CharacterPlayer other;
 
@@ -32,10 +31,11 @@ namespace GameClient.Types.Player
             if (other != null)
             {
                 other = LoginManagerClient.OtherCharacters.Find(c => c._name.Equals(other._name));
-
-                HealthtextComponent.SetText(other.CurrentHealth.ToString());
+                if(other != null)
+                {
+                    HealthtextComponent.SetText(other.CurrentHealth.ToString());
+                }
             }
-            HealthtextComponent.SetText(other.CurrentHealth.ToString());
             base.Update();
         }
 

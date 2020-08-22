@@ -25,7 +25,7 @@ namespace GameServer.Types.Components.Components
         public void Update()
         {
             TotalTime += Time.DeltaTime;
-            if (TotalTime * 100 >= ChannelTime)
+            if (TotalTime >= ChannelTime)
             {
                 ChannelExecute();
                 this.RemoveComponent();

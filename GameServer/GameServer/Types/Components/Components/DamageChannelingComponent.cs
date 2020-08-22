@@ -30,6 +30,12 @@ namespace GameServer.Types.Components.Components
                         target.GetComponent<DamageComponent>().AddDoTAbility(ability as DoTAbility);
                     }
                     break;
+                case AbilityType.TravelAbility:
+                    if (target != null)
+                    {
+                        target.GetComponent<DamageComponent>().DealDamageToEntity(ability.BaseDamage);
+                    }
+                    break;
                 default:
                     break;
             }

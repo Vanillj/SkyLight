@@ -12,7 +12,6 @@ namespace GameClient.UI.Elements
 {
     class AbilityBarWindow : Window
     {
-
         public AbilityBarWindow(string title, WindowStyle style) : base(title, style)
         {
             SetMovable(false);
