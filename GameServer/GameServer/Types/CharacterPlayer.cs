@@ -14,7 +14,7 @@ namespace Server.Types
         public Vector2 physicalPosition = new Vector2(0, 0);
         public string LastMultiLocation { get; set; } //Last location that is not solo or group locked
         public int CurrentHealth { get; set; }
-        public CharacterPlayer(float x, float y, string name, WeaponItem[] equipment, WeaponItem[] inventory) : base(x, y, name)
+        public CharacterPlayer(float x, float y, string name, WeaponItem[] equipment, WeaponItem[] inventory, int maxHealth = 100) : base(x, y, name, maxHealth)
         {
             Equipment = equipment;
             Inventory = inventory;

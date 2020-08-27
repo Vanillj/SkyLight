@@ -38,7 +38,6 @@ namespace GameServer.Types.Components.Components
         }
         public override void OnAddedToEntity()
         {
-
             base.OnAddedToEntity();
         }
         public override void OnRemovedFromEntity()

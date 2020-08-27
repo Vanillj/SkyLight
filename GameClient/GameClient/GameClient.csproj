@@ -129,6 +129,7 @@
     <Compile Include="Types\Abilities\AbilityformaterClient.cs" />
     <Compile Include="UI\Component\ChannelBarComponent.cs" />
     <Compile Include="UI\Elements\AbilityBarWindow.cs" />
+    <Compile Include="UI\Elements\ChannelBarWindow.cs" />
     <Compile Include="UI\Elements\CharacterWindow.cs" />
     <Compile Include="UI\Elements\InventoryWindow.cs" />
     <Compile Include="UI\Elements\ItemButton.cs" />
@@ -368,6 +369,10 @@
     <ProjectReference Include="..\..\Dependencies\Nez\Nez.FarseerPhysics\Nez.FarseerPhysics.csproj">
       <Project>{ab29b711-dbec-43b3-96de-2eaabf8912f4}</Project>
       <Name>Nez.FarseerPhysics</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Dependencies\Nez\Nez.ImGui\Nez.ImGui.csproj">
+      <Project>{982ad513-4500-4b4a-97a7-09c92eebed79}</Project>
+      <Name>Nez.ImGui</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Dependencies\Nez\Nez.Portable\Nez.csproj">
       <Project>{64730b7a-b614-4d24-b81c-1a82c21e2083}</Project>

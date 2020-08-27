@@ -9,11 +9,13 @@ namespace Server.Types
         public string _name;
         private Texture2D playerTexture { get; set; }
         public int playerTextureID { get; set; }
-        public CharacterHead(float x, float y, string name)
+        public int MaxHealth { get; set; }
+        public CharacterHead(float x, float y, string name, int maxHealth)
         {
             _pos.X = x;
             _pos.Y = y;
             _name = name;
+            MaxHealth = maxHealth;
         }
 
     }

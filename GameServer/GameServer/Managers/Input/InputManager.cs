@@ -2,6 +2,8 @@
 using FarseerPhysics.Dynamics;
 using GameServer.General;
 using GameServer.Managers;
+using GameServer.Types.Components;
+using GameServer.Types.Components.Components;
 using GameServer.Types.Item;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
@@ -65,10 +67,12 @@ namespace Server.Managers
                 }
                 if (dir != Vector2.Zero)
                 {
-                    var movement = dir * speed * Time.DeltaTime;
                     Entity e = Core.Scene.FindEntity(character._name);
-                    FSRigidBody body = e.GetComponent<FSRigidBody>();
+                    e.RemoveComponent<ChannelingComponent>();
 
+                    var movement = dir * speed * Time.DeltaTime;
+
+                    FSRigidBody body = e.GetComponent<FSRigidBody>();
                     Mover mover = e.GetComponent<Mover>();
 
                     if(mover.Move(movement, out CollisionResult collisionResult))

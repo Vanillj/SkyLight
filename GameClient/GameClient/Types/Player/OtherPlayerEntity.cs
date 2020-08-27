@@ -1,9 +1,12 @@
 ﻿using Client.Managers;
 using GameClient.General;
+using GameClient.Scenes;
 using GameClient.Types.Components;
+using GameServer.General;
 using Microsoft.Xna.Framework;
 using Nez;
 using Nez.Sprites;
+using Nez.UI;
 using Server.Types;
 using System;
 using System.Collections.Generic;
@@ -17,7 +20,8 @@ namespace GameClient.Types.Player
     {
         TextComponent HealthtextComponent;
         CharacterPlayer other;
-
+        ProgressBar bar;
+        private int past = 100;
         public OtherPlayerEntity()
         {
         }
@@ -31,9 +35,17 @@ namespace GameClient.Types.Player
             if (other != null)
             {
                 other = LoginManagerClient.OtherCharacters.Find(c => c._name.Equals(other._name));
-                if(other != null)
+                if (other != null)
                 {
-                    HealthtextComponent.SetText(other.CurrentHealth.ToString());
+                    other.MaxHealth = 100;
+                    Vector2 p = Scene.Camera.WorldToScreenPoint(other.physicalPosition);
+                    bar.SetPosition(p.X - bar.PreferredWidth / 2, p.Y - bar.PreferredHeight / 2);
+                    if (past != other.CurrentHealth)
+                    {
+                        bar.SetValue(other.CurrentHealth / (float)other.MaxHealth);
+                        HealthtextComponent.SetText(other.CurrentHealth.ToString());
+                        past = other.CurrentHealth;
+                    }
                 }
             }
             base.Update();
@@ -41,6 +53,8 @@ namespace GameClient.Types.Player
 
         public OtherPlayerEntity(CharacterPlayer others) : base(others._name)
         {
+            others.MaxHealth = 100;
+
             other = others;
             TextComponent textComponent = new TextComponent(Graphics.Instance.BitmapFont, others._name, Vector2.Zero, Color.White);
             HealthtextComponent = new TextComponent(Graphics.Instance.BitmapFont, others.CurrentHealth.ToString(), Vector2.Zero, Color.White);
@@ -59,6 +73,19 @@ namespace GameClient.Types.Player
             animator.AddAnimation("Idle", Idle);
             animator.AddAnimation("Movement", Movement);
             animator.Play("Idle");
+
+        }
+        public override void OnAddedToScene()
+        {
+            other.MaxHealth = 100;
+            past = other.MaxHealth;
+            bar = new ProgressBar(0, 1, 0.02f, false, ConstantValues.skin);
+            bar.SetWidth(100);
+            bar.SetValue(1);
+            Vector2 p = Scene.Camera.WorldToScreenPoint(other.physicalPosition);
+            bar.SetPosition(p.X - bar.PreferredWidth/2, p.Y - bar.PreferredHeight/2);
+            (Scene as MainScene).UICanvas.Stage.AddElement(bar);
+            base.OnAddedToScene();
         }
     }
 }

@@ -9,6 +9,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nez", "..\Dependencies\Nez\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nez.FarseerPhysics", "..\Dependencies\Nez\Nez.FarseerPhysics\Nez.FarseerPhysics.csproj", "{AB29B711-DBEC-43B3-96DE-2EAABF8912F4}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nez.ImGui", "..\Dependencies\Nez\Nez.ImGui\Nez.ImGui.csproj", "{982AD513-4500-4B4A-97A7-09C92EEBED79}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nez.Persistence", "..\Dependencies\Nez\Nez.Persistence\Nez.Persistence.csproj", "{4175A419-43DA-4FF0-B1C2-AF8E665BB9F0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +31,14 @@ Global
 		{AB29B711-DBEC-43B3-96DE-2EAABF8912F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AB29B711-DBEC-43B3-96DE-2EAABF8912F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AB29B711-DBEC-43B3-96DE-2EAABF8912F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{982AD513-4500-4B4A-97A7-09C92EEBED79}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{982AD513-4500-4B4A-97A7-09C92EEBED79}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{982AD513-4500-4B4A-97A7-09C92EEBED79}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{982AD513-4500-4B4A-97A7-09C92EEBED79}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4175A419-43DA-4FF0-B1C2-AF8E665BB9F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4175A419-43DA-4FF0-B1C2-AF8E665BB9F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4175A419-43DA-4FF0-B1C2-AF8E665BB9F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4175A419-43DA-4FF0-B1C2-AF8E665BB9F0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -3,9 +3,11 @@ using GameClient.General;
 using GameClient.Managers;
 using GameClient.Types.Abilities;
 using GameClient.Types.Components.SceneComponents;
+using GameClient.UI.Elements;
 using GameServer.Types.Abilities;
 using Microsoft.Xna.Framework;
 using Nez;
+using Nez.ImGuiTools;
 using Nez.Sprites;
 using Nez.Textures;
 using Nez.UI;
@@ -30,7 +32,6 @@ namespace GameClient.Scenes
             TextureContainer.LoadTextures();
             AbilityContainerClient.LoadAbilities();
             KeyBindContainer.SetKeyBinds();
-
 
             Entity e = CreateEntity("Wallpaper");
             e.AddComponent(new SpriteRenderer(TextureContainer.LoginWallpaper)).SetOrigin(new Vector2(0, 0));
@@ -84,6 +85,10 @@ namespace GameClient.Scenes
             Table.Row().SetPadTop(10);
             Table.Add(buttonr);
 
+            //var imGuiManager = new ImGuiManager();
+            //Core.RegisterGlobalManager(imGuiManager);
+            //imGuiManager.SetEnabled(false);
+            //imGuiManager.ShowDemoWindow = true;
         }
 
         public override void OnStart()

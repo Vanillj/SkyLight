@@ -260,22 +260,21 @@ namespace GameClient.Types.Components.SceneComponents
             {
                 foreach (var KeyBind in KeyBindContainer.KeyBinds)
                 {
-                    if (newState.IsKeyDown(KeyBind.BindedKey) && OldKeyboardState.IsKeyUp(KeyBind.BindedKey) && KeyBind.BindedAbilitityID != -1 && Entity.GetComponent<ChannelBarComponent>() == null)
+                    if (newState.IsKeyDown(KeyBind.BindedKey) && OldKeyboardState.IsKeyUp(KeyBind.BindedKey) && KeyBind.BindedAbilitityID != -1 && Scene.GetSceneComponent<ChannelBarComponent>() == null)
                     {
                         AbilityHead ability = KeyBind.GetAbility();
                         MessageTemplate template;
                         ChannelTemplate ct = new ChannelTemplate(KeyBind.GetAbility().AbilityName, ChannelType.Ability);
                         if ((Scene as MainScene).UICanvas.Stage.FindAllElementsOfType<TargetWindow>() != null)
                         {
-                            if (ability.ChannelTime > 0)
+                            if (ability.ChannelTime > 0 && targeting)
                             {
                                 template = new MessageTemplate(ct.ToJson(), MessageType.StartChanneling);
                                 //ProgressBar bar = new ProgressBar(0, 1, 0.1f, false, ProgressBarStyle.Create(Color.LawnGreen, Color.White));
                                 //Window window = new Window("", skin);
                                 //window.AddElement(bar);
-                                ChannelBarComponent label = new ChannelBarComponent(ability.ChannelTime);
-                                Label l = new Label("");
-                                Entity.AddComponent(label);
+                                ChannelBarComponent channelBarComponent = new ChannelBarComponent(ability.ChannelTime);
+                                Scene.AddSceneComponent(channelBarComponent);
                                 //(Scene as MainScene).UICanvas.AddComponent(label);
                             }
                             else
@@ -341,7 +340,7 @@ namespace GameClient.Types.Components.SceneComponents
             }
             if (IsMoving)
             {
-                Entity.RemoveComponent<ChannelBarComponent>();
+                Scene.RemoveSceneComponent<ChannelBarComponent>();
             }
 
             return keys.ToArray();

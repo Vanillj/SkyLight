@@ -1,4 +1,5 @@
 ﻿using Client.Managers;
+using GameServer.General;
 using Nez;
 using Nez.UI;
 using Server.Managers;
@@ -17,6 +18,7 @@ namespace Server.Scenes
         public override void Initialize()
         {
             base.Initialize();
+            ConstantValues.SetSkin();
             SetupScene();
         }
 

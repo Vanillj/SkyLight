@@ -46,7 +46,7 @@ namespace GameClient.UI.Elements
 
         }
 
-        public AbilityBarWindow(string title, Skin skin, string styleName = null) : base(title, skin, styleName)
+        public AbilityBarWindow(Skin skin, string title = "", string styleName = null) : base(title, skin, styleName)
         {
             SetMovable(false);
             SetResizable(false);

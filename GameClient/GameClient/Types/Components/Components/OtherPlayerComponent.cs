@@ -19,6 +19,7 @@ namespace GameClient.Types.Components
         {
             _character = character;
         }
+
         public void Update()
         {
             timer += Time.DeltaTime;

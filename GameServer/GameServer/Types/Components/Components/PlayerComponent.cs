@@ -32,7 +32,6 @@ namespace GameServer.Types.Components
         {
             //checks if client is still connected
             //CheckIfConnected();
-
             timeSpan += Time.DeltaTime;
             //Updates every 1/20 second
             if (timeSpan > 0.05)

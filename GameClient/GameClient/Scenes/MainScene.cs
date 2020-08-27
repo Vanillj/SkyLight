@@ -12,12 +12,14 @@ using GameServer.General;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Nez;
+using Nez.ImGuiTools;
 using Nez.Sprites;
 using Nez.Textures;
 using Nez.Tweens;
 using Nez.UI;
 using Server.Scenes;
 using Server.Types;
+using Nez.ImGuiTools;
 using System;
 using System.Collections.Generic;
 
@@ -82,7 +84,7 @@ namespace GameClient.Scenes
             AddSceneComponent<MessageSceneComponent>();
             AddSceneComponent<TileSceneComponent>();
             AddSceneComponent(new InputComponent(player, Core.Scene.Camera));
-            UICanvas.Stage.AddElement(new AbilityBarWindow("", InputComponent.skin));
+            UICanvas.Stage.AddElement(new AbilityBarWindow(InputComponent.skin));
             base.OnStart();
         }
 

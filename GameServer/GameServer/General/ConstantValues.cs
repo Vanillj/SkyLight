@@ -1,4 +1,5 @@
 ﻿
+using Nez.UI;
 using System.Runtime.CompilerServices;
 
 namespace GameServer.General
@@ -17,7 +18,7 @@ namespace GameServer.General
         public const string ClassDataFileName = "";
         public const string AbilityDataFileName = "AbilityData.json";
         public const string DefaultMap = "map";
-
+        public static Skin skin;
         public const string KeyBindName = "KeyBindData.json";
 
         //Variables that need to be set
@@ -61,6 +62,11 @@ namespace GameServer.General
                 if (_ServerString == null)
                     _ServerString = value;
             }
+        }
+
+        public static void SetSkin()
+        {
+            skin = Skin.CreateDefaultSkin();
         }
 
     }
