@@ -18,7 +18,7 @@ namespace GameClient.Types.Player
 {
     class OtherPlayerEntity : Entity
     {
-        TextComponent HealthtextComponent;
+        //TextComponent HealthtextComponent;
         CharacterPlayer other;
         ProgressBar bar;
         private int past = 100;
@@ -43,7 +43,7 @@ namespace GameClient.Types.Player
                     if (past != other.CurrentHealth)
                     {
                         bar.SetValue(other.CurrentHealth / (float)other.MaxHealth);
-                        HealthtextComponent.SetText(other.CurrentHealth.ToString());
+                        //HealthtextComponent.SetText(other.CurrentHealth.ToString());
                         past = other.CurrentHealth;
                     }
                 }
@@ -57,12 +57,12 @@ namespace GameClient.Types.Player
 
             other = others;
             TextComponent textComponent = new TextComponent(Graphics.Instance.BitmapFont, others._name, Vector2.Zero, Color.White);
-            HealthtextComponent = new TextComponent(Graphics.Instance.BitmapFont, others.CurrentHealth.ToString(), Vector2.Zero, Color.White);
+            //HealthtextComponent = new TextComponent(Graphics.Instance.BitmapFont, others.CurrentHealth.ToString(), Vector2.Zero, Color.White);
 
             this.SetPosition(others.physicalPosition);
             AddComponent(new OtherPlayerComponent(others));
             AddComponent(textComponent);
-            AddComponent(HealthtextComponent).SetHorizontalAlign(HorizontalAlign.Left).SetVerticalAlign(VerticalAlign.Bottom).SetRenderLayer(-2);
+            //AddComponent(HealthtextComponent).SetHorizontalAlign(HorizontalAlign.Left).SetVerticalAlign(VerticalAlign.Bottom).SetRenderLayer(-2);
             SetTag(7);
             this.SetScale(3.5f);
 
@@ -75,6 +75,7 @@ namespace GameClient.Types.Player
             animator.Play("Idle");
 
         }
+
         public override void OnAddedToScene()
         {
             other.MaxHealth = 100;

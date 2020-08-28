@@ -14,12 +14,14 @@ namespace GameClient.UI.Component
     {
         private float TotalTime = 0;
         private float StartTime;
+        private TextComponent HealthtextComponent;
         private ProgressBar bar;
 
         public ChannelBarComponent(int startTime)
         {
             //SetText(startTime.ToString());
             StartTime = startTime;
+            
         }
 
         public override void Update()

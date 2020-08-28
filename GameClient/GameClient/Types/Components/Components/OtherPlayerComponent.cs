@@ -28,7 +28,6 @@ namespace GameClient.Types.Components
             {
                 timer -= ConstantValues.UpdateFrequency;
                 FixedUpdate();
-                
             }
             
         }
