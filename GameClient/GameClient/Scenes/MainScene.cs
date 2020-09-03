@@ -78,7 +78,6 @@ namespace GameClient.Scenes
            
         }
 
-
         public override void OnStart()
         {
             AddSceneComponent<MessageSceneComponent>();

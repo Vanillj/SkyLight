@@ -116,7 +116,6 @@ namespace GameServer.Types.Components.SceneComponents
                     case MessageType.DamageTarget:
                         DamageTarget(message, template);
                         break;
-
                 }
             });
 

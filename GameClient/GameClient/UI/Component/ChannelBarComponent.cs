@@ -1,4 +1,5 @@
 ﻿using GameClient.Scenes;
+using GameClient.UI.Elements;
 using GameServer.General;
 using Nez;
 using Nez.UI;
@@ -14,8 +15,7 @@ namespace GameClient.UI.Component
     {
         private float TotalTime = 0;
         private float StartTime;
-        private TextComponent HealthtextComponent;
-        private ProgressBar bar;
+        ChannelBarWindow channelBarWindow;
 
         public ChannelBarComponent(int startTime)
         {
@@ -32,30 +32,29 @@ namespace GameClient.UI.Component
             {
                 if (this != null)
                 {
-                    bar.Remove();
+                    channelBarWindow.RemoveElements();
                     Scene.RemoveSceneComponent<ChannelBarComponent>();
                 }
             }
             else
             {
-                bar.SetValue((TotalTime / StartTime));
+                channelBarWindow.UpdateBar((TotalTime / StartTime), (float)Math.Round((StartTime - TotalTime), 3));
             }
             base.Update();
         }
-
+        
         public override void OnRemovedFromScene()
         {
-            if(bar != null)
-                bar.Remove();
+            if(channelBarWindow != null)
+                channelBarWindow.RemoveElements();
             base.OnRemovedFromScene();
         }
 
         public override void OnEnabled()
         {
             base.OnEnabled();
-            bar = new ProgressBar(0, 1, 0.01f, false, ConstantValues.skin);
-            bar.SetPosition(Screen.Width / 2 - 0.75f*bar.PreferredWidth / 2, (Screen.Height + 0.2f * Screen.Height) / 2 - bar.GetHeight() / 2);
-            (Scene as MainScene).UICanvas.Stage.AddElement(bar);
+            channelBarWindow = new ChannelBarWindow("", ConstantValues.skin);
+            (Scene as MainScene).UICanvas.Stage.AddElement(channelBarWindow);
         }
     }
 }

@@ -127,6 +127,7 @@
     <Compile Include="Managers\PlayerManager.cs" />
     <Compile Include="Types\Abilities\AbilityContainerClient.cs" />
     <Compile Include="Types\Abilities\AbilityformaterClient.cs" />
+    <Compile Include="Types\Components\SceneComponents\ObjectSceneEntity.cs" />
     <Compile Include="UI\Component\ChannelBarComponent.cs" />
     <Compile Include="UI\Elements\AbilityBarWindow.cs" />
     <Compile Include="UI\Elements\ChannelBarWindow.cs" />
@@ -134,6 +135,7 @@
     <Compile Include="UI\Elements\InventoryWindow.cs" />
     <Compile Include="UI\Elements\ItemButton.cs" />
     <Compile Include="UI\Elements\ItemHoverWindow.cs" />
+    <Compile Include="UI\Elements\PopUpTextWindow.cs" />
     <Compile Include="UI\Elements\TargetWindow.cs" />
     <Compile Include="UI\SceneManager.cs" />
     <Compile Include="UI\UIManager.cs" />
@@ -224,7 +226,7 @@
     </None>
     <None Include="..\..\GameServer\GameServer\Assets\MapTwo.tmx">
       <Link>Assets\MapTwo.tmx</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="..\..\GameServer\GameServer\Data\AbilityData.json">
       <Link>Data\AbilityData.json</Link>
@@ -252,6 +254,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Managers\Input\" />
+    <Folder Include="Types\Components\Components\Objects\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\GameServer\GameServer\Assets\Grasstiles.tsx">

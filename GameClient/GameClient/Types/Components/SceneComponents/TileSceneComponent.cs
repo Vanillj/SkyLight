@@ -40,6 +40,13 @@ namespace GameClient.Types.Components.SceneComponents
                 tmr.Material = new Material(BlendState.NonPremultiplied);
                 tmr.SetRenderLayer(1);
                 tmr.SetLayersToRender(new string[] { "Tile", "Collision", "Decoration", "CustomCollision" });
+                TmxObjectGroup l = map.TmxMap.GetLayer<TmxObjectGroup>("Objects");
+                foreach (TmxObject obj in l.Objects)
+                {
+                    ObjectSceneEntity osc = new ObjectSceneEntity(obj, tmr.TiledMap.TileWidth);
+                    osc.SetPosition(osc.Position);
+                    Scene.AddEntity(osc);
+                }
             }
         }
 
@@ -50,7 +57,6 @@ namespace GameClient.Types.Components.SceneComponents
             tmr.Material = new Material(BlendState.NonPremultiplied);
             tmr.SetRenderLayer(1);
             tmr.SetLayersToRender(new string[] { "Tile", "Collision", "Decoration", "CustomCollision" });
-
         }
     }
 }

@@ -42,7 +42,11 @@ namespace GameClient.Types.Player
                     bar.SetPosition(p.X - bar.PreferredWidth / 2, p.Y - bar.PreferredHeight / 2);
                     if (past != other.CurrentHealth)
                     {
-                        bar.SetValue(other.CurrentHealth / (float)other.MaxHealth);
+                        if (other.CurrentHealth > 0)
+                            bar.SetValue(other.CurrentHealth / (float)other.MaxHealth);
+                        else
+                            bar.SetValue(0);
+                        
                         //HealthtextComponent.SetText(other.CurrentHealth.ToString());
                         past = other.CurrentHealth;
                     }
