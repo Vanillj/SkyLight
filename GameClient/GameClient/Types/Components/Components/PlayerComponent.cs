@@ -16,6 +16,7 @@ namespace GameClient.Types.Components.Components
     {
         private Direction oldDir;
         private float timer = 0;
+        private Entity Target;
 
         public void Update()
         {
@@ -82,6 +83,19 @@ namespace GameClient.Types.Components.Components
                     Entity.Position = ClientsidePos;
                 }
             }
+        }
+
+        public Entity GetTarget()
+        {
+            return Target;
+        }
+        public void SetTarget(Entity target)
+        {
+            Target = target;
+        }
+        public void RemoveTarget()
+        {
+            SetTarget(null);
         }
     }
 }

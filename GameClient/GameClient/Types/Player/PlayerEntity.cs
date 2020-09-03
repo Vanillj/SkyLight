@@ -20,7 +20,7 @@ namespace GameClient.Types.Player
 
         public PlayerEntity()
         {
-
+            
         }
 
         public PlayerEntity(string name) : base(name)
@@ -45,14 +45,14 @@ namespace GameClient.Types.Player
             this.player = player;
             TextComponent textComponent = new TextComponent(Graphics.Instance.BitmapFont, player._name, Vector2.Zero, Color.White);
             HealthtextComponent = new TextComponent(Graphics.Instance.BitmapFont, player.CurrentHealth.ToString(), Vector2.Zero, Color.White);
-
+            SetTag(2);
             this.SetPosition(player.physicalPosition);
             AddComponent(textComponent).SetHorizontalAlign(HorizontalAlign.Center).SetVerticalAlign(VerticalAlign.Top).SetRenderLayer(-200);
             AddComponent(new PlayerComponent());
             AddComponent(HealthtextComponent).SetHorizontalAlign(HorizontalAlign.Right).SetVerticalAlign(VerticalAlign.Bottom).SetRenderLayer(-200);
 
-            SpriteAnimation Idle = TextureContainer.KnightAnimationAtlas.GetAnimation("Idle");
-            SpriteAnimation Movement = TextureContainer.KnightAnimationAtlas.GetAnimation("Movement");
+            SpriteAnimation Idle = TextureContainer.GetSpriteAtlasByName("Knight").GetAnimation("Idle");
+            SpriteAnimation Movement = TextureContainer.GetSpriteAtlasByName("Knight").GetAnimation("Movement");
 
             SpriteAnimator ani = textComponent.AddComponent<SpriteAnimator>();
             ani.AddAnimation("Idle", Idle);

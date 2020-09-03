@@ -29,8 +29,8 @@ namespace GameClient.Scenes
     {
         float timer = 0;
 
-        SpriteAnimation Idle = TextureContainer.KnightAnimationAtlas.GetAnimation("Idle");
-        SpriteAnimation Movement = TextureContainer.KnightAnimationAtlas.GetAnimation("Movement");
+        SpriteAnimation Idle = TextureContainer.GetSpriteAtlasByName("Knight").GetAnimation("Idle");
+        SpriteAnimation Movement = TextureContainer.GetSpriteAtlasByName("Knight").GetAnimation("Movement");
         public override Table Table { get; set; }
 
         public PlayerEntity player;

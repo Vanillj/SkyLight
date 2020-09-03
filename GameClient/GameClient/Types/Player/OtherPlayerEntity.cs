@@ -70,8 +70,8 @@ namespace GameClient.Types.Player
             SetTag(7);
             this.SetScale(3.5f);
 
-            SpriteAnimation Idle = TextureContainer.KnightAnimationAtlas.GetAnimation("Idle");
-            SpriteAnimation Movement = TextureContainer.KnightAnimationAtlas.GetAnimation("Movement");
+            SpriteAnimation Idle = TextureContainer.GetSpriteAtlasByName("Knight").GetAnimation("Idle");
+            SpriteAnimation Movement = TextureContainer.GetSpriteAtlasByName("Knight").GetAnimation("Movement");
 
             SpriteAnimator animator = AddComponent<SpriteAnimator>();
             animator.AddAnimation("Idle", Idle);

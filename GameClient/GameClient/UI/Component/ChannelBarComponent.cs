@@ -1,6 +1,10 @@
 ﻿using GameClient.Scenes;
+using GameClient.Types.Components.Components;
+using GameClient.Types.Components.SceneComponents;
 using GameClient.UI.Elements;
 using GameServer.General;
+using GameServer.Types.Abilities.SharedAbilities;
+using Microsoft.Xna.Framework;
 using Nez;
 using Nez.UI;
 using System;
@@ -16,12 +20,17 @@ namespace GameClient.UI.Component
         private float TotalTime = 0;
         private float StartTime;
         ChannelBarWindow channelBarWindow;
+        AbilityHead ability;
+        Vector2 source;
+        Entity target;
 
-        public ChannelBarComponent(int startTime)
+        public ChannelBarComponent(int startTime, AbilityHead ability, Entity target, Vector2 source)
         {
             //SetText(startTime.ToString());
             StartTime = startTime;
-            
+            this.ability = ability;
+            this.source = source;
+            this.target = target;
         }
 
         public override void Update()
@@ -32,6 +41,7 @@ namespace GameClient.UI.Component
             {
                 if (this != null)
                 {
+                    Scene.AddEntity(new AbilityAnimationEntity(ability, target, source));
                     channelBarWindow.RemoveElements();
                     Scene.RemoveSceneComponent<ChannelBarComponent>();
                 }

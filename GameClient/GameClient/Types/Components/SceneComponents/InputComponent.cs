@@ -270,12 +270,9 @@ namespace GameClient.Types.Components.SceneComponents
                             if (ability.ChannelTime > 0 && targeting)
                             {
                                 template = new MessageTemplate(ct.ToJson(), MessageType.StartChanneling);
-                                //ProgressBar bar = new ProgressBar(0, 1, 0.1f, false, ProgressBarStyle.Create(Color.LawnGreen, Color.White));
-                                //Window window = new Window("", skin);
-                                //window.AddElement(bar);
-                                ChannelBarComponent channelBarComponent = new ChannelBarComponent(ability.ChannelTime);
+                                ChannelBarComponent channelBarComponent = new ChannelBarComponent(ability.ChannelTime, ability, Scene.FindEntitiesWithTag(2).ElementAt(0).GetComponent<PlayerComponent>().GetTarget(), Entity.Position);
+
                                 Scene.AddSceneComponent(channelBarComponent);
-                                //(Scene as MainScene).UICanvas.AddComponent(label);
                             }
                             else
                                 template = new MessageTemplate(ct.ToJson(), MessageType.DamageTarget);
@@ -379,7 +376,8 @@ namespace GameClient.Types.Components.SceneComponents
                     if (Scene is MainScene)
                     {
                         MainScene scene = Scene as MainScene;
-                        TargetWindow window = new TargetWindow(entity, new Vector2(Screen.Width / 2, 30), skin);
+                        TargetWindow window = new TargetWindow(entity, new Vector2(Screen.Width / 2, Screen.Height * 0.03f), skin);
+                        Scene.FindEntitiesWithTag(2).ElementAt(0).GetComponent<PlayerComponent>().SetTarget(entity);
                         scene.UICanvas.Stage.AddElement(window);
                     }
 

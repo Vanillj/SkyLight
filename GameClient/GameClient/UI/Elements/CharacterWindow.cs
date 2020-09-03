@@ -62,7 +62,7 @@ namespace GameClient.Managers.UI.Elements
                     Row();
                 if (i != null && i.GetSprite() == null)
                 {
-                    i.SetSprite(TextureContainer.ItemAtlas.GetSprite(i.TextureName));
+                    i.SetSprite(TextureContainer.GetSpriteAtlasByName("Items").GetSprite(i.TextureName));
                 }
 
                 if (i != null)

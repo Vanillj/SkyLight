@@ -36,7 +36,7 @@ namespace GameClient.Types.Components.SceneComponents
         {
             Rectangle r = new Rectangle((int)obj.X, (int)obj.Y, (int)Width, (int)Height);
             Vector2 wPoint = Scene.Camera.ScreenToWorldPoint(Input.MousePosition);
-            Console.WriteLine("Mouse: " + Input.MousePosition.ToPoint().ToString() + "Rect: " + r.ToString() + " rest:" + (int)obj.X + ", " + (int)obj.Y + ", " + (int)Width + ", " + (int)Height);
+            
             if (r.Contains(wPoint) && Input.LeftMouseButtonDown)
             {
                 //Do something with object

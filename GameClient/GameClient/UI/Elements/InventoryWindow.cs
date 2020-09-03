@@ -26,7 +26,7 @@ namespace GameClient.Managers.UI.Elements
 
         public InventoryWindow(Skin skin, Vector2 position, float width = -1, float height = -1, string title = "Inventory", string styleName = null) : base(title, skin, styleName)
         {
-            sprite = TextureContainer.UIAtlas.GetSprite("bg_01_02");
+            sprite = TextureContainer.GetSpriteAtlasByName("UI").GetSprite("bg_01_02");
             SetMovable(true);
             SetResizable(true);
             SetResizeBorderSize(20);
@@ -63,7 +63,7 @@ namespace GameClient.Managers.UI.Elements
                     Row();
                 if (i != null && i.GetSprite() == null)
                 {
-                    i.SetSprite(TextureContainer.ItemAtlas.GetSprite(i.TextureName));
+                    i.SetSprite(TextureContainer.GetSpriteAtlasByName("Items").GetSprite(i.TextureName));
                 }
                 if (i != null)
                 {

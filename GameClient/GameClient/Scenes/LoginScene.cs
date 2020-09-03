@@ -38,12 +38,12 @@ namespace GameClient.Scenes
             float h = (float)Screen.Height / (float)TextureContainer.LoginWallpaper.Height;
             float w = (float)Screen.Width / (float)TextureContainer.LoginWallpaper.Width;
             e.SetScale(new Vector2(w, h));
-            Sprite textfieldTexture = TextureContainer.UIAtlas.GetSprite("Plank_03");
+            Sprite textfieldTexture = TextureContainer.GetSpriteAtlasByName("UI").GetSprite("Plank_03");
 
             TextFieldStyle textFields = TextFieldStyle.Create(Color.White, Color.White, Color.Black, Color.DarkGray);
             NinePatchDrawable drawable = new NinePatchDrawable(textfieldTexture, 0, 0, 0, 0) { MinHeight = 20, MinWidth = 50 };
-            NinePatchDrawable drawablebutton = new NinePatchDrawable(TextureContainer.UIAtlas.GetSprite("plank_15"), 0, 0, 0, 0) { MinHeight = 20, MinWidth = 50 };
-            NinePatchDrawable drawablehover = new NinePatchDrawable(TextureContainer.UIAtlas.GetSprite("plank_18"), 0, 0, 0, 0) { MinHeight = 20, MinWidth = 50 };
+            NinePatchDrawable drawablebutton = new NinePatchDrawable(TextureContainer.GetSpriteAtlasByName("UI").GetSprite("plank_15"), 0, 0, 0, 0) { MinHeight = 20, MinWidth = 50 };
+            NinePatchDrawable drawablehover = new NinePatchDrawable(TextureContainer.GetSpriteAtlasByName("UI").GetSprite("plank_18"), 0, 0, 0, 0) { MinHeight = 20, MinWidth = 50 };
 
             textFields.Background = drawable;
 

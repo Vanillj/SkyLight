@@ -1,0 +1,18 @@
+[
+  {
+    "Path": "Assets/Items/Items.atlas",
+    "Name": "Items"
+  },
+  {
+    "Path": "Assets/UI/UI.atlas",
+    "Name": "UI"
+  },
+  {
+    "Path": "Assets/Animations/Knight.atlas",
+    "Name": "Knight"
+  },
+  {
+    "Path": "Assets/Animations/SpriteEffects/FireBall.atlas",
+    "Name": "FireBall"
+  }
+]

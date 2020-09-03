@@ -24,9 +24,9 @@ namespace GameClient.Managers.UI.Elements
             int scale = 3;
             TargetLabel = new Label("Target: " + entity.Name).SetFontScale(scale).SetFontColor(Color.Red);
 
-            SetWidth(TargetLabel.MinWidth + 30);
+            SetWidth(TargetLabel.MinWidth + 20);
             
-            SetHeight(TargetLabel.MinHeight + 20);
+            SetHeight(TargetLabel.MinHeight + 10);
             TargetLabel.SetEllipsis(true);
             SetMovable(true);
             SetPosition(position.X - GetWidth(), position.Y - GetHeight());

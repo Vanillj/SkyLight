@@ -1,4 +1,5 @@
-﻿using GameClient.Types.Abilities;
+﻿using GameClient.General;
+using GameClient.Types.Abilities;
 using GameClient.Types.KeyBinding;
 using GameClient.Types.Map;
 using GameServer.General;
@@ -34,6 +35,11 @@ namespace GameClient.Managers
         public static AbilityformaterClient GetAbilityInformation(string FileName)
         {
             return Newtonsoft.Json.JsonConvert.DeserializeObject<AbilityformaterClient>(GetFileFromString(FileName), new StringEnumConverter());
+        }
+
+        public static List<TextureAtlasData> GetTextureAtlas(string FileName)
+        {
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<List<TextureAtlasData>>(GetFileFromString(FileName), new StringEnumConverter());
         }
 
     }
